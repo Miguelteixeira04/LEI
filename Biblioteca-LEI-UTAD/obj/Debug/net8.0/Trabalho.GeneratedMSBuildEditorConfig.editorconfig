@@ -1,0 +1,195 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Trabalho
+build_property.RootNamespace = Trabalho
+build_property.ProjectDir = C:\Users\imcar\OneDrive\Ambiente de Trabalho\LABWEB2425_PL4G1-main (1)\LABWEB2425_PL4G1-main\Trabalho\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\imcar\OneDrive\Ambiente de Trabalho\LABWEB2425_PL4G1-main (1)\LABWEB2425_PL4G1-main\Trabalho
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Areas/Identity/Pages/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Areas/Identity/Pages/Account/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Areas/Identity/Pages/Account/Manage/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcX01hbmFnZU5hdi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Areas/Identity/Pages/Account/Manage/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Areas/Identity/Pages/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Areas/Identity/Pages/Account/RegisterConfirmation.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZWdpc3RlckNvbmZpcm1hdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Areas/Identity/Pages/Account/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxfVmlld0ltcG9ydHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Areas/Identity/Pages/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZhbGlkYXRpb25TY3JpcHRzUGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Areas/Identity/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Areas/Identity/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Administradores/AprovarNovosBiblio.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5pc3RyYWRvcmVzXEFwcm92YXJOb3Zvc0JpYmxpby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Administradores/CreateAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5pc3RyYWRvcmVzXENyZWF0ZUFkbWluLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Administradores/GerirPerfil.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5pc3RyYWRvcmVzXEdlcmlyUGVyZmlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Administradores/GerirUtilizadores.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5pc3RyYWRvcmVzXEdlcmlyVXRpbGl6YWRvcmVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Administradores/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5pc3RyYWRvcmVzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Administradores/MotivoBloq.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5pc3RyYWRvcmVzXE1vdGl2b0Jsb3EuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Administradores/RegistarAdmin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5pc3RyYWRvcmVzXFJlZ2lzdGFyQWRtaW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Autor/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0b3JcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Autor/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0b3JcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Autor/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0b3JcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Autor/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0b3JcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Autor/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0b3JcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Bibliotecario/Informacoes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmlibGlvdGVjYXJpb1xJbmZvcm1hY29lcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Home/Biblioteca.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxCaWJsaW90ZWNhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Leitores/Biblioteca.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVpdG9yZXNcQmlibGlvdGVjYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Leitores/History.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVpdG9yZXNcSGlzdG9yeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Leitores/Informacoes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVpdG9yZXNcSW5mb3JtYWNvZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Livro/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGl2cm9cQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Livro/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGl2cm9cRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Livro/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGl2cm9cRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Livro/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGl2cm9cRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Livro/EntregasAtraso.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGl2cm9cRW50cmVnYXNBdHJhc28uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Livro/History.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGl2cm9cSGlzdG9yeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Livro/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGl2cm9cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Shared/_LoginPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/imcar/OneDrive/Ambiente de Trabalho/LABWEB2425_PL4G1-main (1)/LABWEB2425_PL4G1-main/Trabalho/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-e2bfwzb94r
