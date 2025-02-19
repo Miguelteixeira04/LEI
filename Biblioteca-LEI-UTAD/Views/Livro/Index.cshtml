@@ -1,0 +1,173 @@
+﻿@model IEnumerable<Trabalho.Models.Livro>
+
+@{
+    ViewData["Title"] = "Lista de Livros";
+}
+
+@* cabeçalho personalizado *@
+@section CustomHeader {
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Livro" asp-action="Index">Home Page Bibliotecário</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBibliotecario" aria-controls="navbarBibliotecario"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarBibliotecario">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Bibliotecario" asp-action="Informacoes">Informações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" asp-controller="Livro" asp-action="Index">Biblioteca</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Livro" asp-action="History">Histórico de Requisições</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Livro" asp-action="EntregasAtraso">Entregas em Atraso</a>
+                    </li>
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #cdcfc0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+            .header h1 {
+                font-size: 48px;
+                font-family: 'Times New Roman', serif;
+                margin: 0;
+                border: 2px solid black;
+                padding: 10px 20px;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        td {
+            vertical-align: middle; /* Centraliza verticalmente */
+            text-align: center; /* Centraliza horizontalmente */
+        }
+
+        .button {
+            margin-left: 10px;
+            padding: 8px 12px;
+            background-color: #f5e9db;
+            color: black;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            color: white;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Lista de Livros</h1>
+        <a asp-action="Create" class="button">Adicionar Novo Livro</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autores</th>
+                <th>Género</th>
+                <th>Preço</th>
+                <th>Exemplares</th>
+                <th>ISBN</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Titulo)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IdAutorNavigation.NameAutor)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Genero)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Preco)</td>
+                    <td>@Html.DisplayFor(modelItem => item.NExemplares)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Isbn)</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a asp-action="Edit" asp-route-id="@item.Isbn" class="btn btn-warning">Editar</a>
+                            <a asp-action="Details" asp-route-id="@item.Isbn" class="btn btn-info">Detalhes</a>
+                            <a asp-action="Delete" asp-route-id="@item.Isbn" class="btn btn-danger">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

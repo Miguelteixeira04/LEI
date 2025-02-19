@@ -1,0 +1,151 @@
+﻿@model Trabalho.Models.Autor
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@* cabeçalho personalizado *@
+@section CustomHeader {
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Livro" asp-action="Index">Home Page Bibliotecario</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBibliotecario" aria-controls="navbarBibliotecario"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarBibliotecario">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Livro" asp-action="Index">Biblioteca</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Livro" asp-action="Create">Criar Livros</a>
+                    </li
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Autor" asp-action="Index">Lista Autores</a>
+                    </li>
+
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Livro</title>
+    <style>
+        body {
+            background-color: #cdcfc0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .grid-item {
+            font-size: 1rem;
+        }
+
+        .grid-item dt {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .grid-item dd {
+            margin: 0;
+            color: #333;
+        }
+
+        .card-footer {
+            background-color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            transition: background 0.3s;
+        }
+
+        .btn-edit {
+            background-color: #757575;
+        }
+
+        .btn-edit:hover {
+            background-color: #757575;
+        }
+
+        .btn-back {
+            background-color: #757575;
+        }
+
+        .btn-back:hover {
+            background-color: #757575;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                Detalhes do Autor
+            </div>
+            <div class="card-body">
+                <dl class="grid">
+                    <div class="grid-item">
+                        <dt>Nome Autor:</dt>
+                        <dd>@Html.DisplayFor(model => model.NameAutor)</dd>
+                    </div>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <a href="/Autor/Edit/@Model?.IdAutor" class="btn btn-edit">Editar</a>
+                <a href="/Autor/Index" class="btn btn-back">Voltar</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

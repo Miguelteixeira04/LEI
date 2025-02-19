@@ -1,0 +1,155 @@
+﻿@model Trabalho.Models.Autor
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+@* cabeçalho personalizado *@
+@section CustomHeader {
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Livro" asp-action="Index">Home Page Bibliotecario</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBibliotecario" aria-controls="navbarBibliotecario"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarBibliotecario">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Livro" asp-action="Index">Biblioteca</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Livro" asp-action="Create">Criar Livros</a>
+                    </li
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Autor" asp-action="Index">Lista Autores</a>
+                    </li>
+
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Livro</title>
+    <style>
+        body {
+            background-color: #cdcfc0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+            .row:last-child {
+                border-bottom: none;
+            }
+
+            .row dt {
+                font-weight: bold;
+                color: #333;
+            }
+
+            .row dd {
+                margin: 0;
+                color: #555;
+            }
+
+        .card-footer {
+            background-color: #f9f9f9;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            transition: background 0.3s;
+        }
+
+        .btn-danger {
+            background-color: #d32f2f;
+        }
+
+            .btn-danger:hover {
+                background-color: #b71c1c;
+            }
+
+        .btn-secondary {
+            background-color: #757575;
+        }
+
+            .btn-secondary:hover {
+                background-color: #616161;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                Eliminar Autor
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt>Nome do Autor:</dt>
+                    <dd class = "col-sm-10">@Html.DisplayFor(model => model.NameAutor)</dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <form asp-action="Delete" method="post" style="display: inline-block;">
+                    <input type="hidden" asp-for="IdAutor" />
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+                <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

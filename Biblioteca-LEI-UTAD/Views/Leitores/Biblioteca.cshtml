@@ -1,0 +1,320 @@
+﻿@model IEnumerable<Trabalho.Models.Livro>
+
+@{
+    ViewData["Title"] = "Biblioteca";
+}
+
+@* cabeçalho personalizado *@
+@section CustomHeader {
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Leitores" asp-action="Biblioteca">Home Page Leitor</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarLeitor" aria-controls="navbarLeitor"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarLeitor">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Leitores" asp-action="Informacoes">Informações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" asp-controller="Leitores" asp-action="Biblioteca">Biblioteca</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Leitores" asp-action="History">Histórico de Requisições</a>
+                    </li>
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #cdcfc0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            border: 2px solid black;
+            padding: 10px 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .requisitar-button {
+            padding: 8px 12px;
+            background-color: #f5e9db;
+            color: black;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-left: -25px;
+        }
+
+        .filter-button {
+            padding: 8px 12px;
+            background-color: #f5e9db;
+            color: black;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-left: 850px;
+        }
+
+        .pesquisar-button {
+            padding: 8px 12px;
+            background-color: #f5e9db;
+            color: black;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-left: 0px;
+            margin-left: 0px;
+        }
+
+        .reset-button {
+            padding: 8px 12px;
+            background-color: #f5e9db;
+            color: black;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-left: 7px;
+        }
+
+        .searchwindow-buttons {
+            display: flex;
+            justify-content: flex-start;
+            gap: 7px; /* Espaçamento entre os botões */
+        }
+
+        .book-radio {
+            transform: scale(1.3); /* Aumenta o botão de rádio */
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .filter-group {
+            margin-bottom: 10px;
+        }
+
+        .filter-group input[type="text"] {
+            padding: 5px;
+            margin-left: 0px;
+        }
+
+        .searchwindow-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .searchwindow-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            max-width: 80%;
+        }
+
+        .searchwindow-close {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 5px;
+        }
+
+        .searchwindow-close button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Biblioteca</h1>
+        <button class="filter-button" onclick="Filtrar()">Filtrar</button>
+
+        <div class="searchwindow-overlay" id="filtrar-window">
+            <div class="searchwindow-content">
+                <div class="searchwindow-close">
+                    <button onclick="fecharWindow()">×</button>
+                </div>
+                <form method="get" action="@Url.Action("Biblioteca", "Leitores")" id="filter-form">
+                    <div class="filter-group">
+                        <input type="checkbox" id="filter-title" name="filter-title">
+                        <label for="filter-title">Título</label>
+                        <input type="text" id="title" name="titulo" disabled>
+                    </div>
+                    <div class="filter-group">
+                        <input type="checkbox" id="filter-author" name="filter-author">
+                        <label for="filter-author">Autor</label>
+                        <input type="text" id="autor" name="autor" disabled>
+                    </div>
+                    <div class="filter-group">
+                        <input type="checkbox" id="filter-genre" name="filter-genre">
+                        <label for="filter-genre">Género</label>
+                        <input type="text" id="genero" name="genero" disabled>
+                    </div>
+
+                    <div class="searchwindow-buttons">
+                        <button type="submit" class="pesquisar-button">Pesquisar</button>
+                        <button type="button" class="reset-button" onclick="resetFiltro()">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <form id="funcao" method="post" action="/LeitoresController/Requisitar?isbn=123">
+        </form>
+        <button class="requisitar-button" onclick="confirmarRequisicao()">Requisitar</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Título</th>
+                <th>Autores</th>
+                <th>Género</th>
+                <th>Preço</th>
+                <th>Exemplares</th>
+                <th>ISBN</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="7" style="text-align: center;">Nenhum livro disponível.</td>
+                </tr>
+            }
+
+            else
+            {
+                @foreach (var item in Model)
+
+                {
+                    <tr>
+                        <td><input type="radio" class="book-radio" name="selectedLivro" value="@item.Isbn"></td>
+                        <td>@Html.DisplayFor(modelItem => item.Titulo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.IdAutorNavigation.NameAutor)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Genero)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Preco)</td>
+                        <td>@Html.DisplayFor(modelItem => item.NExemplares)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Isbn)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</body>
+</html>
+
+<script>
+    // função para confirmar requisições
+    function confirmarRequisicao() {
+        const selectedLivro = document.querySelector('input[name="selectedLivro"]:checked');
+        if (!selectedLivro) {
+            alert("Por favor, selecione um livro para requisitar.");
+            return;
+        }
+
+        const confirmacao = confirm("Tem certeza que deseja requisitar este livro?");
+        if (confirmacao) {
+            const isbn = selectedLivro.value; // O valor do livro selecionado (ISBN do livro)
+
+            // Fazer uma requisição AJAX para o método Requisitar no LeitoresController
+            fetch('@Url.Action("Requisitar", "Leitores")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ isbn: isbn }) // Envia o ISBN do livro
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.sucesso) {
+                        alert("Livro requisitado com sucesso!\nDispõe de um prazo de 15 dias para efetuar a sua devolução");
+                    } else {
+                        alert(data.mensagem); // Exibe a mensagem retornada pela controller
+                    }
+                })
+                .catch(error => {
+                    alert("Ocorreu um erro. Tente novamente.");
+                    console.error("Erro:", error);
+                });
+        }
+        else {
+            alert("Operação cancelada com sucesso!");
+            window.location.href = "@Url.Action("Biblioteca", "Leitores")";
+        }
+    }
+
+    //funções para filtrar livros
+    function Filtrar() {
+        const window = document.getElementById("filtrar-window");
+        window.style.display = "flex";
+    }
+
+    function resetFiltro() {
+        window.location.href = "@Url.Action("Biblioteca", "Leitores")";
+    }
+
+    function fecharWindow() {
+        const window = document.getElementById("filtrar-window");
+        window.style.display = "none";
+    }
+
+    document.querySelectorAll(".filter-group input[type='checkbox']").forEach(checkbox => {
+        checkbox.addEventListener("change", function () {
+            const inputField = this.nextElementSibling.nextElementSibling;
+            inputField.disabled = !this.checked;
+        });
+    });
+</script>

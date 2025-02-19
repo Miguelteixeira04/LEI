@@ -1,0 +1,92 @@
+﻿@{
+    ViewData["Title"] = "Motivo do Bloqueio";
+}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motivo do Block</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #cdcfc0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Estilo do título */
+        h1 {
+            width: 100%; /* O título ocupa a largura total */
+            text-align: left;
+            margin: 20px 0;
+            font-size: 40px;
+            font-weight: bold;
+            border: 1px solid #000;
+            padding: 10px;
+            box-sizing: border-box; /* Inclui padding na largura total */
+        }
+
+        /* Estilo do menu suspenso */
+        select {
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 20px; /* Espaço entre o título e o dropdown */
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        /* Estilo do botão confirmar */
+        .confirm-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ecdeab;
+            font-size: 16px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c5b892;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Motivo do Block</h1>
+
+    <!-- Menu suspenso -->
+    <select id="motivo" name="motivo">
+        <option value="atrasos">Vários atrasos na devolução de livros</option>
+        <option value="danos">Perda ou danos a livros</option>
+        <option value="conduta">Conduta inadequada</option>
+        <option value="violacao">Violação de políticas da biblioteca</option>
+        <option value="compartilhamento">Compartilhamento não autorizado de credenciais</option>
+    </select>
+
+    <!-- Botão Confirmar -->
+    <button class="confirm-button" onclick="confirmarMotivo()">Confirmar</button>
+
+    <script>
+        function confirmarMotivo() {
+            const motivo = document.getElementById('motivo').value;
+            alert(`Motivo selecionado: ${motivo}`);
+
+            // Passa o motivo como parâmetro na URL ao redirecionar para GerirPerfil
+            window.location.href = `/Administradores/GerirPerfil?motivo=${motivo}`;
+        }
+    </script>
+
+</body>
+</html>
