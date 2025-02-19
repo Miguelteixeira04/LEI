@@ -1,0 +1,321 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Registar";
+}
+
+<head>
+    <style>
+        body {
+            background-color: #cdcfc0; /* Fundo de página em cinza claro */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 32px;
+            text-align: center;
+            margin-top: 30px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #ffffff; /* Fundo branco para o formulário */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-floating {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #aaa; /* Bordas mais escuras */
+            font-size: 16px;
+        }
+
+            .form-control:focus {
+                border-color: #0056b3; /* Bordas escuras quando em foco */
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+
+        .form-label {
+            font-weight: normal;
+            color: #666;
+        }
+
+        .form-check {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .role-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+        .text-danger {
+            color: #e74c3c;
+        }
+
+        /* Remover rodapé estático */
+        footer {
+            display: none;
+        }
+    </style>
+</head>
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="form-container">
+    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Nome" class="form-control" id="nome" />
+            <label asp-for="Input.Nome" class="form-label">Nome</label>
+            <span asp-validation-for="Input.Nome" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Username" class="form-control" id="username" />
+            <label asp-for="Input.Username" class="form-label">Username</label>
+            <span asp-validation-for="Input.Username" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3" id="emailDiv">
+            <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="name@example.com" />
+            <label asp-for="Input.Email" class="form-label">Email</label>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Password" class="form-control" autocomplete="new-password" placeholder="password" />
+            <label asp-for="Input.Password" class="form-label">Password</label>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <div class="role-group">
+                <div class="form-check">
+                    <input asp-for="Input.Role" class="form-check-input" type="radio" id="roleLeitor" value="Leitor" checked />
+                    <label class="form-check-label" for="roleLeitor">Leitor</label>
+                </div>
+                <div class="form-check">
+                    <input asp-for="Input.Role" class="form-check-input" type="radio" id="roleBibliotecario" value="Bibliotecario" />
+                    <label class="form-check-label" for="roleBibliotecario">Bibliotecário</label>
+                </div>
+            </div>
+            <span asp-validation-for="Input.Role" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <select id="phoneNumberCount" class="form-control" onchange="togglePhoneNumbers()">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <label for="phoneNumberCount" class="form-label">Quantos números de telemóvel?</label>
+        </div>
+
+        <div class="form-floating mb-3" id="phoneNumber1Div">
+            <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Escreva o seu número telefónico." onblur="verificar_num_tlm(this)" />
+            <label asp-for="Input.PhoneNumber" class="form-label">Número Telefónico</label>
+            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3" id="phoneNumber2Div" style="display: none;">
+            <input asp-for="Input.PhoneNumber2" class="form-control" onblur="verificar_num_tlm(this)" />
+            <label asp-for="Input.PhoneNumber2" class="form-label">Número Telefónico 2</label>
+            <span asp-validation-for="Input.PhoneNumber2" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3" id="phoneNumber3Div" style="display: none;">
+            <input asp-for="Input.PhoneNumber3" class="form-control" onblur="verificar_num_tlm(this)" />
+            <label asp-for="Input.PhoneNumber3" class="form-label">Número Telefónico 3</label>
+            <span asp-validation-for="Input.PhoneNumber3" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-floating mb-3" id="addressDiv">
+            <input asp-for="Input.Address" class="form-control" />
+            <label asp-for="Input.Address" class="form-label">Morada</label>
+            <span asp-validation-for="Input.Address" class="text-danger"></span>
+        </div>
+
+        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Registar</button>
+    </form>
+</div>
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Função para verificar o número de telefone
+        function verificar_num_tlm(input) {
+            const phone = input.value;
+            const cleanedPhoneNumber = phone.replace(/\D/g, ''); // Remove qualquer caracter não numérico
+
+            let isValid = true;
+
+            if (input.value.length > 0) {
+                if (!/^\d+$/.test(cleanedPhoneNumber)) {
+                    showError(input, "Por favor, insira um número válido. Apenas dígitos são permitidos.");
+                    isValid = false;
+                }
+
+                if (cleanedPhoneNumber.length !== 9) {
+                    showError(input, "O número deve ter exatamente 9 dígitos.");
+                    isValid = false;
+                }
+
+                if (cleanedPhoneNumber.charAt(0) !== '9') {
+                    showError(input, "O número deve começar com 9.");
+                    isValid = false;
+                }
+
+                const validPrefixes = ['91', '92', '93', '96'];
+                const prefix = cleanedPhoneNumber.substring(0, 2);
+                if (!validPrefixes.includes(prefix)) {
+                    showError(input, "O número deve começar com 91, 92, 93 ou 96.");
+                    isValid = false;
+                }
+            }
+
+            // Se não houver erro, remove a mensagem de erro
+            if (isValid) {
+                hideError(input);
+            }
+        }
+
+        // Função para mostrar a mensagem de erro
+        function showError(input, message) {
+            // Cria uma mensagem de erro e exibe-a abaixo do campo
+            let errorSpan = input.parentElement.querySelector(".error-message");
+            if (!errorSpan) {
+                errorSpan = document.createElement("span");
+                errorSpan.className = "text-danger error-message";
+                input.parentElement.appendChild(errorSpan);
+            }
+            errorSpan.textContent = message;
+
+            // Coloca o foco no campo para edição
+            input.focus();
+        }
+
+        // Função para esconder a mensagem de erro
+        function hideError(input) {
+            const errorSpan = input.parentElement.querySelector(".error-message");
+            if (errorSpan) {
+                errorSpan.remove();
+            }
+        }
+
+        // Chama a função de alternância de campos ao alterar o seletor de quantidade
+        document.getElementById("phoneNumberCount").addEventListener("change", function() {
+            togglePhoneNumbers();
+            updatePhoneNumberFields(); // Atualizar valores preservados quando o número de campos mudar
+        });
+
+        // Função para alternar os campos de telefone com base na quantidade selecionada
+        function togglePhoneNumbers() {
+            const phoneNumberCount = document.getElementById("phoneNumberCount").value;
+
+            // Atualizar a exibição dos campos com base no número selecionado
+            for (let i = 1; i <= 3; i++) {
+                const div = document.getElementById(`phoneNumber${i}Div`);
+                if (i <= phoneNumberCount) {
+                    div.style.display = 'block';
+                } else {
+                    div.style.display = 'none';
+                }
+            }
+        }
+
+        // Função para preservar os valores dos campos de telefone ao alternar
+        function updatePhoneNumberFields() {
+            const phoneNumberCount = document.getElementById("phoneNumberCount").value;
+
+            // Salvar os valores atuais dos campos de telefone
+            const currentValues = [];
+            for (let i = 1; i <= 3; i++) {
+                const input = document.getElementById(`phoneNumber${i}Div`).querySelector("input");
+                if (input) {
+                    currentValues.push(input.value);
+                }
+            }
+
+            // Atualizar a exibição dos campos com base no número selecionado
+            for (let i = 1; i <= 3; i++) {
+                const div = document.getElementById(`phoneNumber${i}Div`);
+                if (i <= phoneNumberCount) {
+                    div.style.display = 'block';
+
+                    // Restaurar valores salvos se existirem
+                    const input = div.querySelector("input");
+                    if (input && currentValues[i - 1]) {
+                        input.value = currentValues[i - 1];
+                    }
+                } else {
+                    div.style.display = 'none';
+                }
+            }
+        }
+
+         // Função para alternar os campos de acordo com o role selecionado
+        function toggleFieldsBasedOnRole() {
+            const roleLeitor = document.getElementById("roleLeitor").checked;
+            const emailDiv = document.getElementById("emailDiv");
+            const addressDiv = document.getElementById("addressDiv");
+
+            if (roleLeitor) {
+                // Mostrar os campos de email e endereço se Leitor for selecionado
+                emailDiv.style.display = 'block';
+                addressDiv.style.display = 'block';
+            } else {
+                // Esconder os campos de email e endereço se Bibliotecário for selecionado
+                emailDiv.style.display = 'none';
+                addressDiv.style.display = 'none';
+            }
+        }
+
+        // Adicionar eventos de mudança nos radio buttons
+        document.getElementById("roleLeitor").addEventListener("change", toggleFieldsBasedOnRole);
+        document.getElementById("roleBibliotecario").addEventListener("change", toggleFieldsBasedOnRole);
+
+
+        // Chamar as funções ao carregar a página para definir o estado inicial
+        window.onload = function() {
+            togglePhoneNumbers(); // Exibir os campos corretos
+            updatePhoneNumberFields(); // Restaurar valores preenchidos
+            toggleFieldsBasedOnRole();
+        };
+    </script>
+}
