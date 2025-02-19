@@ -1,0 +1,90 @@
+﻿<Window x:Class="Utad.Lab.PL4.G01.Window_perfil"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utad.Lab.PL4.G01"
+        mc:Ignorable="d"
+        Title="Window_perfil" Height="813" Width="1573">
+    <Grid Background="#FF101728">
+        <Menu x:Name="menu" Margin="0,0,0,737" Background="#FF687E94">
+            <MenuItem x:Name="menu_inicio" Header="                        INÍCIO" Height="60" Width="600" FontSize="24" VerticalAlignment="Center" FontFamily="Arial Black" Foreground="White" Click="menu_inicio_Click" HorizontalContentAlignment="Stretch"/>
+            <MenuItem x:Name="menu_perfil" Header="           PERFIL" FontSize="24" Width="600" FontFamily="Arial Black" Foreground="White"/>
+            <MenuItem x:Name="menu_tarefas" Header="TAREFAS" FontSize="24" Width="329" FontFamily="Arial Black" Foreground="White" Click="menu_tarefas_Click"/>
+        </Menu>
+        <ListView x:Name="lv_printtarefas" Margin="682,183,67,227" Background="{x:Null}" Foreground="White" BorderBrush="White" FontSize="20" ItemsSource="{Binding Tarefas}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="112"/>
+                    <GridViewColumn Header="TAREFA" DisplayMemberBinding="{Binding Titulo}" Width="230"/>
+                    <GridViewColumn Header="IMPORTÂNCIA" DisplayMemberBinding="{Binding NivelImportancia}" Width="220"/>
+                    <GridViewColumn Header="ESTADO" Width="215">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Estado}" Name="lb_estado" Width="130" Foreground="White"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Rectangle HorizontalAlignment="Left" Height="9" Margin="682,40,0,0" Stroke="#FAC30C" VerticalAlignment="Top" Width="121" Fill="#FAC30C" RadiusX="3" RadiusY="3"/>
+        <Button x:Name="botao_editar_perfil" Content="Editar Perfil"
+                HorizontalAlignment="Left" Height="81" Margin="166,604,0,0"
+                VerticalAlignment="Top" Width="267" FontSize="20"
+                FontFamily="Arial Black" Background="#FF687E94"
+                BorderBrush="#FF687E94" Foreground="White"
+                Click="botao_editar_perfil_Click">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1" CornerRadius="40">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#FF576A7A"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#FF46525F"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <TextBox x:Name="textbox_nome" HorizontalAlignment="Left" Height="35" Margin="113,535,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="384" FontSize="20" IsEnabled="False" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF101728" Foreground="White" BorderBrush="#FF101728" Text="Username"/>
+        <Image x:Name="Imagem_editarfoto" HorizontalAlignment="Left" Height="279" Margin="166,232,0,0" VerticalAlignment="Top" Width="278" Source="/Icons/imagem-perfil.jpg" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+        <Image Width="100" Margin="546,114,927,73" Source="/Icons/Barra.jpg"/>
+        <Button x:Name="botaoTarefas" Content="Tarefas"
+                HorizontalAlignment="Left" Height="81" Margin="948,604,0,0"
+                VerticalAlignment="Top" Width="267" FontSize="20"
+                FontFamily="Arial Black" Background="#FF687E94"
+                BorderBrush="#FF687E94" Foreground="White" Click="botaoTarefas_Click">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1" CornerRadius="40">
+                            <!-- Ajuste o CornerRadius aqui -->
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#FF576A7A"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#FF46525F"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </Grid>
+</Window>

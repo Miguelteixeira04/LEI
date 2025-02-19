@@ -1,0 +1,30 @@
+﻿<Window x:Class="Utad.Lab.PL4.G01.Window_FiltroTarefas"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utad.Lab.PL4.G01"
+        mc:Ignorable="d"
+        Title="Window_FiltroTarefas" Height="500" Width="1000">
+    <Grid x:Name="janela_tarefas" Background="#FF687E94">
+        <DatePicker x:Name="data_primeirodia" HorizontalAlignment="Left" Margin="660,235,0,0" VerticalAlignment="Top" FontSize="16" FontFamily="Arial" BorderBrush="{x:Null}" IsEnabled="False"/>
+        <Label Content="De:" HorizontalAlignment="Left" Margin="582,234,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16" FontFamily="Arial" FontWeight="Bold"/>
+        <Label Content="Até:" HorizontalAlignment="Left" Margin="582,292,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16" FontFamily="Arial" FontWeight="Bold"/>
+        <DatePicker x:Name="data_ultimodia" HorizontalAlignment="Left" Margin="660,291,0,0" VerticalAlignment="Top" FontSize="16" FontFamily="Arial" BorderBrush="{x:Null}" IsEnabled="False"/>
+        <Image x:Name="btn_check" HorizontalAlignment="Left" Height="47" Margin="923,394,0,0" VerticalAlignment="Top" Width="73" Source="/Icons/botao_check_filtros.png" MouseLeftButtonDown="btn_check_MouseLeftButtonDown"/>
+
+        <Label Content="Filtrar Tarefas" HorizontalAlignment="Center" Margin="0,40,0,0" VerticalAlignment="Top" Foreground="White" FontSize="36" FontWeight="Bold" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="73" Width="428" UseLayoutRounding="False"/>
+        <RadioButton x:Name="rbtn_pordia" Content="Por Dia" HorizontalAlignment="Left" Margin="72,142,0,0" VerticalAlignment="Top" Checked="rbtn_pordia_Checked" FontSize="20" Foreground="White" FontFamily="Arial" FontWeight="Bold"/>
+        <Label Content="Insira o dia:" HorizontalAlignment="Left" Margin="118,182,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16" FontFamily="Arial" FontWeight="Bold"/>
+        <DatePicker x:Name="data_dia" HorizontalAlignment="Left" Margin="232,184,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.511,-0.178" IsEnabled="False" FontFamily="Arial" BorderBrush="{x:Null}"/>
+        <RadioButton x:Name="rbtn_porsemana" Content="Por Semana" HorizontalAlignment="Left" Margin="63,252,0,0" VerticalAlignment="Top" Checked="rbtn_porsemana_Checked" FontSize="20" Foreground="White" FontFamily="Arial" FontWeight="Bold"/>
+        <DatePicker x:Name="data_1dia" HorizontalAlignment="Left" Margin="232,293,0,0" VerticalAlignment="Top" FontSize="16" IsEnabled="False" FontFamily="Arial" BorderBrush="{x:Null}" SelectedDateChanged="data_1dia_SelectedDateChanged"/>
+        <Label Content="Insira o 1º dia:" HorizontalAlignment="Left" Margin="108,294,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16" FontFamily="Arial" FontWeight="Bold"/>
+        <Label Content="7º dia:" HorizontalAlignment="Left" Margin="168,345,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16" FontFamily="Arial" FontWeight="Bold"/>
+        <DatePicker x:Name="data_7dia" HorizontalAlignment="Left" Margin="232,344,0,0" VerticalAlignment="Top" FontSize="16" IsEnabled="False" FontFamily="Arial" BorderBrush="{x:Null}"/>
+        <Button x:Name="btn_restaurar" Content="Restaurar Filtro" HorizontalAlignment="Left" Margin="707,394,0,0" VerticalAlignment="Top" Height="44" Width="171" FontSize="18" Click="btn_restaurar_Click"/>
+        <RadioButton x:Name="rbtn_entredatas" Content="Entre Datas" HorizontalAlignment="Left" Margin="547,187,0,0" VerticalAlignment="Top" FontSize="20" Foreground="White" FontFamily="Arial" FontWeight="Bold" Checked="rbtn_entredatas_Checked"/>
+
+
+    </Grid>
+</Window>
