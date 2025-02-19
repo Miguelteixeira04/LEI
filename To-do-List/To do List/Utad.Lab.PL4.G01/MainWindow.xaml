@@ -1,0 +1,22 @@
+﻿<Window x:Class="Utad.Lab.PL4.G01.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utad.Lab.PL4.G01"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="813" Width="1573">
+    <Grid Background="#FF101728">
+        <Menu x:Name="menu" Margin="0,0,0,737" Background="#FF687E94">
+            <MenuItem x:Name="menu_inicio" Header="                        INÍCIO" Height="60" Width="600" FontSize="24" VerticalAlignment="Center" FontFamily="Arial Black" Foreground="#FFFCFCFC" />
+            <MenuItem x:Name="menu_perfil" Header="           PERFIL" FontSize="24" Width="600" FontFamily="Arial Black" Foreground="White" Click="menu_perfil_Click"/>
+            <MenuItem x:Name="menu_tarefas" Header="TAREFAS" FontSize="24" Width="329" FontFamily="Arial Black" Foreground="White" Click="menu_tarefas_Click"/>
+        </Menu>
+        <Rectangle HorizontalAlignment="Left" Height="9" Margin="178,40,0,0" Stroke="#FAC30C" VerticalAlignment="Top" Width="121" Fill="#FAC30C" RadiusX="3" RadiusY="3"/>
+        <Image x:Name="Imagem_pagina_inicial" HorizontalAlignment="Left" Height="483" Margin="1045,0,0,0" VerticalAlignment="Center" Width="334" Source="/Icons/todo-list.jpg"/>
+        <Label x:Name="label_titulo1_pagina_inicial" Content="Crie aqui a sua&#xD;&#xA;To-do List!" HorizontalAlignment="Left" Margin="141,157,0,0" VerticalAlignment="Top" Height="182" Width="615" Foreground="White" FontFamily="Arial Black" FontSize="72"/>
+        <Label x:Name="label_texto1_pagina_inicial" Content="Farto de não saber o que tem de fazer? Fácil, a nossa To-do-list é a&#xD;&#xA;sua melhor opção! Livre-se ainda hoje das suas antiquadas agendas &#xD;&#xA;físicas e junte-se a nós no mundo digital." Margin="141,399,606,0" VerticalAlignment="Top" Foreground="White" Height="129" FontSize="24"/>
+        <Image x:Name="botao_iniciar" HorizontalAlignment="Left" Height="100" Margin="297,577,0,0" VerticalAlignment="Top" Width="303" Source="/Icons/botao_iniciar.png" MouseLeftButtonDown="botao_iniciar_MouseLeftButtonDown"/>
+        <Image x:Name="btn_exit" HorizontalAlignment="Left" Height="69" Margin="1444,703,0,0" VerticalAlignment="Top" Width="65" Source="/Icons/exit.png" MouseLeftButtonDown="btn_exit_MouseLeftButtonDown"/>
+    </Grid>
+</Window>

@@ -1,0 +1,48 @@
+﻿<Window x:Class="Utad.Lab.PL4.G01.Window_editar_fotografia"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utad.Lab.PL4.G01"
+        mc:Ignorable="d"
+        Title="Window_editar_fotografia" Height="813" Width="1573">
+    <Grid Background="#FF101728" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+        <Menu x:Name="menu" Margin="0,0,0,737" Background="#FF687E94">
+            <MenuItem x:Name="menu_inicio" Header="                        INÍCIO" Height="60" Width="600" FontSize="24" VerticalAlignment="Center" FontFamily="Arial Black" Foreground="White" Click="menu_inicio_Click"/>
+            <MenuItem x:Name="menu_perfil" Header="           PERFIL" FontSize="24" Width="600" FontFamily="Arial Black" Foreground="White" Click="menu_perfil_Click"/>
+            <MenuItem x:Name="menu_tarefas" Header="TAREFAS" FontSize="24" Width="329" FontFamily="Arial Black" Foreground="White" Click="menu_tarefas_Click"/>
+        </Menu>
+        <Rectangle HorizontalAlignment="Left" Height="9" Margin="682,41,0,0" Stroke="#FAC30C" VerticalAlignment="Top" Width="121" Fill="#FAC30C" RadiusX="3" RadiusY="3"/>
+        <Label Content="Editar Fotografia" HorizontalAlignment="Center" Margin="0,113,0,0" VerticalAlignment="Top" Height="102" Width="676" Foreground="White" FontSize="72" FontFamily="Arial Black"/>
+        <Button x:Name="botao_adicionar_foto" Content="Adicionar foto de perfil"
+                HorizontalAlignment="Center" Margin="0,642,0,0" VerticalAlignment="Top"
+                Width="300" Height="64" FontSize="20" FontFamily="Arial Black"
+                Background="#FF687E94" BorderBrush="#FF687E94" Foreground="White"
+                Click="Button_Click">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1" CornerRadius="20">
+                            <!-- Ajuste o CornerRadius aqui -->
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#FF576A7A"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#FF46525F"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Image x:Name="botao_guardar" HorizontalAlignment="Left" Height="99" Margin="1422,656,0,0" VerticalAlignment="Top" Width="101" Source="/Icons/botao_check.png" MouseLeftButtonDown="botao_guardar_MouseLeftButtonDown"/>
+        <Image x:Name="imgFotografia" Stretch="Fill" Margin="568,226,578,171" Source="/Icons/editarfoto.png"/>
+    </Grid>
+
+</Window>

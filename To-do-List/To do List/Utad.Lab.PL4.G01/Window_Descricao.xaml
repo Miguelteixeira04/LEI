@@ -1,0 +1,19 @@
+﻿<Window x:Class="Utad.Lab.PL4.G01.Window_Descricao"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utad.Lab.PL4.G01"
+        mc:Ignorable="d"
+        Title="Window_Descricao" Height="400" Width="500">
+    <Grid Background="#FF687E94">
+        <Label Content="DESCRIÇÃO" HorizontalAlignment="Center" Margin="0,14,0,0" VerticalAlignment="Top" Foreground="White" FontSize="26" FontWeight="Bold" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="73" Width="311" UseLayoutRounding="False"/>
+        <Image x:Name="btn_check" HorizontalAlignment="Left" Height="47" Margin="421,301,0,0" VerticalAlignment="Top" Width="73" Source="/Icons/botao_check_filtros.png" MouseLeftButtonDown="btn_check_MouseLeftButtonDown"/>
+        <Rectangle HorizontalAlignment="Center" Margin="0,75,0,98" Stroke="White" Width="440" StrokeThickness="2" StrokeDashOffset="30">
+            <Rectangle.StrokeDashArray>
+                <DoubleCollection>2 2</DoubleCollection>
+            </Rectangle.StrokeDashArray>
+        </Rectangle>
+        <TextBox x:Name="tb_descricao" Text = "{Binding Descricao, Mode=TwoWay}" HorizontalAlignment="Center" VerticalAlignment="Top" Width="410" Height="173" FontFamily="Arial" FontSize="18" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Margin="0,92,0,0" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+    </Grid>
+</Window>
