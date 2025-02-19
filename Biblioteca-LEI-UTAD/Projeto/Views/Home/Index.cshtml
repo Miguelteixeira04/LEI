@@ -1,0 +1,130 @@
+﻿@model IEnumerable<Trabalho.Models.Biblioteca>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@* cabeçalho personalizado *@
+@section CustomHeader {
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Biblioteca LEI-UTAD</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Biblioteca">Consultar Livros</a>
+                    </li>
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #cdcfc0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .content {
+        }
+
+            /*Logo Biblio*/
+            .content img {
+                height: 60vh;
+                width: auto;
+                object-fit: cover;
+                margin: 0;
+                padding: 0;
+                position: absolute;
+                left: 10px;
+                top: 20%;
+            }
+
+                /*Icon Rota*/
+                .content img.iconhome {
+                    width: 300px;
+                    height: auto;
+                    position: absolute;
+                    top: 62%;
+                    left: 65%;
+                    z-index: 2;
+                }
+
+        .info-card {
+            max-width: 600px;
+            margin: 50px auto;
+            margin-left: 750px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .info-card h2 {
+                font-size: 24px;
+                margin-bottom: 25px;
+                color: #343a40;
+            }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+            .info-row:last-child {
+                border-bottom: none;
+            }
+
+            .info-row i {
+                color: #343a40;
+                margin-right: 10px;
+            }
+    </style>
+</head>
+
+<body>
+    @foreach (var item in Model)
+    {
+        <div class="info-card">
+            <h2><i class="fas fa-info-circle"></i> @item.Nome</h2>
+            <div class="info-row">
+                <i class="fas fa-map-marker-alt"></i> @item.Localizacao
+            </div>
+            <div class="info-row">
+                <i class="fas fa-envelope"></i> @item.Email
+            </div>
+            <div class="info-row">
+                <i class="fas fa-phone"></i> @item.Telefone
+            </div>
+            <div class="info-row">
+                <i class="fas fa-clock"></i> @item.HorarioI - @item.HorarioF
+            </div>
+        </div>
+    }
+
+    <div class="content">
+        <img src="/Images/LogoBiblio.png" asp-append-version="true" class="img-fluid" alt="Background Home">
+        <img src="/Images/iconhome.png" asp-append-version="true" class="img-fluid iconhome" alt="Icon Home">
+    </div>
+</body>
+</html>

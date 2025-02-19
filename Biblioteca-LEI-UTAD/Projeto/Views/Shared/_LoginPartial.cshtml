@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Trabalho.Areas.Data
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+@inject Lab2Context _context
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        // Obtém o usuário logado
+        var user = UserManager.GetUserAsync(User).Result;
+        var bibliotecario = _context.Bibliotecarios.FirstOrDefault(b => b.UsernameBib == user.UserName);
+        var validarRegisto = _context.ValidarRegistos.FirstOrDefault(vr => vr.UsernameBib == user.UserName);
+
+        if (bibliotecario != null && validarRegisto != null && validarRegisto.Validado == false)
+        {
+            // Se o registro não for validado, desloga o usuário e exibe mensagem
+            await SignInManager.SignOutAsync();
+            <li class="nav-item">
+                <span class="nav-link text-dark">O seu registo está pendente... Aguarde pela aprovação.</span>
+            </li>
+        }
+        else
+        {
+            // Se o registro for válido, exibe as opções normais
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+            </li>
+            <li class="nav-item">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                </form>
+            </li>
+        }
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Registar</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>

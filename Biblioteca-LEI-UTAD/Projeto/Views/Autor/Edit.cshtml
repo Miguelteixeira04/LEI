@@ -1,0 +1,123 @@
+﻿@model Trabalho.Models.Autor
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@* cabeçalho personalizado *@
+@section CustomHeader {
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Livro" asp-action="Index">Home Page Bibliotecario</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBibliotecario" aria-controls="navbarBibliotecario"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarBibliotecario">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Livro" asp-action="Index">Biblioteca</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Livro" asp-action="Create">Criar Livros</a>
+                    </li
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Autor" asp-action="Index">Lista Autores</a>
+                    </li>
+
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Autor</title>
+    <style>
+        body {
+            background-color: #cdcfc0;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            border: 2px solid black;
+            padding: 10px 20px;
+        }
+
+        .label-group {
+            margin-bottom: 10px;
+        }
+
+        .label-group input, .label-group select {
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid #000;
+            background-color: #c1b29b;
+            color: black;
+        }
+
+        .label-group label {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .criar-button {
+            margin-left: 10px;
+            padding: 8px 12px;
+            background-color: #f5e9db;
+            color: black;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Autor</h1>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdAutor" />
+                <div class="label-group">
+                    <label class="control-label">Nome do Autor</label>
+                    <input asp-for="NameAutor" class="form-control" />
+                    <span asp-validation-for="NameAutor" class="text-danger"></span>
+                </div>
+                <div class="button-group mt-4">
+                    <input type="submit" value="Guardar" class="criar-button" />
+                    <a asp-action="Index" class="criar-button">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Trabalho.Models.Biblioteca>
+
+@{
+    ViewData["Title"] = "Informacoes";
+}
+
+@* cabeçalho personalizado *@
+@section CustomHeader {
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Livro" asp-action="Index">Home Page Bibliotecário</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBibliotecario" aria-controls="navbarBibliotecario"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarBibliotecario">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" asp-controller="Bibliotecario" asp-action="Informacoes">Informações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Livro" asp-action="Index">Biblioteca</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Livro" asp-action="History">Histórico de Requisições</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Livro" asp-action="EntregasAtraso">Entregas em Atraso</a>
+                    </li>
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informacoes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #cdcfc0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            border: 2px solid black;
+            display: inline-block;
+            padding: 10px 20px;
+        }
+
+        .info-card {
+            max-width: 600px;
+            margin: 70px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .info-card h2 {
+                font-size: 24px;
+                margin-bottom: 25px;
+                color: #343a40;
+            }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+            .info-row:last-child {
+                border-bottom: none;
+            }
+
+            .info-row i {
+                color: #343a40;
+                margin-right: 10px;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Informações</h1>
+    </div>
+
+    @foreach (var item in Model)
+    {
+        <div class="info-card">
+            <h2><i class="fas fa-info-circle"></i> @item.Nome</h2>
+            <div class="info-row">
+                <i class="fas fa-map-marker-alt"></i> @item.Localizacao
+            </div>
+            <div class="info-row">
+                <i class="fas fa-envelope"></i> @item.Email
+            </div>
+            <div class="info-row">
+                <i class="fas fa-phone"></i> @item.Telefone
+            </div>
+            <div class="info-row">
+                <i class="fas fa-clock"></i> @item.HorarioI - @item.HorarioF
+            </div>
+        </div>
+    }
+</body>
+</html>

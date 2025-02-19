@@ -1,0 +1,147 @@
+﻿@model IEnumerable<Trabalho.Models.Requisicao>
+
+@{
+    ViewData["Title"] = "Histórico de Requisições";
+}
+
+@* cabeçalho personalizado *@
+@section CustomHeader {
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Leitores" asp-action="Biblioteca">Home Page Leitor</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarLeitor" aria-controls="navbarLeitor"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarLeitor">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Leitores" asp-action="Informacoes">Informações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Leitores" asp-action="Biblioteca">Biblioteca</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" asp-controller="Leitores" asp-action="History">Histórico de Requisições</a>
+                    </li>
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Requisições</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #cdcfc0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+            .header h1 {
+                font-size: 48px;
+                font-family: 'Times New Roman', serif;
+                margin: 0;
+                border: 2px solid black;
+                padding: 10px 20px;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .status-entregue {
+            background-color: #28a745; /* Verde */
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .status-por-entregar {
+            background-color: #dc3545; /* Vermelho */
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Requisições</h1>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Requisição</th>
+                    <th>Título</th>
+                    <th>Data Requisição</th>
+                    <th>Data Entrega</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+
+                {
+                    <tr>
+                        <td colspan="5" style="text-align: center;">Nenhuma requisição efetuada.</td>
+                    </tr>
+                }
+
+
+
+                else
+
+                {
+                    @foreach (var requisicao in Model)
+                    {
+                        <tr>
+                            <td>@requisicao.IdRequisicao</td>
+                            <td>@requisicao.IsbnNavigation.Titulo</td>
+                            <td>
+                                <span>@requisicao.DataRequisicao.ToString("dd-MM-yyyy")</span>
+                                <small class="text-muted">(@requisicao.DataRequisicao.ToString("HH:mm"))</small>
+                            </td>
+                            <td>
+                                <span>@requisicao.DataDevolucao?.ToString("dd-MM-yyyy")</span>
+                                <small class="text-muted">(@requisicao.DataDevolucao?.ToString("HH:mm"))</small>
+                            </td>
+                            <td class="@(requisicao.Estado ? "status-por-entregar" : "status-entregue")">
+                                @(requisicao.Estado ? "Por Entregar" : "Entregue")
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

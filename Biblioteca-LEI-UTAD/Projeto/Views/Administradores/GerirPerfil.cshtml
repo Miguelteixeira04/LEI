@@ -1,0 +1,389 @@
+﻿@{
+    ViewData["Title"] = "Gerir Perfil";
+}
+
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerir Perfil</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #cdcfc0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: left;
+            margin: 20px 60px;
+            font-size: 40px;
+            font-weight: bold;
+            border: 1px solid #000;
+            padding: 10px;
+            display: inline-block;
+        }
+
+        img {
+            align-self: flex-end;
+            width: 75px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 40px;
+            gap: 50px;
+            flex: 1;
+        }
+
+        .left-panel {
+            width: 60%;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+            .left-panel label {
+                font-weight: bold;
+                margin-top: 7px;
+                display: block;
+            }
+
+            .left-panel input {
+                width: calc(100% - 7px);
+                padding: 8px;
+                margin-top: 5px;
+                margin-bottom: 7px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+        .right-panel {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-self: stretch;
+        }
+
+            .buttons button {
+                background-color: #ecdeab;
+                width: 100%;
+                padding: 10px;
+                font-size: 16px;
+                border: 1px solid #000;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+        .status {
+            background-color: #ecdeab;
+            font-weight: bold;
+            margin-top: 5px;
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #c5b892;
+        }
+
+        .confirm-button {
+            align-self: flex-end;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #ecdeab;
+            font-size: 16px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gerir Perfil</h1>
+
+    <a href="/Administradores/Index">
+        <img src="/Images/Seta.png" alt="Página principal">
+    </a>
+
+    <div class="container">
+        <!-- Painel Esquerdo -->
+        <div class="left-panel">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" disabled>
+
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" disabled>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" disabled>
+
+            <label for="morada">Morada</label>
+            <input type="text" id="morada" name="morada" disabled>
+
+            <label for="contacto">Contacto</label>
+            <input type="text" id="contacto" name="contacto" disabled>
+        </div>
+
+        <!-- Painel Direito -->
+        <div class="right-panel">
+            <div class="buttons">
+                <button onclick="atualizarPerfil()">Atualizar Perfil</button>
+                <button onclick="alterarEstado('ativo')">Ativar Conta</button>
+                <button onclick="bloquearConta()">Bloquear Conta</button>
+                <button class="confirm-button" onclick="confirmarAtualizacao()">Confirmar</button>
+
+            </div>
+
+            <label for="funcao">Função</label>
+            <input type="text" id="funcao" name="funcao" class="readonly-field" readonly>
+
+            <label for="motivo">Motivo do Bloqueio</label>
+            <select id="motivo" name="motivo">
+                <option value="atrasos">Vários atrasos na devolução de livros</option>
+                <option value="danos">Perda ou danos a livros</option>
+                <option value="conduta">Conduta inadequada</option>
+                <option value="violacao">Violação de políticas da biblioteca</option>
+                <option value="compartilhamento">Compartilhamento não autorizado de credenciais</option>
+            </select>
+
+
+            <label>Estado</label>
+            <div class="status" id="estado"></div>
+        </div>
+    </div>
+
+    <script>
+        function carregarPerfil() {
+            const username = new URLSearchParams(window.location.search).get('username');
+            if (!username) {
+                alert("Username do utilizador não fornecido.");
+                return;
+            }
+
+            fetch(`/api/Administradores/Utilizador/${username}`)
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().catch(() => {
+                            return response.text().then(text => {
+                                throw new Error(text || "Erro desconhecido.");
+                            });
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("nome").value = data.nome || "";
+                    document.getElementById("username").value = data.userName || "";
+                    document.getElementById("email").value = data.email || "";
+                    document.getElementById("morada").value = data.address || "";
+                    document.getElementById("contacto").value = data.phoneNumber || "";
+                    document.getElementById("funcao").value = data.role || "";
+                    document.getElementById("estado").textContent = data.estado || "";
+                })
+                .catch(error => {
+                    alert("Erro ao carregar perfil: " + error.message);
+                    console.error(error);
+                });
+        }
+
+
+        // Função para verificar o estado de bloqueio na tabela
+        function verificarEstadoBloqueio(username) {
+            fetch(`/api/Administradores/VerificarBloqueio/${username}`)
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(err.mensagem || "Erro ao verificar estado de bloqueio.");
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.bloqueado) {
+                        // Se a conta estiver bloqueada, desabilitar o botão de "Ativar Conta"
+                        document.querySelector("button[onclick='alterarEstado(\"ativo\")']").disabled = true;
+                        document.getElementById("estado").textContent = "Bloqueado";
+                    } else {
+                        // Se a conta não estiver bloqueada, desabilitar o botão de "Bloquear Conta"
+                        document.querySelector("button[onclick='bloquearConta()']").disabled = true;
+                        document.getElementById("estado").textContent = "Ativo";
+                    }
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+
+        // Função para habilitar os campos de email, morada e contacto para edição
+        function atualizarPerfil() {
+            // Habilitar campos de email, morada e contacto
+            document.getElementById("email").disabled = false;
+            document.getElementById("morada").disabled = false;
+            document.getElementById("contacto").disabled = false;
+        }
+
+        // Função para confirmar e atualizar o perfil
+        function confirmarAtualizacao() {
+            const nome = document.getElementById("nome").value;
+            const email = document.getElementById("email").value;
+            const morada = document.getElementById("morada").value;
+            const contacto = document.getElementById("contacto").value;
+
+            // Verificar se todos os campos obrigatórios estão preenchidos
+            // if (!nome || !email || !morada || !contacto) {
+            //     alert("Todos os campos são obrigatórios.");
+            //     return;
+            // }
+
+            // Dados a serem enviados para o servidor
+            const data = {
+                username: new URLSearchParams(window.location.search).get('username'),
+                nome: nome,
+                email: email,
+                morada: morada,
+                contacto: contacto
+            };
+
+            // Enviar a requisição de atualização do perfil
+            fetch("/api/Administradores/AtualizarPerfil", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    // Verificar se a resposta não está vazia
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            console.error("Erro de servidor:", text);  // Imprimir erro no console
+                            throw new Error(text || "Erro ao atualizar o perfil.");
+                        });
+                    }
+
+                    // Tentar processar a resposta como JSON, caso contrário, mostrar erro
+                    return response.json().catch(() => {
+                        console.error("Erro de servidor: Resposta não contém JSON válido");  // Log de erro
+                        throw new Error("Resposta do servidor não contém JSON válido.");
+                    });
+                })
+                .then(data => {
+                    // Se a atualização for bem-sucedida, mostrar sucesso
+                    alert("Perfil atualizado com sucesso!");
+
+                    // Desabilitar novamente os campos após a atualização
+                    document.getElementById("email").disabled = true;
+                    document.getElementById("morada").disabled = true;
+                    document.getElementById("contacto").disabled = true;
+                })
+                .catch(error => {
+                    // Mostrar o erro caso algo falhe
+                    alert("Erro ao atualizar o perfil: " + error.message);
+                    console.error(error);  // Exibir erro no console para depuração
+                });
+        }
+
+        // Função para bloquear a conta
+        function bloquearConta() {
+            const username = new URLSearchParams(window.location.search).get('username');
+            const motivo = document.getElementById("motivo").value;
+
+            if (!username) {
+                alert("Username do utilizador não encontrado.");
+                return;
+            }
+
+            if (!motivo.trim()) {
+                alert("Por favor, insira um motivo para o bloqueio.");
+                return;
+            }
+
+            fetch(`/api/Administradores/BloquearUtilizador/${username}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ motivo })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().catch(() => {
+                            return response.text().then(text => {
+                                throw new Error(text || "Erro desconhecido.");
+                            });
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message || "Conta bloqueada com sucesso!");
+                    document.getElementById("estado").textContent = "Bloqueado";
+                    document.getElementById("motivo").value = "";
+                })
+                .catch(error => {
+                    alert("Erro ao bloquear o utilizador: " + error.message);
+                    console.error(error);
+                });
+        }
+
+
+
+        // Função para carregar o motivo do bloqueio, se existir
+        function carregarMotivoBloqueio() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const motivo = urlParams.get('motivo');
+            if (motivo) {
+                document.getElementById('motivo').value = motivo; // Preenche o campo motivo com o valor da URL
+            }
+        }
+
+        // Função para alterar o estado (ativo/inativo)
+        function alterarEstado(estado) {
+            const username = new URLSearchParams(window.location.search).get('username');
+
+            fetch(`/api/Administradores/AlterarEstado?username=${username}&estado=${estado}`, {
+                method: "POST"
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("Erro ao alterar o estado.");
+                    alert(`Conta ${estado === 'ativo' ? 'ativada' : 'bloqueada'} com sucesso!`);
+                    window.location.reload();
+                })
+                .catch(error => alert(error.message));
+        }
+
+
+        // Carregar os dados do perfil ao carregar a página
+        document.addEventListener("DOMContentLoaded", carregarPerfil);
+    </script>
+
+
+
+</body>
+</html>
