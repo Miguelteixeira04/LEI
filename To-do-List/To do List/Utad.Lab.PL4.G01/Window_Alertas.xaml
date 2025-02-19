@@ -1,0 +1,88 @@
+﻿<Window x:Class="Utad.Lab.PL4.G01.Window_Alertas"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utad.Lab.PL4.G01"
+        mc:Ignorable="d"
+        Title="Alertas" Height="813" Width="1573">
+    <Window.Resources>
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="FontSize" Value="30"/>
+        </Style>
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="FontSize" Value="30"/>
+        </Style>
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="30"/>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#FF101728">
+        <Menu x:Name="menu" Margin="0,0,0,737" Background="#FF687E94">
+            <MenuItem x:Name="menu_inicio" Header="                        INÍCIO" Height="60" Width="600" FontSize="24" VerticalAlignment="Center" FontFamily="Arial Black" Foreground="White" Click="menu_inicio_Click" HorizontalContentAlignment="Stretch"/>
+            <MenuItem x:Name="menu_perfil" Header="           PERFIL" FontSize="24" Width="600" FontFamily="Arial Black" Foreground="White" Click="menu_perfil_Click_1"/>
+            <MenuItem x:Name="menu_tarefas" Header="TAREFAS" FontSize="24" Width="329" FontFamily="Arial Black" Foreground="White" Click="menu_tarefas_Click"/>
+        </Menu>
+        <Rectangle HorizontalAlignment="Left" Height="9" Margin="1208,41,0,0" Stroke="#FAC30C" VerticalAlignment="Top" Width="121" Fill="#FAC30C" RadiusX="3" RadiusY="3"/>
+        <Label x:Name="label_manutencao_alertas" Content="Manutenção de Alertas" HorizontalAlignment="Left" Margin="45,154,0,0" VerticalAlignment="Top" Height="94" Width="786" Foreground="White" FontFamily="Arial Black" FontSize="60"/>
+        <Label x:Name="label_tracos" Content="____________________________________________________________________________________________" Margin="45,300,836,0" VerticalAlignment="Top" Foreground="White" Height="83" FontSize="40"/>
+        <Label x:Name="label_tracos2" Content="____________________________________________________________________________________________" Margin="45,385,836,0" VerticalAlignment="Top" Foreground="White" Height="83" FontSize="40"/>
+        <Label x:Name="label_tracos3" Content="____________________________________________________________________________________________" Margin="45,470,836,0" VerticalAlignment="Top" Foreground="White" Height="83" FontSize="40"/>
+        <Label x:Name="label_tracos4" Content="____________________________________________________________________________________________" Margin="45,555,836,0" VerticalAlignment="Top" Foreground="White" Height="83" FontSize="40"/>
+        <TextBlock x:Name="tb_id" HorizontalAlignment="Left" Height="51" Margin="244,289,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="450" Background="#687E94" Foreground="White" Style="{StaticResource TextBlockStyle}" />
+        <TextBlock x:Name="tb_data" HorizontalAlignment="Left" Height="50" Margin="244,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="450" Background="#687E94" Foreground="White" Style="{StaticResource TextBlockStyle}" />
+        <Label x:Name="label_Id" Content="Id: "         Foreground="White" Height="54" FontSize="36" VerticalAlignment="Top"                                            Margin="45,290,1429,0"/>
+        <Label x:Name="label_Data" Content="Data: "     Foreground="White" Height="64" FontSize="36" RenderTransformOrigin="0.51,1.529" VerticalAlignment="Top"         Margin="45,369,1386,0"/>
+        <StackPanel Orientation="Horizontal" Margin="-10,5,10,-5">
+            <TextBlock x:Name="tb_hora" Height="50" Margin="254,451,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="450" Background="#687E94" Foreground="White" Style="{StaticResource TextBlockStyle}" />
+            <Image x:Name="infoIcon" HorizontalAlignment="Right" Height="32" VerticalAlignment="Center" Width="32" Source="/Icons/botao_info.png" Margin="10,160,0,0">
+                <Image.ToolTip>
+                    <ToolTip Placement="Right" HorizontalOffset="10">
+                        <StackPanel>
+                            <TextBlock Text="Consoante o alerta selecionado, a hora que o alerta é enviado é diferente."/>
+                            <TextBlock Text="- Se for 'Antecipação' é enviado cerca de 30 minutos antes do começo da tarefa"/>
+                            <TextBlock Text="- Se for 'Execução' é enviado cerca de 1 minuto depois do começo da tarefa"/>
+                        </StackPanel>
+                    </ToolTip>
+                </Image.ToolTip>
+            </Image>
+        </StackPanel>
+        <Label x:Name="label_Hora" Content="Hora: "     Foreground="White" Height="64" FontSize="36" VerticalAlignment="Top" Width="142" HorizontalAlignment="Left"     Margin="45,450,0,0"/>
+        <Label x:Name="label_Alerta" Content="Alerta: " Foreground="White" Height="64" FontSize="36" VerticalAlignment="Top" Width="120" HorizontalAlignment="Left"     Margin="45,538,0,0"/>
+        <Label x:Name="label_Tipo" Content="Tipo: "     Foreground="White" Height="64" FontSize="36" VerticalAlignment="Top" Width="99" HorizontalAlignment="Left"     Margin="45,619,0,0"/>
+        <CheckBox x:Name="cb_ativar" Content="Ativar/Desativar Alarme" HorizontalAlignment="Left" Margin="938,539,0,0" VerticalAlignment="Top" Foreground="White" FontSize="9" Width="126" IsChecked="True" Height="16" VerticalContentAlignment="Center" >
+            <CheckBox.LayoutTransform>
+                <ScaleTransform ScaleX="3.5" ScaleY="3.5"/>
+            </CheckBox.LayoutTransform>
+        </CheckBox>
+
+
+        <Image HorizontalAlignment="Left" Height="91" Margin="1432,676,0,0" VerticalAlignment="Top" Width="107" Source="/Icons/botao_check.png" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
+        <Image HorizontalAlignment="Left" Height="67" Margin="935,611,0,0" VerticalAlignment="Top" Width="64" Source="/Icons/aviso.png"/>
+        <Canvas Height="137" Margin="1005,627,165,0" VerticalAlignment="Top">
+            <Label x:Name="label_1" Content="Se a tarefa for                   esta" Foreground="White" Height="64" FontSize="30" RenderTransformOrigin="0.51,1.529" Canvas.Left="1" VerticalAlignment="Top" Width="422" HorizontalAlignment="Center" Canvas.Top="-21"/>
+            <Label x:Name="label_2" Content="possui automaticamente os" Foreground="White" Height="64" FontSize="30" RenderTransformOrigin="0.51,1.529" Canvas.Left="1" Canvas.Top="16" VerticalAlignment="Top" Width="402" HorizontalAlignment="Center"/>
+            <Label x:Name="label_3" Content="2 alertas" Foreground="#FAC30C" Height="64" FontSize="30" RenderTransformOrigin="0.51,1.529" FontWeight="Bold" Canvas.Top="52" VerticalAlignment="Top" Width="142" HorizontalAlignment="Center"/>
+            <Label x:Name="label_4" Content="prioritária" Foreground="#FAC30C" Height="64" FontSize="30" RenderTransformOrigin="0.51,1.529" FontWeight="Bold" Canvas.Left="196" Canvas.Top="-20" VerticalAlignment="Top" Width="158" HorizontalAlignment="Center"/>
+        </Canvas>
+        <Rectangle HorizontalAlignment="Left" Height="330" Margin="955,175,0,0" Stroke="#687E94" VerticalAlignment="Top" Width="453" Fill="#687E94" RadiusX="20" RadiusY="20"/>
+        <Label x:Name="label_alertas" Content="Alertas" HorizontalAlignment="Left" Margin="1060,183,0,0" VerticalAlignment="Top" Height="87" Width="248" Foreground="#89B9AD" FontFamily="Roca One" FontSize="70" FontWeight="Bold"/>
+        <ComboBox x:Name="cb_alertas" HorizontalAlignment="Left" Height="52" Margin="244,540,0,0" VerticalAlignment="Top" Width="450" Style="{StaticResource ComboBoxStyle}">
+            <ComboBoxItem Content="Antecipação"/>
+            <ComboBoxItem Content="Execução"/>
+            <ComboBoxItem Content="Antecipação e Execução"/>
+        </ComboBox>
+        <ComboBox x:Name="cb_tipo" HorizontalAlignment="Left" Height="52" Margin="244,625,0,0" VerticalAlignment="Top" Width="450" Style="{StaticResource ComboBoxStyle}">
+            <ComboBoxItem Content="Email"/>
+            <ComboBoxItem Content="Windows"/>
+            <ComboBoxItem Content="Email e Windows"/>
+        </ComboBox>
+        <TextBox x:Name="tb_nota_alerta" HorizontalAlignment="Left" Height="214" Margin="981,275,0,0" Text=" (Insira uma nota relativa ao alarme aqui)" VerticalAlignment="Top" Width="401" Background="#687E94" Foreground="White" FontSize="20" GotFocus="tb_nota_alerta_GotFocus" AcceptsReturn="True" BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+        <Rectangle HorizontalAlignment="Left" Margin="969,275,0,303" Stroke="White" Width="426" StrokeThickness="2" StrokeDashOffset="30">
+            <Rectangle.StrokeDashArray>
+                <DoubleCollection>2 2</DoubleCollection>
+            </Rectangle.StrokeDashArray>
+        </Rectangle>
+
+    </Grid>
+</Window>

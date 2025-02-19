@@ -1,0 +1,28 @@
+﻿<Window x:Class="Utad.Lab.PL4.G01.Window_editar_perfil"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utad.Lab.PL4.G01"
+        mc:Ignorable="d"
+        Title="Perfil" Height="813" Width="1573">
+    <Grid Background="#FF101728">
+        <Menu x:Name="menu" Margin="0,0,0,737" Background="#FF687E94">
+            <MenuItem x:Name="menu_inicio" Header="                        INÍCIO" Height="60" Width="600" FontSize="24" VerticalAlignment="Center" FontFamily="Arial Black" Foreground="White" Click="menu_inicio_Click"/>
+            <MenuItem x:Name="menu_perfil" Header="           PERFIL" FontSize="24" Width="600" FontFamily="Arial Black" Foreground="White" Click="menu_perfil_Click"/>
+            <MenuItem x:Name="menu_tarefas" Header="TAREFAS" FontSize="24" Width="329" FontFamily="Arial Black" Foreground="White" Click="menu_tarefas_Click"/>
+        </Menu>
+        <Rectangle HorizontalAlignment="Left" Height="9" Margin="682,41,0,0" Stroke="#FAC30C" VerticalAlignment="Top" Width="121" Fill="#FAC30C" RadiusX="3" RadiusY="3"/>
+        <Label Content="Editar perfil" HorizontalAlignment="Left" Height="107" Margin="138,150,0,0" VerticalAlignment="Top" Width="495" Foreground="White" FontSize="72" FontFamily="Arial Black"/>
+        <Image HorizontalAlignment="Left" Height="133" Margin="81,0,0,0" VerticalAlignment="Center" Width="609" Source="/Icons/Editar_nome.jpg"/>
+        <TextBox x:Name="textbox_editar_nome" HorizontalAlignment="Left" Margin="215,363,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="446" Height="64" FontSize="35" Background="#FF101728" Foreground="White" BorderBrush="#FF101728" IsEnabled="False" TextChanged="textbox_editar_nome_TextChanged"/>
+        <Image HorizontalAlignment="Left" Height="122" Margin="81,564,0,0" VerticalAlignment="Top" Width="596" Source="/Icons/Editar_email.jpg"/>
+        <TextBox x:Name="textbox_editar_email" HorizontalAlignment="Left" Margin="215,564,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="446" Height="64" FontSize="35" Background="#FF101728" Foreground="White" BorderBrush="#FF101728" IsEnabled="False"/>
+        <Button x:Name="botao_editar_nome" Content="Editar Nome" HorizontalAlignment="Left" Margin="75,461,0,0" VerticalAlignment="Top" Height="32" Width="162" FontSize="18" Background="#FF101728" Foreground="#FF7C8FFF" BorderBrush="#FF101728" Click="botao_editar_nome_Click"/>
+        <Button x:Name="botao_editar_email" Content="Editar Email" HorizontalAlignment="Left" Margin="75,672,0,0" VerticalAlignment="Top" Height="32" Width="162" FontSize="18" Background="#FF101728" Foreground="#FF7C8FFF" BorderBrush="#FF101728" Click="botao_editar_email_Click"/>
+        <Image x:Name="Imagem_editar_fotografia" HorizontalAlignment="Left" Height="391" Margin="995,229,0,0" VerticalAlignment="Top" Width="390" OpacityMask="Black" Source="/Icons/imagem-perfil.jpg"/>
+        <Button x:Name="botao_editar_fotografia" Content="Editar fotografia" HorizontalAlignment="Left" Margin="1109,640,0,0" VerticalAlignment="Top" Height="32" Width="162" FontSize="18" Background="#FF101728" Foreground="#FF7C8FFF" BorderBrush="#FF101728" Click="botao_editar_fotografia_Click"/>
+        <Image x:Name="botao_guardar" HorizontalAlignment="Left" Height="99" Margin="1422,656,0,0" VerticalAlignment="Top" Width="101" Source="/Icons/botao_check.png" MouseLeftButtonDown="botao_guardar_MouseLeftButtonDown"/>
+
+    </Grid>
+</Window>
