@@ -1,0 +1,4246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="roomType.css">
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
+  <style>
+  
+#mapa {
+width: 1920px;
+height: 1080px;
+background: url("https://i.ibb.co/Pvs3zpFy/fundu.jpg");
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+position: absolute;
+top: calc(50% - 50px);
+left: 50%;
+transform: translate(-63%, -50%);
+}
+
+#personagem {
+  position: absolute;
+  width:110px;
+  height:110px;
+  background: url('https://i.ibb.co/DHzKLLfN/soldado.png');
+  background-size: cover;
+  top: 435px;
+  left: 920px;
+  transform: rotate(0deg);
+  z-index: 10;
+  transform-origin: center center; /* Set the transform origin to the center */
+}
+.follower {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  scale: 0.6;
+  background: url('https://i.ibb.co/DHzKLLfN/soldado.png');
+  background-size: cover;
+  transform: rotate(0deg);
+  z-index: 11;
+}
+.zombie {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  background: url('https://i.ibb.co/mr00xkCQ/zombie.png');
+  background-size: cover;
+  transform: rotate(0deg);
+}
+#bullet {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: url('https://i.ibb.co/XfY6wKSS/bala2.png');
+  background-size: cover;
+}
+
+#scoreboard {
+  position: fixed;
+  top: 25px;
+  left: 2080px;
+  background-color: #222; /* Cor de fundo escura */
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra suave */
+  font-family: Arial, sans-serif; /* Fonte padrão */
+  font-size: 30px;
+  text-align: center; /* Alinhamento centralizado */
+  white-space: nowrap; /* Impede quebra de linha */
+}
+
+#currentRoomDisplay {
+  position: fixed;
+  top: 25px; 
+  left: 2410px;
+  background-color: #222; /* Cor de fundo escura */
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra suave */
+  font-family: Arial, sans-serif; /* Fonte padrão */
+  font-size: 30px;
+  text-align: center; /* Alinhamento centralizado */
+  white-space: nowrap; /* Impede quebra de linha */
+}
+
+
+
+#playerHealthBar {
+  position: fixed;
+  width: 600px;
+  height: 175px;
+  top: 915px;
+  left: 50px;
+  z-index: 9999;
+}
+.healthBarLayer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+#playerHealthBarBackground {
+  background-color: black;
+  height: 150px;
+  bottom: 0;
+}
+#playerHealthBarMiddle {
+  background-color: #4CFF00;
+  height: 150px;
+  bottom: 0;
+}
+#playerHealthBarTop {
+  background: url('https://i.ibb.co/YF8ztDSp/Health-Bar-Player.png') center center no-repeat;
+  background-size: cover;
+}
+.door {
+  position: absolute; /* Position the doors absolutely within the map container */
+  background-size: cover;
+  z-index: 9;
+}
+
+#portaAberta {
+  background: url('https://i.ibb.co/PvJCGgL9/porta-aberta.png') center center no-repeat;
+}
+#portaAntiga {
+  background: url('https://i.ibb.co/6cMLkMK5/porta-antiga.png') center center no-repeat;
+}
+
+#blackScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none; /* Allow interaction with elements beneath */
+  z-index: 998; /* Ensure the black screen appears above other content */
+}
+
+#chest {
+  width: 75px;
+  height: 75px;
+  position: absolute;
+  top: 100px;
+  left: 110px;
+}
+
+#chest.closed {
+  background-image: url('https://i.ibb.co/jvfyS80W/bau-fechado.png'); /* Imagem do baú fechado */
+  background-size: contain; /* Ou cover, dependendo do comportamento desejado */
+  background-repeat: no-repeat; /* Evita repetição da imagem */
+  background-position: center; /* Centraliza a imagem */
+}
+
+
+#chest.open {
+  background-image: url('https://i.ibb.co/mC26HF5v/bau-aberto.png'); /* Imagem do baú aberto */
+  background-size: contain; /* Ou cover, dependendo do comportamento desejado */
+  background-repeat: no-repeat; /* Evita repetição da imagem */
+  background-position: center; /* Centraliza a imagem */
+}
+
+#chestMessage {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7); /* Fundo preto com transparência */
+  color: white;
+  padding: 5px 10px; /* Margem interna ajustada */
+  border-radius: 5px; /* Bordas arredondadas */
+  font-size: 25px; /* Tamanho da fonte */
+  max-width: 315px; /* Largura máxima */
+  text-align: center; /* Texto centralizado */
+  pointer-events: none; /* Impede interação com o texto */
+  white-space: nowrap; /* Impede quebra de linha */
+}
+
+#timeDisplay {
+  position: fixed;
+  top: 150px;
+  left: 1950px;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+#deathCount {
+  position: fixed;
+  top: 250px; 
+  left: 1950px;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+
+#questionTimeDisplay {
+  position: fixed;
+  top: 450px;
+  left: 1950px;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+
+.hidden {
+  display: none;
+}
+
+
+.question-container {
+  position: absolute;
+  width: 80%;
+  max-width: 600px; /* Adjust max-width as needed */
+  left: 50%;
+  top: 10%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: white; /* Text color set to white */
+  z-index: 999; /* Ensure the black screen appears above other content */
+}
+
+.question-text {
+  font-size: 40px;
+  margin-bottom: 40px;
+  z-index: 999; /* Ensure the black screen appears above other content */
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999; /* Ensure the black screen appears above other content */
+}
+
+.option {
+  font-size: 35px;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 999; /* Ensure the black screen appears above other content */
+}
+
+.option.selected {
+  background-color: #4CAF50; /* Green background color for selected option */
+  color: white;
+  z-index: 999; /* Ensure the black screen appears above other content */
+}
+
+#badgeDisplay {
+  position: fixed; /* Fixa o elemento na tela */
+  top: 33%; /* Posiciona verticalmente no meio */
+  right: -555px; /* Alinha à direita com um deslocamento adicional */
+  transform: translateY(-50%); /* Ajusta o elemento para ficar centralizado verticalmente */
+  display: flex;
+  flex-direction: column; /* Permite empilhar a label acima dos badges */
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+#badgesContainer {
+  display: flex; /* Exibe os badges lado a lado */
+  justify-content: center;
+  align-items: center;
+}
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 20px; /* Espaçamento entre os badges */
+}
+
+.badgeLabel {
+  color: black; /* Texto preto */
+  padding: 5px 10px; /* Espaçamento interno */
+  margin-bottom: 10px; /* Espaçamento abaixo da label */
+  border-radius: 5px; /* Bordas arredondadas */
+  font-size: 35px; /* Tamanho da fonte */
+  text-align: center; /* Alinhamento do texto */
+  font-weight: bold; /* Negrito */
+  font-family: 'Roboto', sans-serif; /* Fonte personalizada */
+}
+
+#currentRankLabel {
+  color: black; /* Texto preto */
+  padding: 5px 10px; /* Espaçamento interno */
+  margin-top: 10px; /* Espaçamento acima da label */
+  border-radius: 5px; /* Bordas arredondadas */
+  font-size: 30px; /* Tamanho da fonte */
+  text-align: center; /* Alinhamento do texto */
+  font-weight: bold; /* Negrito */
+  font-family: 'Roboto', sans-serif; /* Fonte personalizada */
+}
+
+#currentBadgeImage{
+  width: 220px;
+  height: 190px;
+}
+
+#newBadgeContainer {
+  position: fixed;
+  top: calc(905px + 220px); /* 905px é a nova posição da barra de vida, +175px de altura da barra, +50px de margem */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row; /* Alinhados na mesma linha */
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* Espaço entre os badges */
+  z-index: 10;
+}
+
+#newBadgeContainer .badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#newBadgeContainer img {
+  width: 125px;
+  height: 125px;
+  margin: 5px;
+  border: 0;
+}
+
+.badgeMessage {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.9); /* Fundo mais escuro */
+  color: white;
+  padding: 10px 15px; /* Aumenta o espaço interno */
+  border-radius: 8px; /* Bordas mais suaves */
+  font-size: 28px; /* Letras maiores */
+  max-width: 500px; /* Ajusta a largura máxima */
+  text-align: center;
+  pointer-events: none;
+  white-space: nowrap;
+  display: none; /* Oculto por padrão */
+  z-index: 1000;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 1); /* Adiciona um efeito de sombra para maior contraste */
+}
+
+
+
+#startScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+#startScreen h1 {
+  font-size: 60px; /* Aumenta o tamanho da label WELCOME */
+  margin-bottom: 10px; /* Reduz o espaço abaixo do h1 */
+}
+
+#startScreen h3 {
+  font-size: 30px; /* Aumenta o tamanho da label WELCOME */
+  margin-top: 10; /* Remove o espaço superior do h3 */
+}
+
+#startScreen input {
+  padding: 20px; /* Aumenta o padding do input */
+  font-size: 24px; /* Aumenta o tamanho da fonte do input */
+  margin-bottom: 40px; /* Ajusta o espaçamento abaixo do input */
+}
+
+#startScreen button {
+  background-color: green;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+#rankingTableContainer {
+  position: fixed;
+  top: 600px; /* Ajuste a posição conforme necessário */
+  left: 1975px; /* Posiciona a tabela fora da área do jogo */
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 450px;
+  height: 100vh;
+  margin: 0;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.leaderboard {
+  position: absolute;
+  width: 500px;
+  height: 310px;
+  background: linear-gradient(to bottom, #001e5f, #181c26);
+  border-radius: 10px;
+  box-shadow: 0 7px 30px rgba(62, 9, 11, 0.3);
+  top: 600px;
+  left: 1975px;
+}
+
+.leaderboard h1 {
+  font-size: 18px;
+  color: #e1e1e1;
+  padding: 12px 13px 18px;
+}
+
+.leaderboard h1 svg {
+  width: 25px;
+  height: 26px;
+  position: relative;
+  top: 3px;
+  margin-right: 6px;
+  vertical-align: baseline;
+}
+
+.leaderboard ol {
+  counter-reset: leaderboard;
+}
+
+.leaderboard ol li {
+  position: relative;
+  z-index: 1;
+  font-size: 14px;
+  counter-increment: leaderboard;
+  padding: 18px 10px 18px 50px;
+  cursor: pointer;
+  backface-visibility: hidden;
+  transform: translateZ(0) scale(1.0, 1.0);
+}
+
+.leaderboard ol li::before {
+  content: counter(leaderboard);
+  position: absolute;
+  z-index: 2;
+  top: 15px;
+  left: 15px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  color: #1900ff;
+  background: #fff;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.leaderboard ol li mark {
+  font-size: 18px;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 18px 10px 18px 50px;
+  margin: 0;
+  background: none;
+  color: #fff;
+}
+
+.leaderboard ol li mark::before,
+.leaderboard ol li mark::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  bottom: -11px;
+  left: -9px;
+  border-top: 10px solid blue;
+  border-left: 10px solid transparent;
+  transition: all 0.1s ease-in-out;
+  opacity: 0;
+}
+
+.leaderboard ol li mark::after {
+  left: auto;
+  right: -9px;
+  border-left: none;
+  border-right: 10px solid transparent;
+}
+
+.leaderboard ol li small {
+  font-size: 16px;
+  position: relative;
+  z-index: 2;
+  display: block;
+  text-align: right;
+}
+
+.leaderboard ol li::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fa6855;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+}
+
+.leaderboard ol li:nth-child(1) {
+  background: #052a47;
+}
+
+.leaderboard ol li:nth-child(1)::after {
+  background: #fa6855;
+}
+
+.leaderboard ol li:nth-child(2) {
+  background: #073a64;
+}
+
+.leaderboard ol li:nth-child(2)::after {
+  background: #e0574f;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08);
+}
+
+.leaderboard ol li:nth-child(3) {
+  background: #085b9e;
+}
+
+.leaderboard ol li:nth-child(3)::after {
+  background: #d7514d;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.11);
+}
+
+.leaderboard ol li:nth-child(4) {
+  background: #0c79d3;
+}
+
+.leaderboard ol li:nth-child(4)::after {
+  background: #00eeff;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.leaderboard ol li:nth-child(5) {
+  background: #078fff;
+  border-radius: 0 0 10px 10px;
+}
+
+.leaderboard ol li:nth-child(5)::after {
+  background: #c24448;
+  box-shadow: 0 -2.5px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 0 0 10px 10px;
+}
+
+.leaderboard ol li:hover {
+  z-index: 2;
+  overflow: visible;
+}
+
+.leaderboard ol li:hover::after {
+  opacity: 1;
+  transform: scaleX(1.06) scaleY(1.03);
+}
+
+.leaderboard ol li:hover mark::before,
+.leaderboard ol li:hover mark::after {
+  opacity: 1;
+  transition: all 0.35s ease-in-out;
+}
+
+.the-most {
+  position: fixed;
+  z-index: 1;
+  bottom: 0;
+  left: 0;
+  width: 50vw;
+  max-width: 200px;
+  padding: 10px;
+}
+
+.the-most img {
+  max-width: 100%;
+}
+
+#endGameScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.ibb.co/1fhzgR82/Bartle-Z-endscreen.png') center center no-repeat;
+    background-size: cover; /* Ajusta a imagem para cobrir a tela */
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 100px; 
+    color: white;
+    font-family: Arial, sans-serif;
+    z-index: 9999;
+    display: none; /* Oculto por padrão */
+}
+
+
+#endGameScreen h3 {
+  font-size: 40px;
+  margin-bottom: 45px;
+  margin-top: 500px; /* Aumenta ainda mais a distância do topo */
+}
+
+#endGameScreen table {
+  border-collapse: collapse;
+  width: 85%; /* Aumenta a largura da tabela */
+  font-size: 24px; /* Aumenta o tamanho do texto dentro da tabela */
+}
+
+#endGameScreen th, #endGameScreen td {
+  border: 2px solid white; /* Bordas mais visíveis */
+  padding: 20px; /* Aumenta o espaço dentro das células */
+  text-align: center;
+}
+
+#endGameScreen th {
+  background-color: #333;
+  font-size: 28px; /* Tamanho maior para os títulos */
+}
+
+#endGameScreen td {
+  background-color: #555;
+  font-size: 24px; /* Tamanho maior para os valores */
+}
+
+
+
+</style>
+  </head>
+  <body>
+    
+    <div id="startScreen">
+        <h1>Welcome to BartleZ</h1>
+        <h3>Insert your Player Number</h3>
+        <input type="text" id="playerID" placeholder="PlayerID">
+        <button onclick="startGame()">START</button>
+    </div>
+
+    <div id="mapa" style="display: none;">
+      <div id="roomName"></div>
+      <div id="personagem"></div>
+      <div id="scoreboard">Score: 0</div>
+      <div id="blackScreen" class="hidden"></div>
+      <div id="chest" class="closed"></div>
+      <div id="chestMessage" class="hidden">Press E to open the chest</div>
+      <div id="timeDisplay" class="hidden">Time: 0:00</div>
+      <div id="deathCount" class="hidden">Deaths: 0</div>
+      <div id="currentRoomDisplay">Current Room: 1</div>
+      <div id="questionTimeDisplay" class="hidden">Time Last Question: 0:00</div>
+      <div class="leaderboard" id="leaderboard" name="leaderboard">
+        <h1>
+          <svg class="ico-cup">
+            <use xlink:href="#cup"></use>
+          </svg>
+          Top 4 <text id="pointName"/>
+        </h1>
+        <ol>
+          <li>
+            <mark id="name0"></mark>
+            <small id="points0"></small>
+
+          </li>
+          <li>
+            <mark id="name1"></mark>
+            <small id="points1"></small>
+
+          </li>
+          <li>
+           <mark id="name2"></mark>
+            <small id="points2"></small>
+
+          </li>
+          <li>
+           <mark id="name3"></mark>
+            <small id="points3"></small>
+
+          </li>
+        </ol>
+      </div>
+
+
+      <div id="badgeDisplay" class="hidden">
+        <div id="badgesContainer">
+            <div class="badge">
+                <div class="badgeLabel">RANK</div>
+                <img id="currentBadgeImage" src="" alt="Current Badge">
+                <div id="currentRankLabel"></div>
+            </div>
+        </div>
+    </div>
+    <div id="newBadgeContainer">
+        <div class="badge">
+            <img id="badge1" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge2" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge3" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge4" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge5" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge6" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge7" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge8" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge9" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge10" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge11" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge12" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+        <div class="badge">
+            <img id="badge13" src="https://i.ibb.co/qDqTKgM/Locked.jpg" alt="Locked Badge">
+        </div>
+    </div>
+    <div id="endGameScreen">
+        <h3></h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Percentage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Killer</td>
+              <td id="killerPercentage">0%</td>
+            </tr>
+            <tr>
+              <td>Achiever</td>
+              <td id="achieverPercentage">0%</td>
+            </tr>
+            <tr>
+              <td>Socializer</td>
+              <td id="socializerPercentage">0%</td>
+            </tr>
+            <tr>
+              <td>Explorer</td>
+              <td id="explorerPercentage">0%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+  <title>Jogo Dijo</title>
+    <script>
+    let backgroundChanged = false; // Variável para controlar se o fundo já foi alterado
+    let player; // jogador
+    let shootingMode, shootDirection, throttle = true; // tentativas de evitar falta de limite de frames em js
+    let playerID;
+    let followersShouldNotShoot = false;
+
+
+        //classes adicionadas dijo
+
+    class PTDAnswers{
+		constructor(pID, qid, answer) {
+			this.playerID = pID;
+			this.questionID = qid;
+			this.answer = answer;
+			this.timeOnDecision = 0;
+		}
+	}
+	
+	class CVCAnswers{
+		constructor(pID, qid, nature, answer) {
+			this.playerID = pID;
+			this.questionID = qid;
+			this.nature = nature;
+			this.answer = answer;
+			this.timeOnDecision = 0;
+		}
+	}
+	
+	class HITAnswer{
+		constructor(pID, qid, diff, corr, answer, pg) {
+			this.playerID = pID;
+			this.questionID = qid;
+			this.difficultyChosen = diff;
+			this.correct = corr;
+			this.answer = answer;
+			this.pointsGathered = pg;
+			this.timeOnDecision = 0;
+		}
+	}
+	
+	class RankAwarded{
+		constructor(pID, n) {
+			this.playerID = pID;
+			this.name = n;
+		}
+	}
+	
+	class Badge{
+		constructor(pID, n) {
+			this.playerID = pID;
+			this.name = n;
+		}
+	}
+
+	class Player {
+    constructor(element, playerID) {
+        this.element = element;
+        this.playerID = playerID; 
+        this.answeredQuestions = new Set(); // Adiciona um conjunto para armazenar perguntas respondidas
+        this.dx = 0;
+        this.dy = 0;
+        this.speed = 7; //5
+        this.health = 100;
+        this.healthBar = null;
+        this.reloadSpeed = 2;
+        this.initReloadTimer = 40;
+        this.deaths = 0;
+        this.reloadTimer = this.initReloadTimer;
+        this.invulnTime;
+        this.tiro = null;
+        this.score = 0;
+        this.direction = 0;
+        this.createHealthBar();
+        this.isFrozen = false;
+        this.pointsAchiever = 0;
+        this.pointsExplorer = 0;
+        this.pointsKiller = 0;
+        this.pointsSocializer = 0;
+        this.weaponDamage = 5;
+        this.levelTimer = 0;
+        this.totalTime = 0;
+        this.timeInterval = null;
+        this.timeDisplay = document.getElementById('timeDisplay');
+        this.deathCountDisplay = document.getElementById('deathCount');
+        
+        // Variáveis novas
+        this.zombiesKilled = 0;
+        this.levelCompletionTime = 0;
+        this.completedLevelWithoutDying = true;
+        this.completedGameWithoutDying = true;
+
+        this.levelCount = 1; 
+        this.chestsOpened = 0;
+		
+        //tirar estas de baixo this. e meter os [] e adicionar as classes
+		this.pTDAnswers = [];
+		this.CvCAnswers = [];
+		this.hITAnswers = [];
+		
+		this.PositionOnLeaderboard = 0;
+		this.FinalRank = '';
+		this.RankingHistory = [];
+		this.badges = [];
+        this.numberOfBadges = 0;
+
+        //novasss
+        this.apercentagem = 0;
+        this.epercentagem = 0;
+        this.kpercentagem = 0;
+        this.spercentagem = 0;
+
+    }
+
+    initialize(){
+        // Método inicializador (pode ser usado para configurar estados iniciais, se necessário)
+    }
+
+    mainPers(){
+        const points = {
+            Achiever: this.pointsAchiever,
+            Explorer: this.pointsExplorer,
+            Killer: this.pointsKiller,
+            Socializer: this.pointsSocializer,
+        };
+
+        const maxPoints = Math.max(...Object.values(points));
+        const dominantRoles = [];
+
+        for (const role in points) {
+            if (points[role] === maxPoints) {
+                dominantRoles.push(role);
+            }
+        }
+
+        return dominantRoles.length === 1 ? dominantRoles[0] : dominantRoles;
+    }
+
+    hasAnsweredQuestion(questionID) {
+        return this.answeredQuestions.includes(questionID);
+    }
+
+    // Método para marcar uma pergunta como respondida
+    markQuestionAsAnswered(questionID) {
+        if (!this.hasAnsweredQuestion(questionID)) {
+        this.answeredQuestions.push(questionID);
+        }
+    }
+
+    arrayPers(){
+        var arrayPoints = [this.pointsAchiever,this.pointsExplorer,this.pointsKiller,this.pointsSocializer]
+        return arrayPoints;
+    }
+
+    getDeaths(){
+        return this.deaths;
+    }
+
+    getScore(){
+        return this.score;
+    }
+
+    createHealthBar() {
+        const healthBar = document.createElement('div');
+        healthBar.id = 'playerHealthBar';
+        document.getElementById('mapa').appendChild(healthBar);
+    
+        const layers = ['Background', 'Middle', 'Top'];
+        layers.forEach(layer => {
+            const layerDiv = document.createElement('div');
+            layerDiv.classList.add('healthBarLayer');
+            layerDiv.id = `playerHealthBar${layer}`;
+            healthBar.appendChild(layerDiv);
+        });
+    
+        this.healthBar = healthBar;
+    }
+
+    startTotalGameTimer() {
+        this.totalGameStartTime = Date.now(); // Armazena o tempo de início do jogo
+    }
+    getTotalGameTime() {
+        const endTime = Date.now();
+        return (endTime - this.totalGameStartTime) / 1000; // Retorna o tempo total em segundos
+    }
+
+    updateLife(newHealth){
+        this.health = newHealth;
+    }
+
+    freeze(){
+        this.isFrozen = true;
+    }
+
+    unfreeze(){
+        this.isFrozen = false;
+    }
+
+    moveCharacter() {
+        let top = parseInt(getComputedStyle(this.element).top);
+        let left = parseInt(getComputedStyle(this.element).left);
+    
+        top += this.dy;
+        left += this.dx;
+    
+        // altera os limites de movimento
+        if (backgroundChanged) {
+            const marginTop = 40;
+            const marginLeft = 40;
+            const marginRight = 0;
+            const marginBottom = 0;
+            const minX = marginLeft;
+            const maxX = mapa.clientWidth - marginRight - 150;
+            const minY = marginTop;
+            const maxY = mapa.clientHeight - marginBottom - 150;
+    
+            if (top >= minY && top <= maxY && left >= minX && left <= maxX) {
+                player.element.style.top = top + 'px';
+                player.element.style.left = left + 'px';
+            }
+        } else {
+            // Aplica os limites de movimento padrão
+            const marginTop = 110;
+            const marginLeft = 110;
+            const marginRight = 60;
+            const marginBottom = 60;
+            const minX = marginLeft;
+            const maxX = mapa.clientWidth - marginRight - 150;
+            const minY = marginTop;
+            const maxY = mapa.clientHeight - marginBottom - 150;
+    
+            if (top >= minY && top <= maxY && left >= minX && left <= maxX) {
+                player.element.style.top = top + 'px';
+                player.element.style.left = left + 'px';
+            }
+        }
+    }
+
+    shoot(rotation, room) {
+        this.startShotTimer(this.reloadTimer, this.reloadSpeed); // Start the shot timer
+
+        if (!this.canShoot()) return;
+
+        const playerPositionX = parseInt(getComputedStyle(personagem).left);
+        const playerPositionY = parseInt(getComputedStyle(personagem).top);
+    
+        const bullet = createBullet(playerPositionX, playerPositionY);
+    
+        bullet.dx = Math.cos(rotation);
+        bullet.dy = Math.sin(rotation);
+    
+        updateBullet(bullet, room, this.weaponDamage);
+    }
+
+    getPlayerRotation(){
+        return this.rotation;
+    }
+
+    getPlayerSpeed(){
+        return this.speed;
+    }
+
+    setPlayerRotation(nuValue){
+        this.rotation = nuValue;
+    }
+
+    setPlayerDamage(nuValue){
+        this.weaponDamage = nuValue;
+    }
+
+    canShoot (){
+        return (this.reloadTimer === this.initReloadTimer && !this.isFrozen);
+    }
+
+    startShotTimer() {
+        if (!this.canShoot()) return; // Prevent multiple intervals - could be melhor
+
+        this.isReloading = true;
+        this.reloadTimer = this.initReloadTimer;
+
+        const interval = setInterval(() => {
+            if (this.reloadTimer > 0) {
+                this.reloadTimer -= this.reloadSpeed;
+                if (this.reloadTimer <= 0) {
+                    clearInterval(interval);
+                    this.reloadTimer = this.initReloadTimer;
+                    this.isReloading = false; // Reset the flag
+                }
+            }
+        }, 1000 / 60); // Run at approximately 60fps
+    }
+
+    startInvulTimer() {
+        this.invulnTime = 10; // Set initial invulnerability time
+        const intervalId = setInterval(() => {
+            if(this.invulnTime > 0){
+                this.invulnTime--; // Decrement the remaining time
+                if (this.invulnTime <= 0) {
+                    clearInterval(intervalId); // Stop the timer when invulnerability time is over
+                    this.invulnTime = 0;
+                  }
+            }
+        }, 1000/60); // Tick down every second (adjust as needed)
+        return this.reloadTimer;
+    }
+
+    isInvuln() {
+        return this.invulnTime > 0; // Return true if invulnerability time is still remaining
+    }
+
+    editValues() {
+
+    // PTD 1
+    let answer1 = this.pTDAnswers.find(answer => answer.questionID === 1)?.answer;
+    if (answer1 === 'E') this.pointsExplorer += 1;
+    else if (answer1 === 'A') this.pointsAchiever += 1;
+
+    // PTD 2
+    let answer2 = this.pTDAnswers.find(answer => answer.questionID === 2)?.answer;
+    if (answer2 === 'A') this.pointsAchiever += 1;
+    else if (answer2 === 'K') this.pointsKiller += 1;
+
+    //PTD 3
+    let answer3 = this.pTDAnswers.find(answer => answer.questionID === 3)?.answer;
+    if (answer3 === 'K') this.pointsKiller += 1;
+    else if (answer3 === 'E') this.pointsExplorer += 1;
+
+    //PTD 4
+    let answer4 = this.pTDAnswers.find(answer => answer.questionID === 4)?.answer;
+    if (answer4 === 'S') this.pointsSocializer += 1;
+    else if (answer4 === 'A') this.pointsAchiever += 1;
+
+    //PTD 5
+    let answer5 = this.pTDAnswers.find(answer => answer.questionID === 5)?.answer;
+    if (answer5 === 'S') this.pointsSocializer += 1;
+    else if (answer5 === 'E') this.pointsExplorer += 1;
+
+    //PTD6
+    let answer6 = this.pTDAnswers.find(answer => answer.questionID === 6)?.answer;
+    if (answer6 === 'K') this.pointsKiller += 1;
+    else if (answer6 === 'S') this.pointsSocializer += 1;
+
+    // Calculando o total de pontos para normalização
+    let totalPoints = this.pointsKiller + this.pointsAchiever + this.pointsExplorer + this.pointsSocializer;
+
+    if (totalPoints === 0) {
+        console.log("⚠️ Nenhum ponto foi atribuído. O jogador ainda não respondeu perguntas.");
+        return;
+    }
+
+    // Calculando percentagens corretamente
+    let kperc = (this.pointsKiller / totalPoints) * 100;
+    let aperc = (this.pointsAchiever / totalPoints) * 100;
+    let eperc = (this.pointsExplorer / totalPoints) * 100;
+    let sperc = (this.pointsSocializer / totalPoints) * 100;
+
+    this.apercentagem = aperc;
+    this.kpercentagem = kperc;
+    this.epercentagem = eperc;
+    this.spercentagem = sperc;
+
+
+    // Encontrando o maior valor
+    const maxPerc = Math.max(kperc, aperc, eperc, sperc);
+
+    // Identificando os tipos dominantes (se houver empate)
+    let dominantTypes = [];
+    if (kperc === maxPerc) dominantTypes.push("Killer");
+    if (aperc === maxPerc) dominantTypes.push("Achiever");
+    if (eperc === maxPerc) dominantTypes.push("Explorer");
+    if (sperc === maxPerc) dominantTypes.push("Socializer");
+
+    // Definindo o tipo dominante e sua porcentagem
+    this.dominanttype = dominantTypes.length === 1 ? dominantTypes[0] : dominantTypes;
+    this.domainpercentage = maxPerc;
+
+    // Exibir resultados no console
+    console.log("🔹 Pontuação Atualizada:");
+    console.log(`Achiever: ${aperc.toFixed(2)}%`);
+    console.log(`Explorer: ${eperc.toFixed(2)}%`);
+    console.log(`Killer: ${kperc.toFixed(2)}%`);
+    console.log(`Socializer: ${sperc.toFixed(2)}%`);
+    console.log(`🏆 Tipo dominante: ${this.dominanttype} (${maxPerc.toFixed(2)}%)`);
+}
+
+
+
+
+    specialEventChanger(eventID, option){
+        const playerPositionX = parseInt(getComputedStyle(personagem).left);
+        const playerPositionY = parseInt(getComputedStyle(personagem).top);
+        switch (eventID){
+            case 1:
+                if(option === 0){this.reloadSpeed = this.reloadSpeed + 1}
+                else {
+                    const fellower = new Follower();
+                    fellower.addFollower(playerPositionX,playerPositionY);
+                }
+            break;
+        }
+    }
+
+    startLevelTimer() {
+        console.log('Timer iniciado'); // Adicionado para depuração
+        this.levelTimer = 0;
+        this.timerInterval = setInterval(() => {
+            this.levelTimer++;
+            const minutes = Math.floor(this.levelTimer / 60);
+            const seconds = this.levelTimer % 60;
+            const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            console.log(`Tempo: ${formattedTime}`); // Adicionado para depuração
+            this.timeDisplay.innerText = `Time: ${formattedTime}`; // Atualiza o marcador de tempo
+        }, 1000); // Atualiza a cada segundo
+    }
+
+    stopLevelTimer() {
+        clearInterval(this.timerInterval);
+        this.totalTime += this.levelTimer;
+        this.levelCompletionTime = this.levelTimer;
+
+        console.log(`🏆 Nível ${gameMap.getCurrentRoom().id + 1}  concluído!`);
+        console.log(`Morreu neste nível? ${!this.completedLevelWithoutDying}`);
+
+
+        //ver. badge apenas desbloqueia no nivel 8. quando pode ser logo no 1ºnivel, desde que nao morra
+        if (this.completedLevelWithoutDying) {
+            let badge = document.getElementById('badge11');
+            if (badge && badge.src.includes("Locked.jpg")) {
+                window.unlockBadge('badge11', 'https://i.ibb.co/kmp0KvR/Survivor.jpg');
+                console.log('✅ Badge 11 desbloqueado!');
+            }
+        }
+    }
+    
+    
+    resetLevelStats() {
+        this.levelTimer = 0;
+        this.completedLevelWithoutDying = true;
+    }
+
+    incrementDeaths() {
+        this.deaths++;
+        this.completedLevelWithoutDying = false; // Player died in this level
+        this.completedGameWithoutDying = false; // Player died during the game
+        console.log(`Deaths incremented: ${this.deaths}`); 
+        this.deathCountDisplay.innerText = `Deaths: ${this.deaths}`; 
+    }
+
+    openChest() {
+        const currentRoom = gameMap.getCurrentRoom();
+        if (!currentRoom.chestState.open) {
+            currentRoom.chestState.open = true;
+            this.chestsOpened++;
+        }
+    }
+    
+    incrementZombiesKilled(){
+        this.zombiesKilled++;
+    }
+
+    checkGameCompletion() {
+
+        console.log(`🎉 Jogo Concluído!`);
+        console.log(`Total Time: ${this.totalTime} seconds`);
+        console.log(`Zombies Killed: ${this.zombiesKilled}`);
+        console.log(`Deaths: ${this.deaths}`);
+        console.log(`Chests Opened: ${this.chestsOpened}`);
+        console.log(`Completou sem morrer? ${this.completedGameWithoutDying}`);
+
+        if (this.completedGameWithoutDying) {
+            console.log('🏆 Desbloqueando Badge 12...');
+
+            if (typeof window.unlockBadge === "function") {  
+                window.unlockBadge('badge12', 'https://i.ibb.co/X8PR9zF/NoDeaths.jpg');
+            } else {
+                console.error("❌ Erro crítico: unlockBadge ainda não está acessível!");
+            }
+        }
+        
+    }
+
+    showEndGameScreen() {
+        const endGameScreen = document.getElementById('endGameScreen');
+        const killerPercentage = document.getElementById('killerPercentage');
+        const achieverPercentage = document.getElementById('achieverPercentage');
+        const socializerPercentage = document.getElementById('socializerPercentage');
+        const explorerPercentage = document.getElementById('explorerPercentage');
+
+        /* Ocultar a barra de vida ao exibir a tela de fim de jogo
+        if (healthBar) {
+            healthBar.style.display = 'none';
+        }*/
+
+
+        // Calculate percentages
+        const total = this.pointsKiller + this.pointsAchiever + this.pointsSocializer + this.pointsExplorer;
+        const kPercentage = ((this.pointsKiller / total) * 100).toFixed(2);
+        const aPercentage = ((this.pointsAchiever / total) * 100).toFixed(2);
+        const sPercentage = ((this.pointsSocializer / total) * 100).toFixed(2);
+        const ePercentage = ((this.pointsExplorer / total) * 100).toFixed(2);
+
+        // Update table with percentages
+        killerPercentage.textContent = `${kPercentage}%`;
+        achieverPercentage.textContent = `${aPercentage}%`;
+        socializerPercentage.textContent = `${sPercentage}%`;
+        explorerPercentage.textContent = `${ePercentage}%`;
+
+        // Show the end game screen
+        endGameScreen.style.display = 'flex';      
+    }
+}
+
+class Bullet {
+    constructor(x, y, dx, dy) {
+        this.x = x;
+        this.y = y;
+        this.dx = dx;
+        this.dy = dy;
+        this.element = null;
+        this.speed = 9; // velocidade bala=6
+    }
+}
+
+function createBullet(x, y) {
+    const bullet = new Bullet(x + 50, y + 50, 0, 0);
+    const bulletElement = document.createElement("div");
+    bulletElement.id = "bullet";
+    bulletElement.style.position = "absolute";
+    bulletElement.style.width = "20px";
+    bulletElement.style.height = "20px";
+    bulletElement.style.background = "url('https://i.ibb.co/XfY6wKSS/bala2.png')";
+    bulletElement.style.backgroundSize = "cover";
+    bulletElement.style.left = x + "px";
+
+    bulletElement.style.top = y + "px";
+    document.getElementById("mapa").appendChild(bulletElement);
+    bullet.element = bulletElement;
+    return bullet;
+}
+
+function updateBullet(bullet,room,damage) {
+    const bulletElement = bullet.element;
+
+    bullet.x += bullet.dx * bullet.speed;
+    bullet.y += bullet.dy * bullet.speed;
+
+    bulletElement.style.left = bullet.x + "px";
+    bulletElement.style.top = bullet.y + "px";
+
+    if (hitWall(bullet.x, bullet.y)) {
+        bulletElement.remove();
+        return;
+    }else if (zombie = hitEnemy(bullet.x, bullet.y)){
+        bulletElement.remove();
+        damageTarget(zombie,room,damage)
+        return;
+    }
+
+    requestAnimationFrame(() => updateBullet(bullet,room,damage));
+}
+
+function hitWall(left, top) {
+    const marginTop = 100; // Reduzindo a área superior
+    const marginLeft = 100; // Reduzindo a área esquerda
+    const marginRight = 1; // Aumentando a área direita
+    const marginBottom = 0; // Aumentando a área inferior
+
+    const minX = marginLeft;
+    const maxX = mapa.clientWidth - marginRight - 150; // 150 é a largura do personagem
+    const minY = marginTop;
+    const maxY = mapa.clientHeight - marginBottom - 150; // 150 é a altura do personagem
+
+    return !(left >= minX && left <= maxX && top >= minY && top <= maxY);
+}
+
+function hitEnemy(left, top) {
+    const margin = 0;
+    const zombies = document.querySelectorAll('.zombie');
+
+    left = left - margin;
+    top = top - margin;
+
+
+    for (let i = 0; i < zombies.length; i++) {
+        const zombie = zombies[i];
+        const zombieTop = parseInt(getComputedStyle(zombie).top);
+        const zombieLeft = parseInt(getComputedStyle(zombie).left);
+        if (
+            top + 20 >= zombieTop &&
+            top <= zombieTop + 90 &&
+            left + 20 >= zombieLeft &&
+            left <= zombieLeft + 90
+        ) {
+            // Bullet hit the zombie
+            return zombie; // Zombie hit
+        }
+    }
+    return false; // No zombie hit
+}
+
+function damageTarget(targetElement, currentRoom, damage) {
+    const zombieLife = parseInt(targetElement.getAttribute('data-health'));
+    const newLife = zombieLife - Math.round(damage * 10); //normal == 20 tiros. *10 2 tiros de vida
+    targetElement.setAttribute('data-health', newLife);
+    updateHealthBar(targetElement);
+
+    if (newLife <= 0) {
+        zombie = getEnemyFromElement(targetElement);
+        targetElement.remove();
+        currentRoom.removeZombie(zombie);
+
+        player.incrementZombiesKilled(); // Increment the number of zombies killed
+
+        player.score += 1000;
+        document.getElementById('scoreboard').textContent = "Score: " + player.score;
+
+        if (currentRoom.isClear()) {
+            currentRoom.openDoors();
+        }
+    }
+}
+
+let lastRoomId = 0
+class Room {
+    constructor(name, description, reward) {
+        this.name = name;
+        this.description = description;
+        this.cleared = false;
+        this.reward = reward;
+        this.doors = {}; // Object to store connections to other rooms
+        this.zombies = []; // Array to store zombies in the room
+        this.blackScreen = document.getElementById('blackScreen');
+        this.anwseredQuestion = false;
+        this.id = lastRoomId++;
+        this.time_room = 0;
+        this.startTime = null; // Start time when question is created
+        this.chestState = { open: false }; // Estado inicial do baú
+
+    }
+
+    getGameMap() {
+        for (const mapRoom of Object.values(gameMap.rooms)) {
+            if (this === mapRoom) {
+                return gameMap;
+            }
+        }
+        return null;
+    }
+
+    updateChestForCurrentRoom() {
+        const chest = document.getElementById('chest');
+        const chestMessage = document.getElementById('chestMessage');
+        const currentRoom = gameMap.getCurrentRoom();
+    
+        if (!currentRoom.chestState) {
+            currentRoom.chestState = { open: false };
+        }
+    
+        console.log(`Atualizando o estado do baú na sala: ${currentRoom.name}. Estado: ${currentRoom.chestState.open ? 'Aberto' : 'Fechado'}`);
+        
+        if (currentRoom.chestState.open) {
+            chest.classList.remove('closed');
+            chest.classList.add('open');
+            chestMessage.classList.add('hidden');
+        } else {
+            chest.classList.remove('open');
+            chest.classList.add('closed');
+            chestMessage.classList.remove('hidden');
+        }
+    }
+
+    startDate(){
+        this.startTime = new Date()
+    }
+
+    addDoor(direction, room) {
+        this.doors[direction] = room;
+    }
+
+    addZombie(zombie) {
+        this.zombies.push(zombie);
+    }
+
+    removeZombie(zombie) {
+        const index = this.zombies.indexOf(zombie);
+        if (index !== -1) {
+            this.zombies.splice(index, 1);
+            if (this.zombies.length === 0) {
+                this.cleared = true;
+                var map = this.getGameMap()
+                map.everythingClear()
+            }
+        }
+    }
+
+    setAnwser(value){
+        this.anwseredQuestion = value
+    }
+
+    isClear() {
+        return this.cleared;
+    }
+
+    getDoor(direction) {
+        return this.doors[direction];
+    }
+
+    async enterDoor(player) {
+        
+        if (this.enteringDoor) return; // Exit early if already entering a door
+        const doorId = this.findDoorCollision(player);
+        if (!doorId) return; // No door found, exit early
+    
+        const direction = doorId.split('_')[1]; // Extract direction from door id
+        if (!this.isValidDirection(direction, player)) return; // Invalid direction, exit early
+            const endTime = new Date();
+            this.time_room = (endTime - this.startTime) / 1000; // Calculate time spent in seconds
+            logAddRoomT(this.time_room)
+            console.log(`Time spent on room: ${this.time_room} seconds`);
+
+        console.log(`Player entered door ${direction} in room ${this.name}`);
+
+        if (this.isClear()) {
+            player.stopLevelTimer();
+            player.resetLevelStats(); // Reset status do jogador para o próximo nível
+        }
+            
+        this.enteringDoor = true; // Set enteringDoor flag to true
+
+        if (player.choseFastCompletionBonus && this.time_room < 15) {
+            player.score += 300; // Adiciona 300 pontos se a sala foi completada em menos de 3 minutos
+            console.log('Bônus de 300 pontos concedido por completar a sala rapidamente!');
+        }
+
+    
+        this.showBlackScreen();
+        player.freeze();
+        const nextRoom = this.doors[direction];
+        if (nextRoom) {
+            switch(direction){
+                case "up":
+                    player.element.style.left = '940px';
+                    player.element.style.top = '870px';
+                break;
+                case "down":
+                    player.element.style.left = '940px';
+                    player.element.style.top = '110px';
+                break;
+                case "left":
+                    player.element.style.left = '1710px';
+                    player.element.style.top = '480px';
+                break;
+                case "right":
+                    player.element.style.left = '110px';
+                    player.element.style.top = '480px';
+                break;
+            }
+    
+        try {
+            if(nextRoom.anwseredQuestion === false){
+                await this.showQuestionAndWait(nextRoom.id,player);
+                nextRoom.setAnwser(true)
+                }
+        } catch (error) {
+            console.error('Error while showing question:', error);
+        } finally {
+            gameMap.setCurrentRoom(nextRoom);
+            nextRoom.updateRoomDisplay();
+            this.hideBlackScreen();
+            player.unfreeze();
+            this.removeDoors();
+            this.removeBullets();
+            this.enteringDoor = false;
+            nextRoom.startDate();
+            if(nextRoom.isClear()){
+                nextRoom.openDoors();
+            }else{
+                this.startTime = new Date();
+                initZombie(gameMap,600)
+            }
+        }
+    }
+    }
+
+    async showQuestionAndWait(id,player) {
+
+            // Verifica se a pergunta já foi respondida
+    if (player.answeredQuestions.has(id)) {
+        console.log(`Pergunta ${id} já foi respondida. Pulando...`);
+        return;
+    }
+
+    // Adiciona a pergunta ao conjunto de perguntas respondidas
+    player.answeredQuestions.add(id);
+
+        var questionText1, questionOptions1, questionText2, questionOptions2, rewardArray, answerCallback1, answerCallback2, questionText3, questionOptions3, answerCallback3, cvc1temp, cvc2temp, cvc3temp, cvc4temp, cvc5temp, cvc6temp;
+        var specialRewardEventFlag = 0
+        switch (id){
+            case 1:
+                  questionText1 = 'PTD1: On a game, a new area opens up. Which do you look forward to more?';
+				  questionOptions1 = ['Explore it', 'Be first to get gear'];
+                  answerCallback1 = (selectedOptionIndex) => {
+    if (selectedOptionIndex === 0) {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 1, 'E'));
+    } else {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 1, 'A'));
+    }
+};
+
+			
+			      questionText2 = 'CvC 1: What do you prefeer?';
+				  questionOptions2 = ['A stronger weapon / more damage (-1 crewmate)', 'Your crewmates get stronger weapons (Not you)'];
+                  answerCallback2 = (selectedOptionIndex) => {
+
+                    if (selectedOptionIndex === 0) {
+                        player.CvCAnswers.push(new CVCAnswers(player.playerID, 1, 'Comp', 'Comp1'));
+                        cvc1temp = 'Comp1';
+
+                        // Tornar a arma do jogador mais forte e remover um seguidor
+                        player.weaponDamage *= 2; // Dano da arma do jogador é dobrado
+
+                        // Remover um seguidor
+                        const followers = document.querySelectorAll('.follower');
+                        if (followers.length > 0) {
+                            followers[followers.length - 1].remove(); // Remove o último seguidor
+                        }
+                    } else {
+
+                        player.CvCAnswers.push(new CVCAnswers(player.playerID, 1, 'Coop', 'Coop1'));
+                        cvc1temp = 'Coop1';
+
+                        // Tornar as armas dos seguidores mais fortes
+                        const followers = document.querySelectorAll('.follower');
+                        followers.forEach(follower => {
+                            const followerInstance = follower.followerInstance;
+                            if (followerInstance) {
+                                followerInstance.followerDamage *= 2; // Dano das armas dos seguidores é dobrado (atual é 2.5. dobrado fica 5 == player)
+                            }
+                        });
+                    }
+                };
+                
+            break;
+            case 2:
+                  questionText1 = 'PTD2: When playing a video game, is it more fun to:';
+				  questionOptions1 = ['Have the highest score on the list', 'Beat your best friend one-on-one'];
+                  answerCallback1 = (selectedOptionIndex) => {
+    if (selectedOptionIndex === 0) {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 2, 'A'));
+    } else {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 2, 'K'));
+    }
+};
+
+			
+				  questionText2 = 'HIT 1: Choose a Difficulty.';
+				  questionOptions2 = ['Easy','Medium', 'Hard'];
+                  answerCallback2 = (selectedOptionIndex) => {
+				  
+				  switch(selectedOptionIndex){ // Escolher dificuldade
+					case 0:
+						player.hit1difficulty = 'E'; // Facil
+						questionText3 = 'HIT 1: Whats the real meaning of this phrase: Wow, you are really good at that \u{1F636}'; // Mudar o aaaa consoante a frase escolhida
+						questionOptions3 = ['Sarcasm', 'Awkward Compliment']; // Mudar as opções com base nas escolhidas
+						answerCallback3 = (selectedOptionIndex) => {
+						//player.hit1answer = selectedOptionIndex === 0 ? 'R' : 'W'; // Usa-se as letras 'R' (Right) quando ele acertar e 'W' (wrong quando errar)
+						
+						if(selectedOptionIndex === 0){
+						player.hITAnswers.push(new HITAnswer(player.playerID, 1,'E',true,'R',100));
+						// Adicionar 100 pontos ao jogador
+					  }
+					  else {
+						player.hITAnswers.push(new HITAnswer(player.playerID, 1,'E',false,'W',100));
+					  }
+					  
+						
+						};
+						break;
+					case 1:
+						//player.hit1difficulty = 'M'; // Medio
+						questionText3 = 'HIT 1: Whats the real meaning of this phrase: Oh great, another meeting. \u{1F636}'; // Mudar o aaaa consoante a frase escolhida
+						questionOptions3 = ['Sarcasm', 'Resigned Acceptance']; // Mudar as opções com base nas escolhidas
+						answerCallback3 = (selectedOptionIndex) => {
+						//player.hit1answer = selectedOptionIndex === 0 ? 'R' : 'W'; // Usa-se as letras 'R' (Right) quando ele acertar e 'W' (wrong quando errar
+						if(selectedOptionIndex === 0){
+						player.hITAnswers.push(new HITAnswer(player.playerID, 1,'M',true,'R',200));
+					  }
+					  else {
+						player.hITAnswers.push(new HITAnswer(player.playerID, 1,'M',false,'W',200));
+					  }
+						// Adicionar 200 pontos + 1 crewmate ao jogador
+						};
+						break;
+					case 2:
+						//player.hit1difficulty = 'H'; // Dificil
+						questionText3 = 'HIT 1: Whats the real meaning of this phrase: Nice outfit \u{1F636}'; // Mudar o aaaa consoante a frase escolhida
+						questionOptions3 = ['Sarcasm', 'Lack of Enthusiasm']; // Mudar as opções com base nas escolhidas
+						answerCallback3 = (selectedOptionIndex) => {
+						//player.hit1answer = selectedOptionIndex === 0 ? 'R' : 'W'; // Usa-se as letras 'R' (Right) quando ele acertar e 'W' (wrong quando errar
+						
+						if(selectedOptionIndex === 0){
+							player.hITAnswers.push(new HITAnswer(player.playerID, 1,'H',true,'R',300));
+                            //desbloquear Badge HIT1
+                            window.unlockBadge('badge8', 'https://i.ibb.co/tBjB7h6/HIT1.jpg');
+						}
+						else {
+							player.hITAnswers.push(new HITAnswer(player.playerID, 1,'H',false,'W',300));
+						}
+						
+						// Adicionar 300 pontos + 2 crewmates ao jogador + badge HIT 1
+						
+						};
+						break;
+					default:
+						break;
+				  }
+            };
+            break;
+            case 3:
+				  questionText1 = 'PTD3: Would you rather:';
+				  questionOptions1 = ['Defeat an enemy', 'Explore a new area'];
+                  answerCallback1 = (selectedOptionIndex) => {
+    if (selectedOptionIndex === 0) {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 3, 'K'));
+    } else {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 3, 'E'));
+    }
+};
+
+			
+			      questionText2 = 'CvC 2: What do you prefeer?';
+				  questionOptions2 = ['Extra points (-1 crewmate)', '+1 crewmate'];
+                  answerCallback2 = (selectedOptionIndex) => {
+
+                    if (selectedOptionIndex === 0) {
+                        player.CvCAnswers.push(new CVCAnswers(player.playerID, 2, 'Comp', 'Comp2'));
+                        cvc2temp = 'Comp2';
+
+                        // Dar pontos extras 
+                        player.score += 1000; 
+
+                        // Remover um seguidor
+                        const followers = document.querySelectorAll('.follower');
+                        if (followers.length > 0) {
+                            followers[followers.length - 1].remove(); // Remove o último seguidor
+                        }
+                    } else {
+                        player.CvCAnswers.push(new CVCAnswers(player.playerID, 2, 'Coop', 'Coop2'));
+                        cvc2temp = 'Coop2';
+
+                        // Adicionar um seguidor
+                        const playerPositionX = parseInt(getComputedStyle(personagem).left);
+                        const playerPositionY = parseInt(getComputedStyle(personagem).top);
+                        const follower = new Follower();
+                        follower.addFollower(playerPositionX, playerPositionY);
+                    }
+                };
+			
+            break;
+            case 4:
+                  questionText1 = 'PTD4: Would you rather be:';
+				  questionOptions1 = ['Popular', 'Wealthy'];
+                  answerCallback1 = (selectedOptionIndex) => {
+    if (selectedOptionIndex === 0) {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 4, 'S'));
+    } else {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 4, 'A'));
+    }
+};
+
+			
+			      questionText2 = 'CvC 3: What do you prefeer?';
+				  questionOptions2 = ['Heal yourself completely (+20 HP for you, -10 HP for each crewmate)', 'Share a healing bonus (+10 HP for everyone)'];
+                  answerCallback2 = (selectedOptionIndex) => {
+
+                    if (selectedOptionIndex === 0) {
+                        player.CvCAnswers.push(new CVCAnswers(player.playerID, 3, 'Comp', 'Comp3'));
+                        cvc3temp = 'Comp3';
+                        
+                        // Curar completamente o jogador 
+                        player.updateLife(Math.min(player.health + 20, 100));
+
+                        // Atualizar visualmente a barra de vida do jogador
+                        document.getElementById('playerHealthBarMiddle').style.width = player.health + "%";
+
+                        // reduzir a vida dos seguidores
+                        const followers = document.querySelectorAll('.follower');
+                        followers.forEach(follower => {
+                            const followerInstance = follower.followerInstance;
+                            if (followerInstance) {
+                                followerInstance.updateLife(followerInstance.health - 10); // reduz 10 de vida (eles nao têm vida....)
+                            }
+                        });
+
+                    } else {
+                        player.CvCAnswers.push(new CVCAnswers(player.playerID, 3, 'Coop', 'Coop3'));
+                        cvc3temp = 'Coop3';
+
+                        // Curar todos os seguidores
+                        const followers = document.querySelectorAll('.follower');
+                        followers.forEach(follower => {
+                            const followerInstance = follower.followerInstance;
+                            if (followerInstance) {
+                                followerInstance.updateLife(followerInstance.health + 10); // Adiciona 10 de vida aos seguidores
+                            }
+                        });
+                    }
+                };
+			
+            break;
+            case 5:
+                  questionText1 = 'PTD5: You are a player on a game, and you want to fight a really tough dragon. How would you approach this problem?';
+				  questionOptions1 = ['Get a big group of players to kill it', 'Try a variety of weapons and magic against it, until you find its weakness'];
+                  answerCallback1 = (selectedOptionIndex) => {
+    if (selectedOptionIndex === 0) {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 5, 'S'));
+    } else {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 5, 'E'));
+    }
+};
+
+			
+				  questionText2 = 'HIT 2: Choose a Difficulty.';
+				  questionOptions2 = ['Easy','Medium', 'Hard'];
+                  answerCallback2 = (selectedOptionIndex) => {
+				  
+				  switch(selectedOptionIndex){ // Escolher dificuldade
+					case 0:
+						//player.hit2difficulty = 'E'; // Facil
+						questionText3 = 'HIT 2: Whats the real meaning of this phrase?: Well, are not you the superstar today? \u{1F971} '; // Mudar o aaaa consoante a frase escolhida
+						questionOptions3 = ['Jealousy or Playful Banter', 'Sarcasm']; // Mudar as opções com base nas escolhidas
+						answerCallback3 = (selectedOptionIndex) => {
+						player.hit2answer = selectedOptionIndex === 0 ? 'W' : 'R'; // Usa-se as letras 'R' (Right) quando ele acertar e 'W' (wrong quando errar
+						
+						if(selectedOptionIndex === 0){
+							player.hITAnswers.push(new HITAnswer(player.playerID, 2,'E',false,'W',100));
+						}
+						else {
+							player.hITAnswers.push(new HITAnswer(player.playerID, 2,'E',true,'R',100));
+						}
+						
+						// Dar 100 pontos ao jogador
+						};
+						break;
+					case 1:
+						//player.hit2difficulty = 'M'; // Medio
+						questionText3 = 'HIT 2: Whats the real meaning of this phrase?: How original \u{1F971} '; // Mudar o aaaa consoante a frase escolhida
+						questionOptions3 = ['Sarcasm', 'Motivation']; // Mudar as opções com base nas escolhidas
+						answerCallback3 = (selectedOptionIndex) => {
+						//player.hit2answer = selectedOptionIndex === 0 ? 'R' : 'W'; // Usa-se as letras 'R' (Right) quando ele acertar e 'W' (wrong quando errar
+						
+						if(selectedOptionIndex === 0){
+							player.hITAnswers.push(new HITAnswer(player.playerID, 2,'M',true,'R',200));
+						}
+						else {
+							player.hITAnswers.push(new HITAnswer(player.playerID, 2,'M',false,'W',200));
+						}
+						
+						// Dar 200 pontos ao jogador + 1 crewmate
+						};
+						break;
+					case 2:
+						//player.hit2difficulty = 'H'; // Dificil
+						questionText3 = 'HIT 2: Whats the real meaning of this phrase?: Thanks a lot for your help! \u{1F636} \u{1F44D}'; // Mudar o aaaa consoante a frase escolhida
+						questionOptions3 = ['Sarcasm', 'Awkward Politeness']; // Mudar as opções com base nas escolhidas
+						answerCallback3 = (selectedOptionIndex) => {
+						//player.hit2answer = selectedOptionIndex === 0 ? 'R' : 'W'; // Usa-se as letras 'R' (Right) quando ele acertar e 'W' (wrong quando errar
+						
+						if(selectedOptionIndex === 0){
+							player.hITAnswers.push(new HITAnswer(player.playerID, 2,'H',true,'R',300));
+                            window.unlockBadge('badge9', 'https://i.ibb.co/NF2Mk1J/HIT2.jpg');
+                            //desbloquear Badge HIT2
+						}
+						else {
+							player.hITAnswers.push(new HITAnswer(player.playerID, 2,'H',false,'W',300));
+						}
+						
+						// 300 pontos + 2 crewmates + badge HIT 2
+						
+						};
+						break;
+					default:
+						break;
+				  }
+            };
+            break;
+            case 6: //Não utilizada nos testes.
+                  questionText1 = 'PTD6: Is it better to be:';
+				  questionOptions1 = ['Feared', 'Loved'];
+                  answerCallback1 = (selectedOptionIndex) => {
+    if (selectedOptionIndex === 0) {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 6, 'K'));
+    } else {
+        player.pTDAnswers.push(new PTDAnswers(player.playerID, 6, 'S'));
+    }
+};
+
+			
+			      questionText2 = 'CvC 4: What do you prefeer?';
+				  questionOptions2 = ['Face the next level in less than 10 seconds (+300 points)', 'Gain +1 crewmate'];
+                  answerCallback2 = (selectedOptionIndex) => {
+
+                    if (selectedOptionIndex === 0) {
+                        player.CvCAnswers.push(new CVCAnswers(player.playerID, 4, 'Comp', 'Comp4'));
+                        cvc4temp = 'Comp4';
+
+                        // Enfrentar o próximo nível em menos de 3 minutos e ganhar pontos extras
+                        player.choseFastCompletionBonus = true;
+                        
+                    } else {
+
+                        player.CvCAnswers.push(new CVCAnswers(player.playerID, 4, 'Coop', 'Coop4'));
+                        cvc4temp = 'Coop4';
+                        // Adicionar um seguidor
+                        const playerPositionX = parseInt(getComputedStyle(personagem).left);
+                        const playerPositionY = parseInt(getComputedStyle(personagem).top);
+                        const follower = new Follower();
+                        follower.addFollower(playerPositionX, playerPositionY);
+                    }
+                };
+			
+            break;
+            case 7:
+            questionText1 = 'CvC 5: What do you prefer?';
+            questionOptions1 = ['Increase your own firepower', 'Increase your crewmates firepower'];
+            answerCallback1 = (selectedOptionIndex) => {
+                if (selectedOptionIndex === 0) {
+                    player.CvCAnswers.push(new CVCAnswers(player.playerID, 5, 'Comp', 'Comp5'));
+                    cvc5temp = 'Comp5';
+                    player.weaponDamage *= 2; // Dano da arma do jogador é dobrado
+                } else {
+                    player.CvCAnswers.push(new CVCAnswers(player.playerID, 5, 'Coop', 'Coop5'));
+                    cvc5temp = 'Coop5';
+                    const followers = document.querySelectorAll('.follower');
+                    followers.forEach(follower => {
+                        const followerInstance = follower.followerInstance;
+                        if (followerInstance) {
+                            followerInstance.followerDamage *= 2; // Dano das armas dos seguidores é dobrado
+                        }
+                    });
+                }
+            };
+
+            questionText2 = 'HIT 3: Choose a Difficulty.';
+            questionOptions2 = ['Easy', 'Medium', 'Hard'];
+            answerCallback2 = (selectedOptionIndex) => {
+                switch (selectedOptionIndex) {
+                    case 0:
+                        questionText3 = 'HIT 3: What\'s the real meaning of this phrase?: You are so funny \u{1F636}\u{1F44D}';
+                        questionOptions3 = ['Sarcasm', 'Awkward or Forced Politeness'];
+                        answerCallback3 = (selectedOptionIndex) => {
+                            if (selectedOptionIndex === 0) {
+                                player.hITAnswers.push(new HITAnswer(player.playerID, 3, 'E', true, 'R', 100));
+                            } else {
+                                player.hITAnswers.push(new HITAnswer(player.playerID, 3, 'E', false, 'W', 100));
+                            }
+                        };
+                        break;
+                    case 1:
+                        questionText3 = 'HIT 3: What\'s the real meaning of this phrase?: Just what I needed right now \u{1F636}';
+                        questionOptions3 = ['Sarcasm', 'Awkward or Forced Politeness'];
+                        answerCallback3 = (selectedOptionIndex) => {
+                            if (selectedOptionIndex === 0) {
+                                player.hITAnswers.push(new HITAnswer(player.playerID, 3, 'M', true, 'R', 200));
+                            } else {
+                                player.hITAnswers.push(new HITAnswer(player.playerID, 3, 'M', false, 'W', 200));
+                            }
+                        };
+                        break;
+                    case 2:
+                        questionText3 = 'HIT 3: What\'s the real meaning of this phrase?: I really appreciate it. \u{1F636}\u{1F44D}';
+                        questionOptions3 = ['Sarcasm', 'Mild Discomfort or Neutrality'];
+                        answerCallback3 = (selectedOptionIndex) => {
+                            if (selectedOptionIndex === 0) {
+                                player.hITAnswers.push(new HITAnswer(player.playerID, 3, 'H', true, 'R', 300));
+                                window.unlockBadge('badge10', 'https://i.ibb.co/vvw3YMk/HIT3.jpg');
+                            } else {
+                                player.hITAnswers.push(new HITAnswer(player.playerID, 3, 'H', false, 'W', 300));
+                            }
+                        };
+                        break;
+                    default:
+                        break;
+                }
+            };
+            break;
+            case 8:
+            questionText1 = 'CvC 6: What do you prefer?';
+            questionOptions1 = ['Face the final boss alone (+500 points)', 'Face it with your crewmates.'];
+            answerCallback1 = (selectedOptionIndex) => {
+                if (selectedOptionIndex === 0) {
+                    player.CvCAnswers.push(new CVCAnswers(player.playerID, 6, 'Comp', 'Comp6'));
+                    cvc6temp = 'Comp6';
+                    player.score += 500; // Adiciona 500 pontos
+                    // Remover todos os seguidores
+                    followersShouldNotShoot = true; // Os seguidores agora não podem atirar
+                    
+                    // 🔴 Remover todos os seguidores
+                    const followers = document.querySelectorAll('.follower');
+                    followers.forEach(follower => {
+                        const followerInstance = follower.followerInstance;
+                        
+                        if (followerInstance) {
+                            followerInstance.isShooting = false; // Para o disparo do seguidor
+                            if (followerInstance.shootInterval) {
+                                clearInterval(followerInstance.shootInterval); // Cancela disparos
+                                followerInstance.shootInterval = null;
+                            }
+                        }
+
+                        follower.remove(); // Remove o seguidor do DOM
+                    });
+                    console.log("Todos os followers foram removidos.");
+
+                } else {
+                    player.CvCAnswers.push(new CVCAnswers(player.playerID, 6, 'Coop', 'Coop6'));
+                    cvc6temp = 'Coop6';
+                    // Enfrentar o chefe final com os seguidores
+                    // Nenhuma ação adicional necessária
+                }
+            };
+            break;
+        }
+
+		
+		let questionSpawner1,questionSpawner2, questionSpawner3, startTime1, startTime2, endTime1, endTime2, answerToUpdate1, answerToUpdate2;
+		switch(id)
+		{
+			case 1:
+				questionSpawner1 = new Question(
+				questionText1,
+				questionOptions1,
+				answerCallback1
+				);
+				
+                startTime1 = performance.now();
+            
+				await questionSpawner1.createQuestion();
+
+                endTime1 = performance.now();   
+
+                answerToUpdate1 = player.pTDAnswers.find(answer => answer.questionID === 1);
+                if (answerToUpdate1) {
+                    answerToUpdate1.timeOnDecision = parseFloat((endTime1 - startTime1).toFixed(3));
+                }
+
+                if(answerToUpdate1){
+                    answerToUpdate1.timeOnDecision = endTime1 - startTime1;
+                }
+				
+				questionSpawner2 = new Question(
+				questionText2,
+				questionOptions2,
+				answerCallback2
+				);
+
+                startTime2 = performance.now();
+
+				await questionSpawner2.createQuestion();
+
+                endTime2 = performance.now();
+
+                player.CvCAnswers.find(answer => answer.questionID === 1).timeOnDecision = parseFloat((endTime2 - startTime2).toFixed(3));
+			break;
+			case 2:
+				questionSpawner1 = new Question(
+				questionText1,
+				questionOptions1,
+				answerCallback1
+				);
+                
+				startTime1 = performance.now();
+
+				await questionSpawner1.createQuestion();
+
+                endTime1 = performance.now();
+
+                player.pTDAnswers.find(answer => answer.questionID === 2).timeOnDecision = parseFloat((endTime1 - startTime1).toFixed(3));
+				
+				questionSpawner2 = new Question(
+				questionText2,
+				questionOptions2,
+				answerCallback2
+				);
+
+
+				await questionSpawner2.createQuestion();
+				
+				questionSpawner3 = new Question(
+				questionText3,
+				questionOptions3,
+				answerCallback3
+				);
+
+                startTime2 = performance.now();
+
+				await questionSpawner3.createQuestion();
+
+                endTime2 = performance.now();
+
+                player.hITAnswers.find(answer => answer.questionID === 1).timeOnDecision = parseFloat((endTime2 - startTime2).toFixed(3));
+			break;
+			case 3:
+				questionSpawner1 = new Question(
+				questionText1,
+				questionOptions1,
+				answerCallback1
+				);
+
+                startTime1 = performance.now();
+				
+				await questionSpawner1.createQuestion();
+
+                endTime1 = performance.now();
+
+                player.pTDAnswers.find(answer => answer.questionID === 3).timeOnDecision = parseFloat((endTime1 - startTime1).toFixed(3));
+				
+				questionSpawner2 = new Question(
+				questionText2,
+				questionOptions2,
+				answerCallback2
+				);
+
+                startTime2 = performance.now();
+
+				await questionSpawner2.createQuestion();
+
+                endTime2 = performance.now();
+
+                player.CvCAnswers.find(answer => answer.questionID === 2).timeOnDecision = parseFloat((endTime2 - startTime2).toFixed(3));
+
+
+			break;
+			case 4:
+				questionSpawner1 = new Question(
+				questionText1,
+				questionOptions1,
+				answerCallback1
+				);
+				
+                startTime1 = performance.now();
+
+				await questionSpawner1.createQuestion();
+
+                endTime1 = performance.now();
+
+                player.pTDAnswers.find(answer => answer.questionID === 4).timeOnDecision = parseFloat((endTime1 - startTime1).toFixed(3));
+				
+				questionSpawner2 = new Question(
+				questionText2,
+				questionOptions2,
+				answerCallback2
+				);
+
+                startTime1 = performance.now();
+
+				await questionSpawner2.createQuestion();
+
+                endTime1 = performance.now();
+
+                player.CvCAnswers.find(answer => answer.questionID === 3).timeOnDecision = parseFloat((endTime1 - startTime1).toFixed(3));
+			break;
+			case 5:
+				questionSpawner1 = new Question(
+				questionText1,
+				questionOptions1,
+				answerCallback1
+				);
+
+                startTime1 = performance.now();
+				
+				await questionSpawner1.createQuestion();
+
+                endTime1 = performance.now();   
+
+                player.pTDAnswers.find(answer => answer.questionID === 5).timeOnDecision = parseFloat((endTime1 - startTime1).toFixed(3));
+				
+				questionSpawner2 = new Question(
+				questionText2,
+				questionOptions2,
+				answerCallback2
+				);
+
+				await questionSpawner2.createQuestion();
+				
+				questionSpawner3 = new Question(
+				questionText3,
+				questionOptions3,
+				answerCallback3
+				);
+            
+                startTime2 = performance.now(); 
+
+				await questionSpawner3.createQuestion();
+
+                endTime2 = performance.now();
+
+                player.hITAnswers.find(answer => answer.questionID === 2).timeOnDecision = parseFloat((endTime2 - startTime2).toFixed(3));
+			break;
+			case 6:
+				questionSpawner1 = new Question(
+				questionText1,
+				questionOptions1,
+				answerCallback1
+				);
+
+                startTime1 = performance.now();
+				
+				await questionSpawner1.createQuestion();
+
+                endTime1 = performance.now();
+
+                player.pTDAnswers.find(answer => answer.questionID === 6).timeOnDecision = parseFloat((endTime1 - startTime1).toFixed(3));
+				
+				questionSpawner2 = new Question(
+				questionText2,
+				questionOptions2,
+				answerCallback2
+				);
+
+                startTime2 = performance.now();
+
+				await questionSpawner2.createQuestion();
+
+                endTime2 = performance.now();
+
+                player.CvCAnswers.find(answer => answer.questionID === 4).timeOnDecision = parseFloat((endTime2 - startTime2).toFixed(3));
+			break;
+
+			case 7:
+				questionSpawner1 = new Question(
+				questionText1,
+				questionOptions1,
+				answerCallback1
+				);
+				
+                startTime1 = performance.now();
+
+				await questionSpawner1.createQuestion();
+
+                endTime1 = performance.now();
+
+                player.CvCAnswers.find(answer => answer.questionID === 5).timeOnDecision = endTime1 - startTime1;
+				
+				questionSpawner2 = new Question(
+				questionText2,
+				questionOptions2,
+				answerCallback2
+				);
+
+				await questionSpawner2.createQuestion();
+				
+				questionSpawner3 = new Question(
+				questionText3,
+				questionOptions3,
+				answerCallback3
+				);
+
+                startTime2 = performance.now();
+
+				await questionSpawner3.createQuestion();
+
+                endTime2 = performance.now();
+
+                player.hITAnswers.find(answer => answer.questionID === 3).timeOnDecision = endTime2 - startTime2;
+
+			break;
+
+			case 8:
+				    questionSpawner1 = new Question(
+					questionText1,
+					questionOptions1,
+					answerCallback1
+					);
+				
+                startTime1 = performance.now();
+
+				await questionSpawner1.createQuestion();
+
+                endTime1 = performance.now();
+
+                player.CvCAnswers.find(answer => answer.questionID === 6).timeOnDecision = parseFloat((endTime1 - startTime1).toFixed(3));
+			break;
+		}
+    }
+
+    isValidDirection(direction, player) {
+        if (player.dy < 0 && direction === 'up') {
+            return true;
+        }
+        if (player.dy > 0 && direction === 'down') {
+            return true;
+        }
+        if (player.dx < 0 && direction === 'left') {
+            return true;
+        }
+        if (player.dx > 0 && direction === 'right') {
+            return true;
+        }
+        return false;
+    }
+
+    openDoors() {
+    if (!this.isClear()) {
+        console.log("⚠ Tentando abrir portas antes da hora! Ação bloqueada.");
+        return; // Não abre as portas se ainda houver zumbis
+    }
+    console.log(`🔓 Abrindo portas para a sala ${this.id}`);
+    const doorWidth = 140;
+    const doorHeight = 140; // Talvez tenha que ajustar um pouco mais
+    const mapa = document.getElementById('mapa');
+    const leftPosition = (mapa.offsetWidth / 2) - (doorWidth / 2); // Center horizontally
+    // 🔥 Remover portas antigas para evitar acúmulo de elementos
+    document.querySelectorAll('.door').forEach(door => door.remove());
+    // Verifica se os quartos adjacentes estão limpos e altera a imagem da porta de acordo
+    for (const [direction, adjacentRoom] of Object.entries(this.doors)) {
+        if (this.id === 8) { // Verifica se é o nível 9 (id 8)
+            console.log("🚫 Nenhuma porta será exibida no nível 9.");
+            continue; // Pula a criação de portas
+        }
+        const doorElement = document.createElement('div');
+        doorElement.className = 'door';
+        doorElement.id = `door_${direction}`;
+        if (adjacentRoom.isClear()) {
+            if (adjacentRoom.id > this.id) {
+                // Porta azul para avançar de nível
+                console.log("🔵 Porta azul - avançando para o próximo nível.");
+                doorElement.style.backgroundImage = "url('https://i.ibb.co/6cMLkMK5/porta-antiga.png')";
+            } else {
+                // Porta amarela para retroceder no nível
+                console.log("🟡 Porta amarela - voltando para o nível anterior.");
+                doorElement.style.backgroundImage = "url('https://i.ibb.co/PvJCGgL9/porta-aberta.png')";
+            }
+        } else {
+            // Mantém a porta antiga se a sala ainda não foi limpa
+            console.log("🚪 Porta antiga - sala ainda não foi limpa.");
+            doorElement.style.backgroundImage = "url('https://i.ibb.co/6cMLkMK5/porta-antiga.png')";
+        }
+        doorElement.style.width = `${doorWidth}px`;
+        doorElement.style.height = `${doorHeight}px`;
+        switch (direction) {
+            case 'up':
+                doorElement.style.transform = 'rotate(-90deg)';
+                doorElement.style.top = '0px';
+                doorElement.style.left = `${leftPosition}px`;
+                break;
+            case 'down':
+                doorElement.style.transform = 'rotate(90deg)';
+                doorElement.style.bottom = '0px';
+                doorElement.style.left = `${leftPosition}px`;
+                break;
+            case 'left':
+                doorElement.style.transform = 'rotate(180deg)';
+                doorElement.style.top = `${(mapa.offsetHeight / 2) - (doorHeight / 2)}px`;
+                doorElement.style.left = '0px';
+                break;
+            case 'right':
+                doorElement.style.transform = 'rotate(0deg)';
+                doorElement.style.top = `${(mapa.offsetHeight / 2) - (doorHeight / 2)}px`;
+                doorElement.style.right = '0px';
+                break;
+        }
+        mapa.appendChild(doorElement);
+    }
+}
+    
+
+    findDoorCollision(player) {
+        const playerRect = player.element.getBoundingClientRect();
+        const doors = document.getElementsByClassName('door');
+
+        for (const door of doors) {
+            const doorRect = door.getBoundingClientRect();
+            if (
+                playerRect.top < doorRect.bottom &&
+                playerRect.bottom > doorRect.top &&
+                playerRect.left < doorRect.right &&
+                playerRect.right > doorRect.left
+            ) {
+                return door.id;
+            }
+        }
+
+        return null;
+    }
+
+    showBlackScreen() {
+        this.blackScreen.classList.remove('hidden');
+        setTimeout(() => {
+            this.blackScreen.style.opacity = '1';
+        }, 25);
+    }
+
+    hideBlackScreen() {
+        setTimeout(() => {
+            this.blackScreen.classList.add('hidden');
+            this.blackScreen.style.opacity = '0';
+        }, 550); 
+    }
+    
+
+    removeDoors() {
+        const doorElements = document.querySelectorAll('.door');
+        doorElements.forEach((doorElement) => {
+            doorElement.remove();
+        });
+    }
+
+    removeBullets() {
+        const bulletElements = document.querySelectorAll('#bullet');
+        bulletElements.forEach((bulletElement) => {
+            bulletElement.remove();
+        });
+    }
+
+    updateRoomDisplay() {
+        const currentRoomDisplay = document.getElementById('currentRoomDisplay');
+        if (currentRoomDisplay) {
+            currentRoomDisplay.textContent = `Current Room: ${this.id + 1}`; // Assumindo que `id` é o número da sala
+        }
+    }
+}
+
+class GameMap {
+    constructor(mapaElement) {
+        this.mapaElement = mapaElement;
+        this.rooms = {};
+        this.currentRoom = null; // Initialize currentRoom property
+        this.time_map = 0; // Time spent on question
+        this.timeSpentByRoom = {};
+        this.startTime = null; // Start time when question is created
+    }
+
+    addRoom(name, description) {
+        const room = new Room(name, description);
+        this.rooms[name] = room;
+        return room;
+    }
+
+    connectRooms(room1, direction1, room2, direction2) {
+        room1.addDoor(direction1, room2);
+        room2.addDoor(direction2, room1);
+    }
+
+    getRoom(name) {
+        return this.rooms[name];
+    }
+
+    setCurrentRoom(room) {
+        this.currentRoom = room;
+    }
+
+    getCurrentRoom() {
+        return this.currentRoom;
+    }
+
+    everythingClear(){
+
+
+        for (const roomName in this.rooms) {
+            if (!this.rooms.hasOwnProperty(roomName)) continue; // Skip inherited properties
+            const room = this.rooms[roomName];
+            if (!room.isClear()) {
+                console.log("Rooms yet to be cleared.")
+                return false; // If any room is not cleared, return false immediately
+            }
+        }
+        console.log("All rooms cleared.")
+
+        this.calculateTimeSpent()
+
+        console.log("Time Spent by room: ");
+        for(const [roomName, timeSpent] of Object.entries(this.timeSpentByRoom)) {
+            console.log(`- Room '${roomName}': ${timeSpent.toFixed(2)} seconds`);
+        }
+        //falta meter if nºdeaths ==0
+        if (player.deaths === 0) {
+            window.unlockBadge('badge12', 'https://i.ibb.co/X8PR9zF/NoDeaths.jpg');
+        }        
+        return true; // All rooms are cleared
+    }
+
+    calculateTimeSpent() {
+        const endTime = Date.now();
+        this.time_map = (endTime - this.startTime) / 1000; // Tempo total em segundos
+        console.log(`Total time spent in game: ${this.time_map.toFixed(2)} seconds`);
+        logAddTotalT(this.time_map);
+
+        console.log("🟢Antes de chamar EndGame🟢");
+        EndGame();
+        console.log("🔴Depois de chamar EndGame🔴")
+
+    }
+
+    setCurrentRoom(room) {
+    if (this.currentRoom) {
+        // Verifica se a sala já foi completada anteriormente
+        if (!this.timeSpentByRoom.hasOwnProperty(this.currentRoom.name)) {
+            // Registra o tempo gasto na sala anterior
+            const endTime = Date.now();
+            const roomName = this.currentRoom.name;
+            const timeSpent = (endTime - this.startTime) / 1000; // Tempo em segundos
+            this.timeSpentByRoom[roomName] = timeSpent;
+            console.log(`Time spent in room '${roomName}': ${timeSpent.toFixed(2)} seconds`);
+        }
+    }
+
+    // Define a nova sala e reinicia o cronômetro
+    this.currentRoom = room;
+    this.startTime = Date.now();
+}
+    
+}
+
+// Function to update the displayed room name
+function updateRoomName(room) {
+    const roomNameElement = document.getElementById('roomName');
+    roomNameElement.textContent = room.name; // Set the text content to the current room's name
+}
+
+class Enemy {
+  constructor(name, x, y, health) {
+    this.name = name;
+    this.x = x;
+    this.y = y;
+    this.health = health;
+    this.spawnZombie();
+    this.createHealthBar();
+  }
+
+  spawnZombie() {
+    const zombieDiv = document.createElement('div');
+    zombieDiv.className = 'zombie';
+    zombieDiv.dataset.health = this.health;
+    zombieDiv.dataset.maxhealth = this.health;
+    zombieDiv.style.left = this.x + 'px';
+    zombieDiv.style.top = this.y + 'px';
+
+    if (this.health == 500) {
+      zombieDiv.style.width = '200px'; 
+      zombieDiv.style.height = '200px'; 
+    }
+
+    const mapa = document.getElementById('mapa');
+    mapa.appendChild(zombieDiv);
+    this.element = zombieDiv;
+    this.element.enemyInstance = this; // Assign Enemy instance to the element
+
+    console.log(`Spawned ${this.name} at (${this.x}, ${this.y}) with health ${this.health}`);
+  }
+
+  createHealthBar() {
+    const healthBar = document.createElement('div');
+    healthBar.className = 'zombieHealth';
+    healthBar.style.width = '80px';
+    healthBar.style.height = '5px';
+    healthBar.style.backgroundColor = 'green';
+    healthBar.style.position = 'absolute';
+
+    // Append health bar to the zombie element
+    this.element.appendChild(healthBar);
+
+    // Adjust position of health bar relative to the zombie element
+    healthBar.style.left = '40px';
+    healthBar.style.top = '-10px';
+
+    this.healthBar = healthBar;
+  }
+}
+
+function initZombie(gameMap) {
+  const currentRoom = gameMap.getCurrentRoom();
+
+  if (currentRoom.id === 0 || currentRoom.id === 1) {
+    const zombie1 = new Enemy('zombie', 100, 100, 100);
+    const zombie2 = new Enemy('zombie', 100, 860, 100);
+    const zombie3 = new Enemy('zombie', 1700, 100, 100);
+    const zombie5 = new Enemy('zombie', 1700, 860, 100);
+    currentRoom.addZombie(zombie1); 
+    currentRoom.addZombie(zombie2);
+    currentRoom.addZombie(zombie3);
+    currentRoom.addZombie(zombie5);
+  }
+
+  if (currentRoom.id === 2 || currentRoom.id === 3) {
+    const zombie1 = new Enemy('zombie', 100, 100, 100);
+    const zombie2 = new Enemy('zombie', 100, 860, 100);
+    const zombie3 = new Enemy('zombie', 1700, 100, 100);
+    const zombie5 = new Enemy('zombie', 1700, 860, 100);
+    const zombie7 = new Enemy('zombie', 900, 860, 100); 
+    currentRoom.addZombie(zombie1); 
+    currentRoom.addZombie(zombie2);
+    currentRoom.addZombie(zombie3);
+    currentRoom.addZombie(zombie5);
+    currentRoom.addZombie(zombie7);
+  }
+
+  if (currentRoom.id === 4 || currentRoom.id === 5) {
+    const zombie1 = new Enemy('zombie', 100, 100, 100);
+    const zombie2 = new Enemy('zombie', 100, 860, 100);
+    const zombie3 = new Enemy('zombie', 1700, 100, 100);
+    const zombie5 = new Enemy('zombie', 1700, 860, 100);
+    const zombie6 = new Enemy('zombie', 900, 860, 100);
+    const zombie7 = new Enemy('zombie', 900, 860, 100); 
+    currentRoom.addZombie(zombie1); 
+    currentRoom.addZombie(zombie2);
+    currentRoom.addZombie(zombie3);
+    currentRoom.addZombie(zombie5);
+    currentRoom.addZombie(zombie6); 
+    currentRoom.addZombie(zombie7);
+  }
+
+  if (currentRoom.id === 6 || currentRoom.id === 7) {
+    const zombie1 = new Enemy('zombie', 100, 100, 100);
+    const zombie2 = new Enemy('zombie', 100, 860, 100);
+    const zombie3 = new Enemy('zombie', 1700, 100, 100);
+    const zombie5 = new Enemy('zombie', 1700, 860, 100);
+    const zombie6 = new Enemy('zombie', 900, 100, 100);
+    const zombie7 = new Enemy('zombie', 900, 860, 100); 
+    currentRoom.addZombie(zombie1); 
+    currentRoom.addZombie(zombie2);
+    currentRoom.addZombie(zombie3);
+    currentRoom.addZombie(zombie5);
+    currentRoom.addZombie(zombie6); 
+    currentRoom.addZombie(zombie7);
+  }
+
+  // Add Final Boss only if the current room is room 9
+  if (currentRoom.id === 8) {
+    const zombie1 = new Enemy('zombie', 100, 100, 100);
+    const zombie2 = new Enemy('zombie', 100, 860, 100);
+    const zombie3 = new Enemy('zombie', 1700, 100, 100);
+    const zombie4 = new Enemy('zombie', 900, 860, 500);
+    const zombie5 = new Enemy('zombie', 1700, 860, 100);
+    currentRoom.addZombie(zombie1); 
+    currentRoom.addZombie(zombie2);
+    currentRoom.addZombie(zombie3);
+    currentRoom.addZombie(zombie4);
+    currentRoom.addZombie(zombie5);
+  } else {
+    const zombiesToRemove = currentRoom.zombies.filter(zombie => zombie.health == 500);
+    zombiesToRemove.forEach(zombie => {
+      if (zombie.element && zombie.element.parentNode) {
+        zombie.element.parentNode.removeChild(zombie.element);
+      }
+    });
+    currentRoom.zombies = currentRoom.zombies.filter(zombie => zombie.health != 500);
+  }
+
+  const zombies = currentRoom.zombies; // Get the zombies from the current room
+  moveAllZombies(zombies, currentRoom); // Pass the current room to moveAllZombies
+}
+function moveAllZombies(zombies) {
+  zombies.forEach((zombie) => {
+    if (zombie instanceof Enemy) { // Check if zombie is an instance of Enemy
+      let speed = 2;
+      if (zombie.health == 500) {
+        speed = 1; // Half the speed for zombie4
+      }
+      moveZombieTowardsCharacter(zombie.element, speed);
+    }
+  });
+
+  updatePlayerHealth(zombies);
+  requestAnimationFrame(() => moveAllZombies(zombies));
+}
+
+function moveZombieTowardsCharacter(zombie, speed) {
+  const zombieTop = parseInt(zombie.style.top);
+  const zombieLeft = parseInt(zombie.style.left);
+  const characterTop = parseInt(getComputedStyle(personagem).top);
+  const characterLeft = parseInt(getComputedStyle(personagem).left);
+
+  const deltaX = characterLeft - zombieLeft;
+  const deltaY = characterTop - zombieTop;
+
+  const angle = Math.atan2(deltaY, deltaX);
+
+  const newZombieLeft = zombieLeft + speed * Math.cos(angle);
+  const newZombieTop = zombieTop + speed * Math.sin(angle);
+
+  zombie.style.left = newZombieLeft + 'px';
+  zombie.style.top = newZombieTop + 'px';
+
+  const zombieRotation = getRotation(speed * Math.cos(angle), speed * Math.sin(angle));
+  zombie.style.transform = `rotate(${zombieRotation}deg)`;
+}
+
+function updateHealthBar(zombie) {
+  const life = parseInt(zombie.getAttribute('data-health'));
+  const maxhealth = parseInt(zombie.getAttribute('data-maxhealth'));
+  const healthBar = zombie.querySelector('.zombieHealth');
+
+  if (healthBar) { // Check if healthBar exists before updating
+    if (life > 0) {
+      const newWidth = (life / maxhealth) * 80;
+      healthBar.style.width = newWidth + 'px';
+
+      if (life <= (life / maxhealth * 20)) {
+        healthBar.style.backgroundColor = 'red';
+      } else {
+        healthBar.style.backgroundColor = 'green';
+      }
+    } else {
+      healthBar.style.display = 'none';
+      zombie.health = null;
+    }
+  }
+}
+
+function updatePlayerHealth(zombies) {
+  const playerTop = parseInt(getComputedStyle(personagem).top);
+  const playerLeft = parseInt(getComputedStyle(personagem).left);
+  let playerLife = parseInt(player.health);
+
+  zombies.forEach(zombie => {
+    // Check if the zombie is an instance of the Enemy class
+    if (zombie instanceof Enemy) {
+      // Get the DOM element of the zombie
+      const zombieElement = zombie.element;
+
+      // Check if the zombie element is valid
+      if (zombieElement instanceof Element) {
+        const zombieTop = parseInt(getComputedStyle(zombieElement).top);
+        const zombieLeft = parseInt(getComputedStyle(zombieElement).left);
+
+        // Check if the zombie is near the player and update player's health
+        if (Math.abs(playerTop - zombieTop) < 50 && Math.abs(playerLeft - zombieLeft) < 50 && !player.isInvuln()) {
+          if (playerLife > 0) {
+            playerLife -= 1;
+            player.startInvulTimer();
+          }
+          player.updateLife(playerLife);
+          personagem.setAttribute('health', playerLife);
+          const healthBar = document.getElementById('playerHealthBarMiddle');
+          updatePlayerHealthBar(personagem, healthBar);
+        }
+      }
+    }
+  });
+}
+
+function updatePlayerHealthBar(playerElement, healthBar) {
+    const life = parseInt(playerElement.getAttribute('health'));
+    const newWidth = (life / 100) * 600; // Supondo que 600px seja a largura total da barra de vida
+    healthBar.style.width = newWidth + 'px';
+    if (life <= 20) { // Supondo que 20 seja o limite crítico de vida
+        healthBar.style.backgroundColor = 'red';
+        if (life < 1) {
+            console.log("morreu"); // Adiciona o console.log
+            if (player.score > 0) {
+                player.deaths += 1;
+                player.score = Math.max(0, player.score - 500); // Perde 500 pontos, mas não fica negativo
+                document.getElementById('scoreboard').textContent = "Score: " + player.score;
+            }
+            player.updateLife(100); // Restaura a vida para 100
+            healthBar.style.width = '600px'; // Preenche a barra de vida completamente
+            healthBar.style.backgroundColor = '#4CFF00'; // Define a cor da barra de vida para verde
+            respawnPlayer(); // Chama a função de respawn
+        }
+    } else {
+        healthBar.style.backgroundColor = '#4CFF00';
+    }
+}
+
+function respawnPlayer() {
+    const mapa = document.getElementById('mapa');
+    const mapWidth = mapa.clientWidth;
+    const mapHeight = mapa.clientHeight;
+    const playerElement = document.getElementById('personagem');
+    
+    // Calcula a posição central
+    const centerX = (mapWidth - playerElement.clientWidth) / 2;
+    const centerY = (mapHeight - playerElement.clientHeight) / 2;
+    
+    // Reposiciona o jogador
+    playerElement.style.left = centerX + 'px';
+    playerElement.style.top = centerY + 'px';
+}
+
+function getEnemyFromElement(element) {
+  if (element && element.enemyInstance instanceof Enemy) {
+    return element.enemyInstance;
+  }
+  return null;
+}
+
+class Question {
+    constructor(questionText, options, selectOptionCallback) {
+        this.questionText = questionText;
+        this.options = options;
+        this.selectOptionCallback = selectOptionCallback;
+        this.element = null;
+        this.selectedOptionIndex = 0; // Default selected option index - make it show immediately
+        this.resolveFunction = null; // Function to resolve the promise
+        this.time_question = 0; // Time spent on question
+        this.startTime = null; // Start time when question is created
+    }
+
+    createQuestion() {
+        return new Promise((resolve) => {
+            this.resolveFunction = resolve; // Store the resolve function for later use
+
+            // Record the start time
+            this.startTime = new Date();
+
+            const questionContainer = document.createElement('div');
+            questionContainer.className = 'question-container';
+
+            const questionTextElement = document.createElement('div');
+            questionTextElement.className = 'question-text';
+            questionTextElement.innerText = this.questionText;
+
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options-container';
+
+            this.options.forEach((optionText, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerText = optionText;
+                optionElement.addEventListener('click', () => {
+                    this.selectedOptionIndex = index;
+                    this.calculateTimeSpent();
+                    this.selectOptionCallback(index);
+                    this.cleanup(); // Cleanup after option selection
+                });
+                optionsContainer.appendChild(optionElement);
+            });
+
+            questionContainer.appendChild(questionTextElement);
+            questionContainer.appendChild(optionsContainer);
+
+            const mapa = document.getElementById('mapa');
+            mapa.appendChild(questionContainer);
+            this.element = questionContainer;
+
+            // Keyboard navigation
+            document.addEventListener('keydown', this.handleKeyDown);
+        });
+    }
+
+    handleKeyDown = (event) => {
+        if (event.key === 'ArrowUp' && this.selectedOptionIndex > 0) {
+            this.selectedOptionIndex--;
+            this.updateSelectedOption();
+        } else if (
+            event.key === 'ArrowDown' &&
+            this.selectedOptionIndex < this.options.length - 1
+        ) {
+            this.selectedOptionIndex++;
+            this.updateSelectedOption();
+        } else if (event.key === ' ') {
+            this.calculateTimeSpent();
+            this.selectOptionCallback(this.selectedOptionIndex);
+            this.cleanup(); // Cleanup after option selection
+        }
+    };
+
+    updateSelectedOption() {
+        const optionElements = this.element.querySelectorAll('.option');
+        optionElements.forEach((optionElement, index) => {
+            if (index === this.selectedOptionIndex) {
+                optionElement.classList.add('selected');
+            } else {
+                optionElement.classList.remove('selected');
+            }
+        });
+    }
+
+    calculateTimeSpent() {
+        const endTime = Date.now();
+        this.time_question = endTime - this.startTime;
+    
+        // Converter o tempo de milissegundos para minutos e segundos
+        const seconds = Math.floor(this.time_question / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+    
+        // Formatar o tempo no estilo 0:00
+        const formattedTime = `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    
+        // Atualizar o conteúdo da div com id "questionTimeDisplay"
+        const timerElement = document.getElementById('questionTimeDisplay');
+        if (timerElement) {
+            timerElement.textContent = `Time Last Question: ${formattedTime}`;
+        } else {
+            console.warn("Elemento #questionTimeDisplay não encontrado no DOM!");
+        }
+    
+        // Log para depuração no console
+        console.log(`Time spent on question: ${formattedTime}`);
+    }
+    
+    
+
+    cleanup() {
+        // Remove event listener for keydown
+        document.removeEventListener('keydown', this.handleKeyDown);
+        // Remove the question container from the DOM
+        this.element.remove();
+        // Resolve the promise with the selected option index
+        if (this.resolveFunction) {
+            this.resolveFunction(this.selectedOptionIndex);
+        }
+    }
+}
+
+let followerCount = 1;
+
+class Follower{
+    constructor(element,x,y,position){
+        this.element = element;
+        this.id = followerCount++;
+        this.x = x;
+        this.y = y;
+        this.position = position;
+        this.reloadSpeed = 2;
+        this.initReloadTimer = 500;
+        this.reloadTimer = this.initReloadTimer;
+        this.followerDamage = 2.5;
+    }
+
+setReloadSpeed(nuValue){
+        this.initReloadTimer = nuValue
+        this.reloadTimer = this.initReloadTimer
+    }
+
+addFollower(nux,nuy){
+    console.log("Made a Friend :D")
+    const followerDiv = document.createElement('div');
+    followerDiv.className = 'follower';
+    followerDiv.style.left = nux + 'px';
+    followerDiv.style.top = nuy + 'px';
+
+    const fellower = new Follower(followerDiv,nux,nuy,120)
+
+    const mapa = document.getElementById('mapa');
+    mapa.appendChild(followerDiv);
+    fellower.moveThisFollower()
+}
+
+initiatedFollower(nux, nuy, numFollowers = 5) {
+    console.log("Made a Friend :D")
+    
+    for (let i = 0; i < numFollowers; i++) {
+        // Gerar um deslocamento aleatório para cada seguidor
+        const offsetX = Math.floor(Math.random() * 200) - 100;  // Se os quiser mais afastados é aqui 
+        const offsetY = Math.floor(Math.random() * 200) - 100;  
+
+        // Gerar o HTML do seguidor
+        const followerDiv = document.createElement('div');
+        followerDiv.className = 'follower';
+        followerDiv.style.left = (nux + offsetX) + 'px';
+        followerDiv.style.top = (nuy + offsetY) + 'px';
+
+        // Criar o seguidor com as novas posições
+        const follower = new Follower(followerDiv, nux + offsetX, nuy + offsetY, 120);
+
+        const mapa = document.getElementById('mapa');
+        mapa.appendChild(followerDiv);
+        follower.moveThisFollower();
+    }
+}
+
+
+moveThisFollower() {
+    const followerTop = parseInt(this.element.style.top);
+    const followerLeft = parseInt(this.element.style.left);
+    const characterTop = parseInt(getComputedStyle(personagem).top);
+    const characterLeft = parseInt(getComputedStyle(personagem).left);
+
+    const deltaX = characterLeft - followerLeft;
+    const deltaY = characterTop - followerTop;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    if (distance >= this.position) {
+        this.moveFollowerTowardsCharacter();
+    }
+
+    // Calcular a rotação em relação ao zombi mais próximo
+    this.rotateTowardsClosestZombie();
+
+    if (this.canShoot()) {
+        this.shoot(); // Garanta que o *follower* está sempre disparando
+    }
+
+    requestAnimationFrame(() => this.moveThisFollower());
+}
+
+// Função para mover o seguidor em direção ao jogador
+moveFollowerTowardsCharacter() {
+    const speed = returnPlayerSpeed() * 4 / 5;
+
+    const followerTop = parseInt(this.element.style.top);
+    const followerLeft = parseInt(this.element.style.left);
+
+    const characterTop = parseInt(getComputedStyle(personagem).top);
+    const characterLeft = parseInt(getComputedStyle(personagem).left);
+
+    const deltaX = characterLeft - followerLeft;
+    const deltaY = characterTop - followerTop;
+
+    const angle = Math.atan2(deltaY, deltaX);
+
+    let newFollowerLeft = followerLeft + speed * Math.cos(angle);
+    let newFollowerTop = followerTop + speed * Math.sin(angle);
+
+    const followers = document.querySelectorAll('.follower');
+    const minDistance = 50; // Distância mínima 
+
+    followers.forEach((otherFollower) => {
+        if (otherFollower === this.element) return;
+
+        const otherLeft = parseInt(otherFollower.style.left);
+        const otherTop = parseInt(otherFollower.style.top);
+
+        const distance = Math.sqrt(
+            (newFollowerLeft - otherLeft) ** 2 + (newFollowerTop - otherTop) ** 2
+        );
+
+        if (distance < minDistance) {
+            const avoidAngle = Math.atan2(newFollowerTop - otherTop, newFollowerLeft - otherLeft);
+            newFollowerLeft += (minDistance - distance) * Math.cos(avoidAngle);
+            newFollowerTop += (minDistance - distance) * Math.sin(avoidAngle);
+        }
+    });
+
+    this.element.style.left = newFollowerLeft + 'px';
+    this.element.style.top = newFollowerTop + 'px';
+}
+
+// Função para rotação baseada no zombi mais próximo
+rotateTowardsClosestZombie() {
+    const zombies = document.querySelectorAll('.zombie');
+    if (zombies.length === 0) return;
+
+    let closestZombie = null;
+    let closestDistance = Infinity;
+
+    const followerX = parseInt(this.element.style.left);
+    const followerY = parseInt(this.element.style.top);
+
+    // Encontrar o zombi mais próximo
+    zombies.forEach((zombie) => {
+        const zombieX = parseInt(zombie.style.left);
+        const zombieY = parseInt(zombie.style.top);
+        const distance = Math.sqrt(
+            (zombieX - followerX) ** 2 + (zombieY - followerY) ** 2
+        );
+
+        if (distance < closestDistance) {
+            closestZombie = zombie;
+            closestDistance = distance;
+        }
+    });
+
+    if (closestZombie) {
+        const zombieX = parseInt(closestZombie.style.left);
+        const zombieY = parseInt(closestZombie.style.top);
+
+        const angle = Math.atan2(zombieY - followerY, zombieX - followerX);
+
+        this.element.style.transform = `rotate(${angle}rad)`; // Rotaciona para o zombi mais próximo
+    }
+}
+
+
+
+moveFollowerTowardsCharacter() {
+    const pRotation = returnPlayerRotation();
+    const speed = returnPlayerSpeed() * 4 / 5;
+
+    const followerTop = parseInt(this.element.style.top);
+    const followerLeft = parseInt(this.element.style.left);
+
+    const characterTop = parseInt(getComputedStyle(personagem).top);
+    const characterLeft = parseInt(getComputedStyle(personagem).left);
+
+    const deltaX = characterLeft - followerLeft;
+    const deltaY = characterTop - followerTop;
+
+    const angle = Math.atan2(deltaY, deltaX);
+
+    let newFollowerLeft = followerLeft + speed * Math.cos(angle);
+    let newFollowerTop = followerTop + speed * Math.sin(angle);
+
+    const followers = document.querySelectorAll('.follower');
+    const minDistance = 50; // Distância mínima 
+
+    followers.forEach((otherFollower) => {
+        if (otherFollower === this.element) return;
+
+        const otherLeft = parseInt(otherFollower.style.left);
+        const otherTop = parseInt(otherFollower.style.top);
+
+        const distance = Math.sqrt(
+            (newFollowerLeft - otherLeft) ** 2 + (newFollowerTop - otherTop) ** 2
+        );
+
+        if (distance < minDistance) {
+            const avoidAngle = Math.atan2(newFollowerTop - otherTop, newFollowerLeft - otherLeft);
+            newFollowerLeft += (minDistance - distance) * Math.cos(avoidAngle);
+            newFollowerTop += (minDistance - distance) * Math.sin(avoidAngle);
+        }
+    });
+
+    this.element.style.left = newFollowerLeft + 'px';
+    this.element.style.top = newFollowerTop + 'px';
+
+    this.element.style.transform = `rotate(${pRotation}deg)`;
+}
+
+
+
+shoot() {
+    
+    if (followersShouldNotShoot) return; // Impede followers de atirar se foram removidos
+    const room = returnCurrentGameRoom(); 
+    const zombies = document.querySelectorAll('.zombie'); // Liste todos os zombis
+
+    if (zombies.length === 0) return; // Não há zombis
+
+    let closestZombie = null;
+    let closestDistance = Infinity;
+
+    const followerX = parseInt(this.element.style.left);
+    const followerY = parseInt(this.element.style.top);
+
+    // Identifique o zombi mais próximo
+    zombies.forEach((zombie) => {
+        const zombieX = parseInt(zombie.style.left);
+        const zombieY = parseInt(zombie.style.top);
+        const distance = Math.sqrt(
+            (zombieX - followerX) ** 2 + (zombieY - followerY) ** 2
+        );
+
+        if (distance < closestDistance) {
+            closestZombie = zombie;
+            closestDistance = distance;
+        }
+    });
+
+    // Delay para disparar
+    const delayTime = 500; // Delay de 1 segundo (1000ms)
+
+    // Adicionar controle de disparo com flag
+    if (!this.isShooting) {
+        this.isShooting = true; // Marque que o disparo foi iniciado
+
+        if (closestZombie) {
+            setTimeout(() => {
+                const zombieX = parseInt(closestZombie.style.left);
+                const zombieY = parseInt(closestZombie.style.top);
+
+                const angle = Math.atan2(zombieY - followerY, zombieX - followerX);
+
+                // Criação e disparo da bala
+                const bullet = createBullet(followerX, followerY);
+                bullet.dx = Math.cos(angle);
+                bullet.dy = Math.sin(angle);
+
+                // 🔴 Aqui está a mudança! Se followersShouldNotShoot for true, a bala será invisível e sem dano
+                if (followersShouldNotShoot) {
+                    console.log("ENTROU NO BALA VAZIA")
+                    bullet.element.style.opacity = "0"; // Bala invisível
+                    bullet.element.setAttribute("data-no-damage", "true"); // Marca bala como sem dano
+                }
+
+                updateBullet(bullet, room, this.followerDamage);
+                this.startShotTimer(); // Reinicia o tempo de recarga
+
+                // Após disparar, definir novamente para permitir um novo disparo depois da recarga
+                setTimeout(() => {
+                    this.isShooting = false; // Liberar o próximo disparo
+                }, this.initReloadTimer); // Definir o tempo de recarga baseado no reloadTimer
+            }, delayTime); // Espera o tempo definido antes de disparar
+        }
+    }
+}
+
+
+
+
+canShoot (){
+    return (this.reloadTimer === this.initReloadTimer ); //&& this.isFrozen === false
+}
+
+startShotTimer() {
+    const interval = setInterval(() => {
+        if (this.reloadTimer > 0) {
+            this.reloadTimer -= this.reloadSpeed;
+            if (this.reloadTimer <= 0) {
+                clearInterval(interval);
+                this.reloadTimer = this.initReloadTimer;
+            }
+        }
+    }, 1000 / 60);
+    return this.reloadTimer;
+    }
+}
+
+class dataHold {
+    constructor() {
+        this.total_time = []; // Initialize as an empty array
+        this.room_time = []; // Initialize as an empty array
+        this.choice_time = []; // Initialize as an empty array
+    }
+
+    setTotal(nuValue) {
+        this.total_time.push(nuValue); // Add nuValue to the total_time array
+    }
+
+    setRoom(nuValue) {
+        this.room_time.push(nuValue); // Add nuValue to the room_time array
+    }
+
+    setChoice(nuValue) {
+        this.choice_time.push(nuValue); // Add nuValue to the choice_time array
+    }
+
+    getTotalT() {
+        return this.total_time; // Return the total_time array
+    }
+
+    getRoomT() {
+        return this.room_time; // Return the room_time array
+    }
+
+    getChoiceT() {
+        return this.choice_time; // Return the choice_time array
+    }
+}
+
+function logAddTotalT(nuValue){
+    record.setTotal(nuValue)
+}
+
+function logAddRoomT(nuValue){
+    record.setRoom(nuValue)
+}
+
+function logAddChoiceT(nuValue){
+    record.setChoice(nuValue)
+}
+
+window.onload = function () {
+    console.log("Limpando cache...");
+    localStorage.clear();
+    sessionStorage.clear();
+};
+
+function startGame() {
+      const playerID = document.getElementById('playerID').value.trim();
+      if (playerID) {
+        document.getElementById('startScreen').style.display = 'none';
+        document.getElementById('mapa').style.display = 'block';
+
+        // Adiciona a espera de 0.3 segundo antes de iniciar o jogo
+        setTimeout(() => {
+          initializeGame(playerID);
+        }, 150);
+      } else {
+        alert('Please enter a PlayerID to start.');
+      }
+
+
+      //Pos 1
+        document.getElementById("name0").textContent =  "Dijo";
+        document.getElementById("points0").textContent = "43754";
+
+        //Pos 2
+        document.getElementById("name1").textContent =  "Miguel";
+        document.getElementById("points1").textContent =  "33254";
+        //Pos 3
+        document.getElementById("name2").textContent =  "Diogo";
+        document.getElementById("points2").textContent = "16572";
+
+        //Pos 4
+        document.getElementById("name3").textContent = `Player ${playerID}`;
+        document.getElementById("points3").textContent = "0";
+    }
+
+    function initializeGame(playerID) {
+
+      record = new dataHold();
+      const playerElement = document.getElementById('personagem');
+      player = new Player(playerElement, playerID);
+      player.initialize();
+      player.startLevelTimer();
+
+      const mapaElement = document.getElementById('mapa');
+      gameMap = new GameMap(mapaElement);
+
+
+          // Iniciar o temporizador total do jogo
+      player.startTotalGameTimer(); // Adicione esta linha
+
+      // Spawn dos followers
+      const initialX = 200; // Coordenada X inicial
+      const initialY = 200; // Coordenada Y inicial
+
+      const followerManager = new Follower(null, initialX, initialY, 120);
+      followerManager.initiatedFollower(initialX, initialY, 5); // Cria 5 followers
+
+      // Salas existentes
+      const room1 = gameMap.addRoom("Room 1", "You are in room 1.", false);
+      
+      room1.setAnwser(true);
+      room1.startDate();
+
+     // gameMap.setCurrentRoom(room1);
+      //room1.startDate(); 
+
+      const room2 = gameMap.addRoom("Room 2", "You are in room 2.", false);
+      const room3 = gameMap.addRoom("Room 3", "You are in room 3.", false);
+      const room4 = gameMap.addRoom("Room 4", "You are in room 4.", false);
+      const room5 = gameMap.addRoom("Room 5", "You are in room 5.", false);
+      const room6 = gameMap.addRoom("Room 6", "You are in room 6.", false);
+      const room7 = gameMap.addRoom("Room 7", "You are in room 7.", false);
+      const room8 = gameMap.addRoom("Room 8", "You are in room 8.", false);
+      const room9 = gameMap.addRoom("Room 9", "You are in room 9.", false);
+
+      // Conectar as salas
+      gameMap.connectRooms(room1, "right", room2, "left");
+      gameMap.connectRooms(room2, "up", room3, "left");
+      gameMap.connectRooms(room3, "down", room4, "up");
+      gameMap.connectRooms(room4, "left", room5, "right");
+      gameMap.connectRooms(room5, "left", room6, "right");
+      gameMap.connectRooms(room6, "right", room7, "left");
+      gameMap.connectRooms(room7, "right", room8, "left");
+      gameMap.connectRooms(room8, "down", room9, "up");
+
+      gameMap.setCurrentRoom(room1); // Set the current room
+
+      initZombie(gameMap); // Call initZombie after setting the current room
+
+      console.log('Game initialized for Player:', playerID);
+
+      updateGame();
+    }
+
+    function changeBackground() {
+    if (!backgroundChanged) { // Verifica se o fundo já foi alterado
+        const randomNumber = Math.floor(Math.random() * 4) + 1;
+
+        switch (randomNumber) {
+        case 1:
+            mapa.style.backgroundImage = "url('porta_cima.jpg')";
+            break;
+        case 2:
+            mapa.style.backgroundImage = "url('porta_dir.jpg')";
+            break;
+        case 3:
+            mapa.style.backgroundImage = "url('porta_baixo.jpg')";
+            break;
+        case 4:
+            mapa.style.backgroundImage = "url('porta_esq.jpg')";
+            break;
+        }
+
+        backgroundChanged = true; // Marca que o fundo foi alterado
+    }
+    }
+
+    function startTimer(delay) {
+            setTimeout(() => {
+                throttle = true;
+        }, delay);
+    }
+    
+    function updateGame() {
+
+    requestAnimationFrame(updateGame);
+
+    // Controle de disparos
+    if (shootingMode && throttle) {
+        throttle = false;
+        startTimer(200);
+        player.shoot(shootDirection * Math.PI, gameMap.getCurrentRoom());
+    }
+
+    // Movimentação do jogador
+    player.moveCharacter();
+
+    // Obter a sala atual
+    const currentRoom = gameMap.getCurrentRoom();
+
+    // Atualizar o estado do baú na sala atual
+    if (currentRoom) {
+        currentRoom.updateChestForCurrentRoom();
+    }
+
+    // Verificar transição de sala
+    if (currentRoom) {
+        currentRoom.enterDoor(player);
+    }
+        
+}
+
+
+    function returnCurrentGameRoom(){
+      return gameMap.getCurrentRoom()
+    }
+
+    function returnPlayerRotation(){
+      return player.getPlayerRotation()
+    }
+
+    function returnPlayerSpeed(){
+      return player.getPlayerSpeed()
+    }
+
+    function getRotation(dx, dy) {
+      const angle = Math.atan2(dx, dy)
+      return (angle * (180 / Math.PI) * -1) + 90;
+    }
+
+let lastKeyPressed = "none"
+
+document.addEventListener('keydown', (event) => {
+if (!player.isFrozen) {
+    if (event.key === 'w' || event.key === 'W') {
+        player.dy = -player.speed; // Move para cima
+        personagem.style.transform = `rotate(270deg)`; // Rotaciona o personagem
+        player.setPlayerRotation(270);
+    } else if (event.key === 's' || event.key === 'S') {
+        player.dy = player.speed; // Move para baixo
+        personagem.style.transform = `rotate(90deg)`;
+        player.setPlayerRotation(90);
+    } else if (event.key === 'a' || event.key === 'A') {
+        player.dx = -player.speed; // Move para a esquerda
+        personagem.style.transform = `rotate(180deg)`;
+        player.setPlayerRotation(180);
+    } else if (event.key === 'd' || event.key === 'D') {
+        player.dx = player.speed; // Move para a direita
+        personagem.style.transform = `rotate(0deg)`;
+        player.setPlayerRotation(0);
+    }
+    }
+});
+
+document.addEventListener('keyup', (event) => {
+    if (event.key === 'w' || event.key === 'W' || 
+        event.key === 's' || event.key === 'S') {
+        player.dy = 0; // Para movimento vertical
+    } else if (event.key === 'a' || event.key === 'A' || 
+            event.key === 'd' || event.key === 'D') {
+        player.dx = 0; // Para movimento horizontal
+    }
+});
+
+
+  //Funcionalidades acabam aqui.
+
+  var userLogTask = null; // contains the log of all actions done by the user while is doing the task
+
+
+
+var userLog = (function () {
+    //
+    // Private variables
+    //
+    var defaults = {
+            // Available functionality
+            clickCount: true,
+            clickDetails: true,
+            mouseMovement: false,
+            context: true,
+            keyLogger: true,
+
+            // Action Item
+            actionItem: {
+                processOnAction: false,
+                selector: "",
+                event: ""
+            },
+            processTime: 15,
+            processData: function (results) {
+                console.log(results);
+            }
+        },
+        // End results, what is shown to the user
+        results = null;
+
+    var support = !!document.querySelector && !!document.addEventListener,
+        settings;
+    // Helper Functions
+    var helperActions = {
+        /**
+         * Set the timer interval, will increment time on page if the user is
+         * active on the page, totalTime counter always increments
+         * @private
+         */
+        timer: function () {
+            window.setInterval(function () {
+                if (document["visibilityState"] === "visible") {
+                    results.time.timeOnPage++;
+                }
+                results.time.totalTime++;
+            }, 1000);
+        },
+        /**
+         * Detect the X,Y coordinates of the mouse movement
+         * @private
+         */
+        mouseMovement: function () {
+            document.addEventListener("mousemove", function () {
+                results.mouseMovements.push({
+                    timestamp: Date.now(),
+                    x: event.pageX,
+                    y: event.pageY
+                });
+            });
+        },
+        /**
+         * Check if the user is navigating to a different page
+         * @private
+         */
+        contextChange: function () {
+            document.addEventListener("visibilitychange", function () {
+                results.contextChange.push({
+                    timestamp: Date.now(),
+                    type: document["visibilityState"]
+                });
+            });
+        },
+        /**
+         * Log the pasted information and keys pressed
+         * @private
+         */
+        keyLogger: function () {
+            document.addEventListener("paste", function () {
+                var pastedText = undefined;
+                // Get Pasted Text
+                if (window.clipboardData && window.clipboardData.getData) {
+                    pastedText = window.clipboardData.getData("Text");
+                } else if (event.clipboardData && event.clipboardData.getData) {
+                    pastedText = event.clipboardData.getData("text/plain");
+                }
+
+                if (!!pastedText) {
+                    results.keyLogger.push({
+                        timestamp: Date.now(),
+                        data: pastedText,
+                        type: "paste"
+                    });
+                }
+            });
+            document.addEventListener("keyup", function () {
+                var charCode = event.keyCode || event.which,
+                    charString = String.fromCharCode(charCode);
+
+                results.keyLogger.push({
+                    timestamp: Date.now(),
+                    data: charString,
+                    type: "keypress"
+                });
+            });
+        }
+    };
+
+document.addEventListener('mousedown', (event) => {
+    if (event.button === 0) { // Botão esquerdo do mouse
+        const playerRotation = player.getPlayerRotation(); // Obtém a rotação atual do jogador
+        const angle = (playerRotation * Math.PI) / 180; // Converte para radianos
+        player.shoot(angle, gameMap.getCurrentRoom()); // Dispara para onde o jogador está virado
+    }
+});
+
+let chestState = {}; // Armazena o estado do baú por nível
+
+document.addEventListener('keydown', (event) => {
+    updateScore(player.score); // Atualiza a pontuação
+    if (event.key === 'e' || event.key === 'E') {
+        const currentRoom = gameMap.getCurrentRoom();
+        const chest = document.getElementById('chest');
+        const message = document.getElementById('chestMessage');
+
+        // Obtém a posição do jogador e do baú
+        const playerRect = player.element.getBoundingClientRect();
+        const chestRect = chest.getBoundingClientRect();
+
+        // Calcula a distância entre o jogador e o baú
+        const distance = Math.sqrt(
+            Math.pow((playerRect.left + playerRect.width / 2) - (chestRect.left + chestRect.width / 2), 2) +
+            Math.pow((playerRect.top + playerRect.height / 2) - (chestRect.top + chestRect.height / 2), 2)
+        );
+
+        // Se estiver dentro da distância permitida, permite abrir o baú
+        if (distance <= 200) {
+            if (!currentRoom.chestState.open) {
+                player.openChest();
+                updateScore(player.score);
+                chest.classList.remove('closed');
+                chest.classList.add('open');
+                player.score += 200;
+                updateScore(player.score);
+                currentRoom.chestState.open = true;
+                message.classList.add('hidden');
+            }
+        }
+    }
+});
+
+
+function updateChestMessagePosition() {
+    const chest = document.getElementById('chest');
+    const message = document.getElementById('chestMessage');
+
+    const chestRect = chest.getBoundingClientRect();
+    const gameAreaRect = document.getElementById('mapa').getBoundingClientRect();
+
+    // Calcular a posição da mensagem logo abaixo do baú
+    const messageTop = chestRect.bottom - gameAreaRect.top + 5 + 'px'; // 5px abaixo do baú
+    const messageLeft = chestRect.left - gameAreaRect.left + 'px';
+
+    // Atualizar a posição da mensagem
+    message.style.top = messageTop;
+    message.style.left = messageLeft;
+
+    // Calcular a distância entre o jogador e o baú
+    const distance = Math.sqrt(
+        Math.pow((playerRect.left + playerRect.width / 2) - (chestRect.left + chestRect.width / 2), 2) +
+        Math.pow((playerRect.top + playerRect.height / 2) - (chestRect.top + chestRect.height / 2), 2)
+    );
+
+    // Mostrar ou ocultar a mensagem com base na distância
+    if (distance <= 50) {
+        message.classList.remove('hidden');
+    } else {
+        message.classList.add('hidden');
+    }
+}
+
+function spawnChest() {
+    const chest = document.getElementById('chest');
+    const gameArea = document.getElementById('mapa');
+
+    // Obter as dimensões da área de jogo
+    const gameAreaWidth = gameArea.offsetWidth;
+    const gameAreaHeight = gameArea.offsetHeight;
+
+    // Margem de segurança para evitar que o baú fique fora dos limites visíveis
+    const margin = 50;
+
+    // Calcular as coordenadas aleatórias dentro da área visível
+    const randomX = Math.floor(Math.random() * (gameAreaWidth - 2 * margin)) + margin;
+    const randomY = Math.floor(Math.random() * (gameAreaHeight - 2 * margin)) + margin;
+
+    // Atualizar as posições do baú
+    chest.style.left = `${randomX}px`;
+    chest.style.top = `${randomY}px`;
+
+    updateChestMessagePosition();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const chest = document.getElementById('chest');
+
+    if (gameArea && chest) {
+        gameArea.style.display = 'block';
+        spawnChest();
+    } else {
+        console.error('Erro: mapa ou baú não encontrados.');
+    }
+});
+
+window.unlockBadge = function (badgeId, badgeUrl) {
+    const badge = document.getElementById(badgeId);
+    if (badge.src.includes("Locked.jpg") || badge.src.endsWith("Locked.jpg")) {
+        badge.src = badgeUrl;
+        const formattedBadgeName = formatBadges([badgeId])[0]; // Use formatBadges para obter o nome formatado
+        player.badges.push(new Badge(player.playerID, formattedBadgeName));
+        player.numberOfBadges = player.badges.length; // Atualiza o número de badges
+        if (['badge6', 'badge7', 'badge8', 'badge9', 'badge10', 'badge11', 'badge12', 'badge13'].includes(badgeId)) {
+            incrementScore(200);
+        }
+    }
+};
+
+function incrementScore(points) {
+    player.score += points;
+    updateScore(player.score);
+}
+
+// Função para verificar as medalhas baseadas na pontuação
+function checkAndAddBadge(score) {
+  if (score >= 1999 && score <= 7999) {
+    unlockBadge('badge1', 'https://i.ibb.co/WHkGFH2/Badge-Silver.jpg'); // Medalha Silver
+  } else if (score >= 8000 && score <= 14999) {
+    unlockBadge('badge2', 'https://i.ibb.co/t2GYGgC/Badge-Gold.jpg'); // Medalha Gold
+  } else if (score >= 15000 && score <= 24999) {
+    unlockBadge('badge3', 'https://i.ibb.co/5T6jFhs/Badge-Platiunium.jpg'); // Medalha Platinum
+  } else if (score >= 25000 && score <= 37999) {
+    unlockBadge('badge4', 'https://i.ibb.co/ZgJ8kDx/Badge-Ruby.jpg'); // Medalha Ruby
+  } else if (score >= 38000) { //Maximo dos máximos é 31 000
+    unlockBadge('badge5', 'https://i.ibb.co/GJW9qVg/Badge-Diamond.jpg'); // Medalha Diamond
+  }
+  
+}
+
+
+function checkAndAddSpecialBadges(player, currentRoom) {
+    
+    // Badge 6: Kill 20 zombies 
+    if (player.zombiesKilled >= 20) {
+        unlockBadge('badge6', 'https://i.ibb.co/fqqpc9g/Zombie-Slayer.jpg');
+    }
+
+    // Badge 7: Complete a level in under 10 seconds 
+    if (Number(currentRoom.time_room) > 0 && Number(currentRoom.time_room) < 10) {
+        unlockBadge('badge7', 'https://i.ibb.co/g4v1PZF/Speed-Runner.jpg');
+    }
+
+    // Badge 13: Collect all treasures in the game 
+    if (player.chestsOpened == 8) {
+        unlockBadge('badge13', 'https://i.ibb.co/hXTNF7N/Treasures.jpg');
+    }
+}
+
+//rato por cima e mostrar o que cada um faz
+document.addEventListener("DOMContentLoaded", function () {
+    // Criar o elemento da mensagem
+    const badgeMessage = document.createElement("div");
+    badgeMessage.id = "badgeMessage";
+    badgeMessage.className = "badgeMessage";
+    document.body.appendChild(badgeMessage);
+
+    // Lista de mensagens para cada badge
+    const badgeDescriptions = {
+        badge1: 'Achieve Silver Rank',
+        badge2: 'Achieve Gold Rank',
+        badge3: 'Achieve Platinum Rank',
+        badge4: 'Achieve Ruby Rank',
+        badge5: 'Achieve Diamond Rank',
+        badge6: "Kill 20 zombies",
+        badge7: "Complete a level in under 10 seconds",
+        badge8: "Answer correctly to HIT1 on Dificulty Hard",
+        badge9: "Answer correctly to HIT2 on Dificulty Hard",
+        badge10: "Answer correctly to HIT3 on Dificulty Hard",
+        badge11: "Complete a level without dying",
+        badge12: "Complete the game without dying",
+        badge13: "Collect all treasures in the game"
+    };
+
+    // Adicionar eventos de mouse a cada badge
+    Object.keys(badgeDescriptions).forEach(badgeId => {
+        const badge = document.getElementById(badgeId);
+        if (badge) {
+            badge.addEventListener("mouseover", function (event) {
+                badgeMessage.textContent = badgeDescriptions[badgeId];
+                badgeMessage.style.display = "block";
+                badgeMessage.style.left = event.pageX + 20 + "px";
+                badgeMessage.style.top = event.pageY - 30 + "px";
+            });
+
+            badge.addEventListener("mouseout", function () {
+                badgeMessage.style.display = "none";
+            });
+
+            // Atualizar posição conforme o mouse se move
+            badge.addEventListener("mousemove", function (event) {
+                badgeMessage.style.left = event.pageX + 20 + "px";
+                badgeMessage.style.top = event.pageY - 30 + "px";
+            });
+        }
+    });
+});
+
+
+
+let previousRank = '';
+
+function updateBadge(score) {
+    const currentBadgeImage = document.getElementById('currentBadgeImage');
+    const currentRankLabel = document.getElementById('currentRankLabel');
+    const badgeDisplay = document.getElementById('badgeDisplay');
+
+    let currentBadgeUrl = '';
+    let currentRankText = '';
+
+    // Determine the current rank and badge URL based on the score
+    if (score >= 0 && score <= 1999) {
+        currentBadgeUrl = 'https://i.ibb.co/6HhqWM6/Bronze.jpg'; // Bronze Badge
+        currentRankText = 'BRONZE';
+    } else if (score >= 2000 && score <= 7999) {
+        currentBadgeUrl = 'https://i.ibb.co/SvH3DQt/Silver.jpg'; // Silver Badge
+        currentRankText = 'SILVER';
+    } else if (score >= 8000 && score <= 14999) {
+        currentBadgeUrl = 'https://i.ibb.co/rGjY27j/Gold.jpg'; // Gold Badge
+        currentRankText = 'GOLD';
+    } else if (score >= 15000 && score <= 24999) {
+        currentBadgeUrl = 'https://i.ibb.co/rFQrbBp/Platiunium.jpg'; // Platinum Badge
+        currentRankText = 'PLATINUM';
+    } else if (score >= 25000 && score <= 37999) {
+        currentBadgeUrl = 'https://i.ibb.co/zrhQ47R/Ruby.jpg'; // Ruby Badge
+        currentRankText = 'RUBY';
+    } else if (score >= 38000) {
+        currentBadgeUrl = 'https://i.ibb.co/Pzvn7y6/Diamond.jpg'; // Diamond Badge
+        currentRankText = 'DIAMOND';
+    }
+
+    // Store the previous rank before updating it
+    previousRank = currentRankLabel.textContent;
+
+    // Update badge images and rank texts
+    currentBadgeImage.src = currentBadgeUrl;
+    currentRankLabel.textContent = currentRankText;
+
+    // Armazena o rank atualizado na variável FinalRank do jogador
+    player.FinalRank = currentRankText;
+
+    // Adiciona ao histórico SOMENTE SE O RANK MUDAR
+    if (player.RankingHistory.length === 0 || player.RankingHistory[player.RankingHistory.length - 1].name !== currentRankText) {
+        player.RankingHistory.push(new RankAwarded(player.playerID, currentRankText));
+    }
+
+
+    badgeDisplay.classList.remove('hidden');
+}
+
+
+// Call updateBadge whenever score changes
+function updateScore(newScore) {
+    const scoreboard = document.getElementById('scoreboard');
+    const playerID = document.getElementById('playerID').value.trim();
+    scoreboard.textContent = `Score: ${newScore}`;
+    updateBadge(newScore);
+    checkAndAddBadge(newScore); 
+
+    // Se um baú for aberto, incrementar os tesouros coletados
+    if (player) {
+        player.treasuresCollected++;
+        checkAndAddSpecialBadges(player, returnCurrentGameRoom());
+    }
+
+    if(newScore <= 16572){ 
+            document.getElementById("points3").textContent = newScore;
+
+        }
+        else if(newScore > 16572 && newScore <= 33254){ // Colocar na 3 posição
+        //PLayerID esta undifined
+        //Pos 1
+        document.getElementById("name0").textContent =  "Dijo";
+        document.getElementById("points0").textContent = "43754";
+
+        //Pos 2
+        document.getElementById("name1").textContent =  "Miguel";
+        document.getElementById("points1").textContent =  "33254";
+        // Pos 3
+        document.getElementById("name2").textContent =  `Player ${playerID}`;
+        document.getElementById("points2").textContent = newScore;
+        
+        //Pos 4
+        document.getElementById("name3").textContent =  "Diogo";
+        document.getElementById("points3").textContent = "16572";
+
+        player.PositionOnLeaderboard = 3;
+    }
+    else if(newScore > 16572 && newScore <= 42754){
+        //Pos 1
+        document.getElementById("name0").textContent =  "Dijo";
+        document.getElementById("points0").textContent = "43754";
+
+        //Pos 2
+        
+        document.getElementById("name1").textContent =  `Player ${playerID}`;
+        document.getElementById("points1").textContent = newScore;
+        
+        // Pos 3
+        document.getElementById("name2").textContent =  "Miguel";
+        document.getElementById("points2").textContent =  "33254";
+        
+        //Pos 4
+        document.getElementById("name3").textContent =  "Diogo";
+        document.getElementById("points3").textContent = "16572";
+
+        player.PositionOnLeaderboard = 2;
+    }
+    else if(newScore > 42754){
+
+        document.getElementById("name0").textContent =  `Player ${playerID}`;
+        document.getElementById("points0").textContent = newScore;
+        
+        //Pos 2
+        document.getElementById("name1").textContent =  "Dijo";
+        document.getElementById("points1").textContent = "43754";
+        
+        // Pos 3
+        document.getElementById("name2").textContent =  "Miguel";
+        document.getElementById("points2").textContent =  "33254";
+        
+        //Pos 4
+        document.getElementById("name3").textContent =  "Diogo";
+        document.getElementById("points3").textContent = "16572";
+
+        player.PositionOnLeaderboard = 1;
+    }
+}
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Existing initialization code
+
+      // Initial score
+      player.score = 0;
+      updateScore(player.score);
+
+      // Example score increment
+      player.score += 200;
+      updateScore(player.score);
+});
+
+
+    /**
+     * Initialize the results object
+     * @public
+     */
+    function setInitialResultsObject() {
+        results = {
+            userInfo: {
+                appCodeName: navigator.appCodeName || "",
+                appName: navigator.appName || "",
+                vendor: navigator.vendor || "",
+                platform: navigator.platform || "",
+                userAgent: navigator.userAgent || ""
+            },
+            time: {
+                totalTime: 0,
+                timeOnPage: 0
+            },
+            clicks: {
+                clickCount: 0,
+                clickDetails: []
+            },
+            gameInfo: [],
+            mouseMovements: [],
+            contextChange: [],
+        
+            idSession: "SuperEnviesamentoHCILab",//change here to the proper application name so in the user logs can be easily identified
+
+            keyLogger: []
+        };
+
+    }
+
+
+    /**
+     * Merge defaults with options
+     * @private
+     * @param {Object} default settings
+     * @param {Object} user options
+     * @returns {Object} merged object
+     */
+    function getSettings(defaults, options) {
+        var option;
+        for (option in options) {
+            if (options.hasOwnProperty(option)) {
+                defaults[option] = options[option];
+            }
+        }
+        return defaults;
+    }
+
+    /**
+     * Initialize the event listeners
+     * @public
+     * @param {Object} user options
+     */
+    function init(options) {
+        setInitialResultsObject();
+        if (!support) return;
+
+        // Extend default options
+        if (options && typeof options === "object") {
+            settings = getSettings(defaults, options);
+        } else settings = getSettings(defaults, {});
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Countdown Timer
+            window.setInterval(function () {
+                if (document["visibilityState"] === "visible") {
+                    results.time.timeOnPage++;
+                }
+                results.time.totalTime++;
+                // Check if we need to process results
+                if (
+                    settings.processTime > 0 &&
+                    results.time.totalTime % settings.processTime === 0
+                ) {
+                    processResults();
+                }
+            }, 1000);
+
+            // Click registration, increment click counter and save click time+position
+            if (settings.clickCount || settings.clickDetails) {
+                document.addEventListener("mouseup", function () {
+                    if (settings.clickCount) {
+                        results.clicks.clickCount++;
+                    }
+                    if (settings.clickDetails) {
+                        results.clicks.clickDetails.push({
+                            timestamp: Date.now(),
+                            node: event.target.outerHTML,
+                            x: event.pageX,
+                            y: event.pageY
+                        });
+                    }
+                });
+            }
+
+            // Mouse movements
+            if (settings.mouseMovement) {
+                helperActions.mouseMovement();
+            }
+
+            // Check context change
+            if (settings.context) {
+                helperActions.contextChange();
+            }
+
+            // Key Logger
+            if (settings.keyLogger) {
+                helperActions.keyLogger();
+            }
+
+            // Event Listener to porcess
+            if (settings.actionItem.processOnAction) {
+                var node = document.querySelector(settings.actionItem.selector);
+                if (!!!node) throw new Error("Selector was not found.");
+                node.addEventListener(settings.actionItem.event, function () {
+                    return processResults();
+                });
+            }
+        });
+    }
+
+    function processResults() {
+        if (settings.hasOwnProperty("processData")) {
+            return settings.processData.call(undefined, results);
+        }
+        return false;
+    }
+    // Module pattern, only expose necessary methods
+    return {
+        init: init,
+        processResults: processResults,
+        setInitialResultsObject: setInitialResultsObject
+    };
+})();
+
+var getFilteredUserLog = rawLog => {
+    var filteredLog = rawLog;
+    if (
+        rawLog.hasOwnProperty("clicks") &&
+        rawLog.clicks.hasOwnProperty("clickDetails")
+    ) {
+        var clickDetailsFiltered = [];
+        rawLog.clicks.clickDetails.forEach(clickDetail => {
+            var clickDetailFiltered = clickDetail;
+            clickDetailFiltered.node = clickDetailFiltered.node.replace(
+                /<img[^>]*>/g,
+                "<img/>"
+            );
+            if (
+                clickDetailFiltered.node.includes("leaflet-touch") ||
+                clickDetailFiltered.node.includes("leaflet-touch-zoom ") ||
+                clickDetailFiltered.node.includes("leaflet-grab") ||
+                clickDetailFiltered.node.includes("leaflet-touch-drag")
+            )
+                clickDetailFiltered.node =
+                "<div>Inside Leaflet Map - clicked on layer element</div>";
+            clickDetailsFiltered.push(clickDetailFiltered);
+        });
+        filteredLog.clicks.clickDetails = clickDetailsFiltered;
+    }
+
+    if (
+        rawLog.hasOwnProperty("keyLogger")
+    ) {
+        var clickDetailsFiltered = [];
+
+        rawLog.keyLogger.forEach(clickDetail => {
+            var clickDetailFiltered = clickDetail;
+            clickDetailFiltered.data = clickDetailFiltered.data.replace(
+                '\0', ''
+            );
+            clickDetailsFiltered.push(clickDetailFiltered);
+        });
+        filteredLog.keyLogger = clickDetailsFiltered;
+    }
+
+    return filteredLog;
+};
+
+userLog.init({
+    processTime: 2,
+    processData: function (results) {
+        if (typeof userLogTask !== "undefined")
+            // the variable is defined
+            userLogTask = getFilteredUserLog(results);
+console.log("UserLog Results:");
+console.log(results);
+    }
+});
+
+function formatBadges(badges) {
+    const badgeNames = {
+        badge1: 'Silver',
+        badge2: 'Gold',
+        badge3: 'Platinum',
+        badge4: 'Ruby',
+        badge5: 'Diamond',
+        badge6: 'Zombie-Slayer',
+        badge7: 'Speed-Runner',
+        badge8: 'HIT1',
+        badge9: 'HIT2',
+        badge10: 'HIT3',
+        badge11: 'Survivor',
+        badge12: 'NoDeaths',
+        badge13: 'Treasures'
+    };
+
+    return badges.map(badgeId => badgeNames[badgeId] || badgeId);
+}
+
+
+
+function EndGame(event) {
+    console.log("🏁 Jogo Finalizado!");
+
+    // Verificar se o jogador existe antes de acessar suas propriedades
+    if (!player) {
+        console.error("❌ Erro: O objeto 'player' não foi definido.");
+        return;
+    }
+
+    // Certificar que os valores foram calculados antes de exibir os resultados
+    player.editValues();
+
+    // Pegamos os valores já calculados na função editValues()
+    let dominantType = player.dominanttype;
+    let dominantPercent = player.domainpercentage.toFixed(2); // Mantém 2 casas decimais
+
+    // Converter para string no caso de múltiplos tipos dominantes
+    let dominantText = Array.isArray(dominantType) ? dominantType.join(" & ") : dominantType;
+
+    console.log(`🎭 You are: ${dominantText} Player with ${dominantPercent}%`);
+    document.querySelector("#endGameScreen h3").textContent = `\u{1F3AD} You are: ${dominantText} Player with ${dominantPercent}%`;
+
+    // Verificar tempo da Room 9 e parar se necessário
+    if (gameMap.getCurrentRoom().name === "Room 9" && gameMap.getCurrentRoom().isClear()) {
+        const endTime = new Date();
+        gameMap.timeSpentByRoom["Room 9"] = (endTime - gameMap.getCurrentRoom().startTime) / 1000;
+        console.log(`⏱ Tempo finalizado na Room 9: ${gameMap.timeSpentByRoom["Room 9"]} segundos`);
+    }
+
+    // Coletar os tempos gastos em cada sala
+    const timeSpentByRoom = gameMap.timeSpentByRoom;
+
+    const data = { 
+        pNumber: parseInt(player.playerID, 10) || 0,
+        totalScore: player.score,
+        totalTime: player.getTotalGameTime(), 
+        timeSpentRoom1: timeSpentByRoom["Room 1"] || 0,
+        timeSpentRoom2: timeSpentByRoom["Room 2"] || 0,
+        timeSpentRoom3: timeSpentByRoom["Room 3"] || 0,
+        timeSpentRoom4: timeSpentByRoom["Room 4"] || 0,
+        timeSpentRoom5: timeSpentByRoom["Room 5"] || 0,
+        timeSpentRoom6: timeSpentByRoom["Room 6"] || 0,
+        timeSpentRoom7: timeSpentByRoom["Room 7"] || 0,
+        timeSpentRoom8: timeSpentByRoom["Room 8"] || 0,
+        timeSpentRoom9: timeSpentByRoom["Room 9"] || 0, 
+        numberOfDeaths: player.deaths,
+
+        dominanttype: dominantText,
+
+        aperc : player.apercentagem,
+        eperc : player.epercentagem,
+        kperc : player.kpercentagem,
+        sperc : player.spercentagem,
+
+        domainpercentage: dominantPercent,
+
+
+        numberOfReturns: player.totalReturns || 0,
+        pTDAnswers: player.pTDAnswers, 
+        cvCAnswers: player.CvCAnswers,    
+        hITAnswers: player.hITAnswers, 
+        positionOnLeaderboard: player.PositionOnLeaderboard,
+        finalRank: player.FinalRank, 
+        rankingHistory: player.RankingHistory, 
+        numberOfBadges: player.badges.length,
+        badges: player.badges,
+    };
+
+    console.log("📊 Dados a serem enviados:", JSON.stringify(data, null, 2));
+
+    // Enviar os dados para a API
+    const apiUrl = 'https://b174-89-154-108-235.ngrok-free.app/api/Values/GameInfo';
+
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(async response => {
+        let resData = await response.json().catch(() => null);
+        if (response.ok) {
+            console.log("✅ Dados enviados com sucesso!", resData);
+        } else {
+            console.error("❌ Erro ao enviar dados:", response.status, response.statusText, resData);
+        }
+    })
+    .catch(error => {
+        console.error("❌ Erro na requisição:", error);
+    });
+
+    // Ocultar a barra de vida do jogador ao finalizar o jogo
+    const healthBar = document.getElementById('playerHealthBar');
+    if (healthBar) {
+        healthBar.style.display = 'none';
+    } else {
+        console.error("❌ Erro: Elemento 'playerHealthBar' não encontrado.");
+    }
+
+    console.log("showEndGameScreen existe?", typeof player.showEndGameScreen);
+
+    if (typeof player.showEndGameScreen === "function") {
+        // Espera 5 segundo (5000ms) antes de chamar a função showEndGameScreen
+        setTimeout(function() {
+            player.showEndGameScreen();
+        }, 5000);
+    } else {
+        console.error("Erro: showEndGameScreen não está definido corretamente.");
+    }
+
+}
+
+</script>
+</body>
+</html>

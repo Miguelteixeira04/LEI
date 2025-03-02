@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HIT Workflow</title>
+</head>
+<body>
+    <!-- Player Number Input Page -->
+    <div id="playerNumberPage">
+        <h2>Insert your Player Number:</h2>
+        <input type="number" id="playerNumber" placeholder="Player Number">
+        <button onclick="goToDifficultySelection(1)">Next</button>
+    </div>
+
+    <!-- Difficulty Selection Pages -->
+    <div id="difficultySelectionPage1" style="display:none;">
+        <h2>Select Difficulty for HIT 1:</h2>
+        <button onclick="goToHIT('1.1')">Easy</button>
+        <button onclick="goToHIT('1.2')">Medium</button>
+        <button onclick="goToHIT('1.3')">Hard</button>
+    </div>
+    <div id="difficultySelectionPage2" style="display:none;">
+        <h2>Select Difficulty for HIT 2:</h2>
+        <button onclick="goToHIT('2.1')">Easy</button>
+        <button onclick="goToHIT('2.2')">Medium</button>
+        <button onclick="goToHIT('2.3')">Hard</button>
+    </div>
+    <div id="difficultySelectionPage3" style="display:none;">
+        <h2>Select Difficulty for HIT 3:</h2>
+        <button onclick="goToHIT('3.1')">Easy</button>
+        <button onclick="goToHIT('3.2')">Medium</button>
+        <button onclick="goToHIT('3.3')">Hard</button>
+    </div>
+
+    <!-- HIT Pages -->
+    <div id="HIT1.1" style="display:none;">
+        <h2>HIT 1: Easy</h2>
+        <p><strong>Question:</strong> How many circles are in this image?</p>
+		<p><img src="https://i.ibb.co/3k7zf6n/467156837-1164116868756650-5791125413754905654-n.jpg" style="max-width: 100%; max-height: 250px" border="0"></p>
+        <strong>Answer:</strong><input type="text" id="answer1.1" placeholder="Answer">
+        <button onclick="goToDifficultySelection(2, '1.1')">Next</button>
+    </div>
+    <div id="HIT1.2" style="display:none;">
+        <h2>HIT 1: Medium</h2>
+        <p><strong>Question:</strong> How many polygons are in the image?</p>
+		<p><img src="https://i.ibb.co/3k7zf6n/467156837-1164116868756650-5791125413754905654-n.jpg" style="max-width: 100%; max-height: 250px" border="0"></p>
+        <strong>Answer:</strong><input type="text" id="answer1.2" placeholder="Answer">
+        <button onclick="goToDifficultySelection(2, '1.2')">Next</button>
+    </div>
+    <div id="HIT1.3" style="display:none;">
+        <h2>HIT 1: Hard</h2>
+        <p><strong>Question:</strong> How many quadrilaterals are in the image?</p>
+		<p><img src="https://i.ibb.co/3k7zf6n/467156837-1164116868756650-5791125413754905654-n.jpg" style="max-width: 100%; max-height: 250px" border="0"></p>
+        <strong>Answer:</strong><input type="text" id="answer1.3" placeholder="Answer">
+        <button onclick="goToDifficultySelection(2, '1.3')">Next</button>
+    </div>
+
+    <div id="HIT2.1" style="display:none;">
+        <h2>HIT 2: Easy</h2>
+        <p><strong>Question:</strong> Transcribe the text presented in the image.</p>
+		<p><img src="https://i.ibb.co/0f3K7Zx/HIT2-Easy.png" style="max-width: 100%; max-height: 250px" border="0"></p>
+        <strong>Answer:</strong><input type="text" id="answer2.1" placeholder="Answer">
+        <button onclick="goToDifficultySelection(3, '2.1')">Next</button>
+    </div>
+    <div id="HIT2.2" style="display:none;">
+        <h2>HIT 2: Medium</h2>
+        <p><strong>Question:</strong> Transcribe the text presented in the image.</p>
+		<p><img src="https://i.ibb.co/NFcXPH3/HIT2-Medium.png" style="max-width: 100%; max-height: 250px" border="0"></p>
+        <strong>Answer:</strong><input type="text" id="answer2.2" placeholder="Answer">
+        <button onclick="goToDifficultySelection(3, '2.2')">Next</button>
+    </div>
+    <div id="HIT2.3" style="display:none;">
+        <h2>HIT 2: Hard</h2>
+        <p><strong>Question:</strong> Transcribe the text presented in the image.</p>
+		<p><img src="https://i.ibb.co/QnF8r2j/HIT2-Hard.png" style="max-width: 100%; max-height: 250px" border="0"></p>
+        <strong>Answer:</strong><input type="text" id="answer2.3" placeholder="Answer">
+        <button onclick="goToDifficultySelection(3, '2.3')">Next</button>
+    </div>
+
+    <div id="HIT3.1" style="display:none;">
+        <h2>HIT 3: Easy</h2>
+        <p><strong>Question:</strong> Write the value of X to complete the sequence.</p>
+		<p><img src="https://i.ibb.co/026TzJ9/HIT3-Easy.png" style="max-width: 100%; max-height: 250px" border="0"></p>
+        <strong>Answer:</strong><input type="text" id="answer3.1" placeholder="Answer">
+        <button onclick="submit('3.1')">Submit</button>
+    </div>
+    <div id="HIT3.2" style="display:none;">
+        <h2>HIT 3: Medium</h2>
+        <p><strong>Question:</strong> Write the value of X to complete the sequence.</p>
+		<p><img src="https://i.ibb.co/Y0xyt0n/HI3-Medium.png" style="max-width: 100%; max-height: 250px" border="0"></p>
+        <strong>Answer:</strong><input type="text" id="answer3.2" placeholder="Answer">
+        <button onclick="submit('3.2')">Submit</button>
+    </div>
+    <div id="HIT3.3" style="display:none;">
+        <h2>HIT 3: Hard</h2>
+        <p><strong>Question:</strong> Write the value of X to complete the sequence.</p>
+		<p><img src="https://i.ibb.co/vqPP6DV/HIT3-Hard.png" style="max-width: 100%; max-height: 250px" border="0"></p>
+        <strong>Answer:</strong><input type="text" id="answer3.3" placeholder="Answer">
+        <button onclick="submit('3.1')">Submit</button>
+    </div>
+
+    <script>
+		let startTime; 
+		let answers = {}; 
+		let times = {};
+		
+        function goToDifficultySelection(hitNumber, previousHIT) {
+			if (previousHIT) { 
+			
+			const endTime = new Date().getTime(); 
+			times[previousHIT] = (endTime - startTime) / 1000; 
+			answers[previousHIT] = document.getElementById('answer' + previousHIT).value; 
+			
+			}
+			document.getElementById('playerNumberPage').style.display = 'none';
+			document.getElementById('difficultySelectionPage1').style.display = 'none';
+			document.getElementById('difficultySelectionPage2').style.display = 'none';
+			document.getElementById('difficultySelectionPage3').style.display = 'none';
+			document.getElementById('HIT1.1').style.display = 'none';
+			document.getElementById('HIT1.2').style.display = 'none';
+			document.getElementById('HIT1.3').style.display = 'none';
+			document.getElementById('HIT2.1').style.display = 'none';
+			document.getElementById('HIT2.2').style.display = 'none';
+			document.getElementById('HIT2.3').style.display = 'none';
+			document.getElementById('HIT3.1').style.display = 'none';
+			document.getElementById('HIT3.2').style.display = 'none';
+			document.getElementById('HIT3.3').style.display = 'none';
+			document.getElementById('difficultySelectionPage' + hitNumber).style.display = 'block';
+		}
+
+
+       function goToHIT(hitId) {
+			startTime = new Date().getTime();
+			document.getElementById('difficultySelectionPage1').style.display = 'none';
+			document.getElementById('difficultySelectionPage2').style.display = 'none';
+			document.getElementById('difficultySelectionPage3').style.display = 'none';
+			document.getElementById('HIT1.1').style.display = 'none';
+			document.getElementById('HIT1.2').style.display = 'none';
+			document.getElementById('HIT1.3').style.display = 'none';
+			document.getElementById('HIT2.1').style.display = 'none';
+			document.getElementById('HIT2.2').style.display = 'none';
+			document.getElementById('HIT2.3').style.display = 'none';
+			document.getElementById('HIT3.1').style.display = 'none';
+			document.getElementById('HIT3.2').style.display = 'none';
+			document.getElementById('HIT3.3').style.display = 'none';
+			document.getElementById('HIT' + hitId).style.display = 'block';
+		}
+
+
+        function submit(finalHIT) {
+		
+			const endTime = new Date().getTime();
+			
+			times[finalHIT] = (endTime - startTime) / 1000; 
+			
+			answers[finalHIT] = document.getElementById('answer' + finalHIT).value; 
+			
+			const playerNumber = parseInt(document.getElementById('playerNumber').value, 10); 
+			
+			const answersArray = Object.keys(answers).map(hit => ({ hit: hit, answer: answers[hit] })); 
+			
+			const timesArray = Object.keys(times).map(hit => ({ hit: hit, timeseconds: times[hit] }));
+			
+			const body = { playerNumber: playerNumber, answers: answersArray, times: timesArray };
+			
+			console.log(body);
+
+            // Send POST request with JSON body
+            fetch('http://localhost:5087/api/Values/HITStandard', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });			
+			
+            alert('Workflow completed!');
+        }
+        
+    </script>
+</body>
+</html>

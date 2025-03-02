@@ -1,0 +1,445 @@
+#mapa {
+  width: 1920px;
+  height: 1080px;
+  background: url("fundu.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#personagem {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background: url('soldado.png');
+  background-size: cover;
+  top: 510px;
+  left: 920px;
+  transform: rotate(0deg);
+  z-index: 10;
+  transform-origin: center center; /* Set the transform origin to the center */
+}
+
+.follower {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  scale: 0.6;
+  background: url('soldado.png');
+  background-size: cover;
+  transform: rotate(0deg);
+  z-index: 11;
+}
+
+.zombie {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  background: url('zombie.png');
+  background-size: cover;
+  transform: rotate(0deg);
+}
+
+#bullet {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: url('bala2.png');
+  background-size: cover;
+}
+
+#scoreboard {
+  position: fixed;
+  top: 50px;
+  left: 1950px;
+  background-color: #222; /* Cor de fundo escura */
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra suave */
+  font-family: Arial, sans-serif; /* Fonte padrão */
+  font-size: 25px;
+  text-align: center; /* Alinhamento centralizado */
+}
+
+#playerHealthBar {
+  position: fixed;
+  width: 600px;
+  height: 175px;
+  top: 980px;
+  left: 50px;
+  z-index: 9999;
+}
+
+.healthBarLayer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#playerHealthBarBackground {
+  background-color: black;
+  height: 150px;
+  bottom: 0;
+}
+
+#playerHealthBarMiddle {
+  background-color: #4CFF00;
+  height: 150px;
+  bottom: 0;
+}
+
+#playerHealthBarTop {
+  background: url('HealthBarPlayer.png') center center no-repeat;
+  background-size: cover;
+}
+
+.door {
+  position: absolute; /* Position the doors absolutely within the map container */
+  background-size: cover;
+  z-index: 9;
+}
+
+#portaAberta {
+  width: 1920px;
+  height: 1080px;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none; /* Allow interaction with elements beneath */
+  z-index: 998; /* Ensure the black screen appears above other content */
+}
+
+#chest {
+  width: 75px;
+  height: 75px;
+  position: absolute;
+  top: 100px;
+  left: 100px;
+}
+
+#chest.closed {
+  background-image: url('bau_fechado.png'); /* Imagem do baú fechado */
+  background-size: contain; /* Ou cover, dependendo do comportamento desejado */
+  background-repeat: no-repeat; /* Evita repetição da imagem */
+  background-position: center; /* Centraliza a imagem */
+}
+
+
+#chest.open {
+  background-image: url('bau_aberto.png'); /* Imagem do baú aberto */
+  background-size: contain; /* Ou cover, dependendo do comportamento desejado */
+  background-repeat: no-repeat; /* Evita repetição da imagem */
+  background-position: center; /* Centraliza a imagem */
+}
+
+#chestMessage {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7); /* Fundo preto com transparência */
+  color: white;
+  padding: 5px 10px; /* Margem interna ajustada */
+  border-radius: 5px; /* Bordas arredondadas */
+  font-size: 20x; /* Tamanho da fonte */
+  max-width: 200px; /* Largura máxima */
+  text-align: center; /* Texto centralizado */
+  pointer-events: none; /* Impede interação com o texto */
+  white-space: nowrap; /* Impede quebra de linha */
+}
+
+#timeDisplay {
+  position: fixed;
+  top: 150px;
+  left: 1950px;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+#deathCount {
+  position: fixed;
+  top: 250px; 
+  left: 1950px;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+#currentRoomDisplay {
+  position: fixed;
+  top: 350px; 
+  left: 1950px;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+#questionTimeDisplay {
+  position: fixed;
+  top: 450px;
+  left: 1950px;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+#blackScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none; /* Allow interaction with elements beneath */
+  z-index: 998; /* Ensure the black screen appears above other content */
+}
+
+.hidden {
+  display: none;
+}
+
+.hidden {
+  display: none; /* Initially hidden */
+}
+
+.question-container {
+  position: absolute;
+  width: 80%;
+  max-width: 600px; /* Adjust max-width as needed */
+  left: 50%;
+  top: 10%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: white; /* Text color set to white */
+  z-index: 999; /* Ensure the black screen appears above other content */
+}
+
+.question-text {
+  font-size: 32px;
+  margin-bottom: 20px;
+  z-index: 999; /* Ensure the black screen appears above other content */
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999; /* Ensure the black screen appears above other content */
+}
+
+.option {
+  font-size: 24px;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 999; /* Ensure the black screen appears above other content */
+}
+.option.selected {
+  background-color: #4CAF50; /* Green background color for selected option */
+  color: white;
+  z-index: 999; /* Ensure the black screen appears above other content */
+}
+
+#badgeDisplay {
+  position: fixed; /* Fixa o elemento na tela */
+  top: 30%; /* Posiciona verticalmente no meio */
+  right: -400px; /* Alinha à direita com um deslocamento adicional */
+  transform: translateY(-50%); /* Ajusta o elemento para ficar centralizado verticalmente */
+  display: flex;
+  flex-direction: column; /* Permite empilhar a label acima dos badges */
+  justify-content: center;
+  align-items: center;
+}
+
+#badgesContainer {
+  display: flex; /* Exibe os badges lado a lado */
+  justify-content: center;
+  align-items: center;
+}
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 20px; /* Espaçamento entre os badges */
+}
+
+.badgeLabel {
+  color: black; /* Texto preto */
+  padding: 5px 10px; /* Espaçamento interno */
+  margin-bottom: 10px; /* Espaçamento abaixo da label */
+  border-radius: 5px; /* Bordas arredondadas */
+  font-size: 30px; /* Tamanho da fonte */
+  text-align: center; /* Alinhamento do texto */
+  font-weight: bold; /* Negrito */
+  font-family: 'Roboto', sans-serif; /* Fonte personalizada */
+}
+
+#currentRankLabel {
+  color: black; /* Texto preto */
+  padding: 5px 10px; /* Espaçamento interno */
+  margin-top: 10px; /* Espaçamento acima da label */
+  border-radius: 5px; /* Bordas arredondadas */
+  font-size: 25px; /* Tamanho da fonte */
+  text-align: center; /* Alinhamento do texto */
+  font-weight: bold; /* Negrito */
+  font-family: 'Roboto', sans-serif; /* Fonte personalizada */
+}
+
+#currentBadgeImage{
+  width: 175px;
+  height: 160px;
+}
+
+#newBadgeContainer, #newBadgeContainerROW2, #newBadgeContainerROW3, #newBadgeContainerROW4 {
+  position: fixed;
+  top: 80%; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  transform: translateY(-50%); /* Centraliza verticalmente */
+}
+
+#newBadgeContainer {
+  right: -150px; /* Posição inicial */
+}
+
+#newBadgeContainerROW2 {
+  right: -290px; /* 50 pixels à direita do newBadgeContainer */
+}
+
+#newBadgeContainerROW3 {
+  right: -440px; /* 50 pixels à direita do newBadgeContainerROW2 */
+}
+
+#newBadgeContainerROW4 {
+  right: -590px; /* 50 pixels à direita do newBadgeContainerROW3 */
+}
+
+#newBadgeContainer .badgeLabel,
+#newBadgeContainerROW2 .badgeLabel,
+#newBadgeContainerROW3 .badgeLabel,
+#newBadgeContainerROW4 .badgeLabel {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-left: 50px; /* Ajuste este valor conforme necessário para mover a label mais à direita */
+}
+
+#newBadgeContainer .badge,
+#newBadgeContainerROW2 .badge,
+#newBadgeContainerROW3 .badge,
+#newBadgeContainerROW4 .badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+#newBadgeContainer img,
+#newBadgeContainerROW2 img,
+#newBadgeContainerROW3 img,
+#newBadgeContainerROW4 img {
+  width: 125px;
+  height: 125px;
+  margin: 5px;
+  border: 0;
+}
+
+
+#startScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+#startScreen h1 {
+  font-size: 60px; /* Aumenta o tamanho da label WELCOME */
+  margin-bottom: 10px; /* Reduz o espaço abaixo do h1 */
+}
+
+#startScreen h3 {
+  font-size: 30px; /* Aumenta o tamanho da label WELCOME */
+  margin-top: 10; /* Remove o espaço superior do h3 */
+}
+
+#startScreen input {
+  padding: 20px; /* Aumenta o padding do input */
+  font-size: 24px; /* Aumenta o tamanho da fonte do input */
+  margin-bottom: 40px; /* Ajusta o espaçamento abaixo do input */
+}
+
+#startScreen button {
+  background-color: green;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+#rankingTableContainer {
+  position: fixed;
+  top: 50px; /* Ajuste a posição conforme necessário */
+  left: -650px; /* Posiciona a tabela fora da área do jogo */
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+#rankingTable {
+  width: 600px;
+  border-collapse: collapse;
+  margin: auto;
+  background-color: #333;
+}
+
+#rankingTable th, #rankingTable td {
+  padding: 10px;
+  border: 1px solid white;
+  text-align: center;
+}
+
+#rankingTable tr:nth-child(even) {
+  background-color: #444;
+}
+
