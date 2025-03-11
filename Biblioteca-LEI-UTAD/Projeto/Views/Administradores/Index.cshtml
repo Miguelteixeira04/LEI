@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Trabalho.Models.Administradore>
+
+@{
+    ViewData["Title"] = "Administradores";
+}
+
+
+@* cabeçalho personalizado *@
+@section CustomHeader {
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Administradores" asp-action="Index">Home Page Administrador</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarLeitor" aria-controls="navbarLeitor"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarLeitor">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Administradores" asp-action="CreateAdmin">Registar Administradores</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Administradores" asp-action="AprovarNovosBiblio">Aprovação de Bibliotecários</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Administradores" asp-action="GerirUtilizadores">Gerir Utilizadores</a>
+                    </li>
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+}
+
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* Configuração do fundo e fonte geral */
+        body {
+            background-color: #cdcfc0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Estilo do título */
+        h1 {
+            text-align: left;
+            margin: 60px;
+            font-size: 40px;
+            font-weight: bold;
+            border: 1px solid #000;
+            padding: 10px;
+            display: inline-block;
+        }
+
+        /* Container principal */
+        .action-container {
+            display: flex;
+            align-items: center; /* Alinha verticalmente a imagem com os botões */
+            gap: 20px; /* Espaçamento entre a imagem e os botões */
+            width: 80%; /* Centraliza a seção inteira */
+            margin: auto;
+        }
+
+        /* Estilo da imagem */
+        .action-image {
+            width: 500px; /* Ajuste o tamanho da imagem conforme necessário */
+            height: auto;
+            border-radius: 10px; /* Adiciona bordas arredondadas à imagem, opcional */
+        }
+
+        /* Estilo geral dos botões */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 30%;
+        }
+
+        button {
+            background-color: #f1ebe5;
+            border: 1px solid #000;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #f5e9db;
+            }
+    </style>
+</head>
+<body>
+    <h1>Administrador</h1>
+
+    <div class="action-container">
+        <img src="/Images/Administrador.png" class="action-image">
+        <div class="action-buttons">
+            <button onclick="window.location.href='/Administradores/CreateAdmin'">Registar Novos Administradores</button>
+            <button onclick="window.location.href='/Administradores/AprovarNovosBiblio'">Aprovar Novos Bibliotecários</button>
+            <button onclick="window.location.href='/Administradores/GerirUtilizadores'">Gerir Utilizadores</button>
+        </div>
+    </div>
+</body>
+</html>
