@@ -1,0 +1,12 @@
+Melhor resultado para 14 cidades:
+Rota: Chaves -> Valença do Minho -> Viana do Castelo -> Barcelos -> Braga -> Guimarães -> Porto -> Aveiro -> Águeda -> Viseu -> Lamego -> Peso da Régua -> Vila Real -> Bragança
+Custo: 599.24 km
+----------------------------------------
+Melhor resultado para 20 cidades:
+Rota: Santarém -> Lisboa -> Setúbal -> Sagres -> Faro -> Tavira -> Évora -> Portalegre -> Guimarães -> Braga -> Viana do Castelo -> Porto -> Aveiro -> Viseu -> Guarda -> Lamego -> Vila Real -> Chaves -> Bragança -> Coimbra
+Custo: 1738.44 km
+----------------------------------------
+Melhor resultado para 30 cidades:
+Rota: Covilhã -> Viseu -> Guarda -> Miranda do Douro -> Bragança -> Chaves -> Vila Real -> Lamego -> Guimarães -> Braga -> Viana do Castelo -> Porto -> Aveiro -> Águeda -> Coimbra -> Leiria -> Setúbal -> Sines -> Sagres -> Faro -> Tavira -> Beja -> Évora -> Elvas -> Portalegre -> Lisboa -> Sintra -> Santarém -> Tomar -> Castelo Branco
+Custo: 1936.81 km
+----------------------------------------
