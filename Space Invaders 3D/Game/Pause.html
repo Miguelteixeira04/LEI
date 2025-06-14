@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pause - Space Invaders 3D</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    html, body {
+      margin: 0;
+      overflow: hidden;
+      height: 100%;
+      background: black;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .gameover {
+      position: absolute;
+      top: 25%;
+      width: 100%;
+      text-align: center;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 65px;
+      font-weight: bold;
+      margin: 0 10px;
+      color: white;
+      text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+    }
+
+    #intro {
+      width: 100%;
+      text-align: center;
+      color: #fff;
+      position: absolute;
+      top: 45%;
+      font-size: 3vh;
+      line-height: 1.8;
+      display: block;
+      font-family: 'Press Start 2P', monospace;
+    }
+
+    button {
+      font: inherit;
+      background: transparent;
+      color: #0f0;
+      border: 2px solid #0f0;
+      padding: 10px 30px 8px;
+      font-size: 1em;
+      cursor: pointer;
+      display: block;
+      margin: 40px auto;
+    }
+
+    #score {
+      position: absolute;
+      top: 10px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      font-family: 'Press Start 2P', monospace;
+      color: white;
+      font-size: 18px;
+      z-index: 10;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="renderCanvas"></canvas>
+  <div id="score"></div>
+
+  <!-- Título estilo gameover -->
+  <div class="gameover">PAUSE</div>
+
+  <!-- Botões estilo gameover -->
+  <div id="intro">
+    <button id="continuar-jogo">RESUME</button>
+    <button onclick="window.location.href='/Initial Sreen/index.html'">QUIT GAME</button>
+  </div>
+
+  <!-- BabylonJS -->
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+
+  <script>
+    const canvas = document.getElementById("renderCanvas");
+    const engine = new BABYLON.Engine(canvas, true);
+
+    const createScene = () => {
+      const scene = new BABYLON.Scene(engine);
+      scene.clearColor = new BABYLON.Color4.FromHexString("#030819");
+
+      const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 0, -10), scene);
+      camera.setTarget(BABYLON.Vector3.Zero());
+
+      const maxStars = 100;
+      const stars = [];
+
+      const colors = [
+        new BABYLON.Color3(1, 1, 1),
+        new BABYLON.Color3(1, 1, 0),
+        new BABYLON.Color3(1, 0, 1),
+        new BABYLON.Color3(0, 1, 1),
+        new BABYLON.Color3(1, 0.5, 0)
+      ];
+
+      for (let i = 0; i < maxStars; i++) {
+        const disc = BABYLON.MeshBuilder.CreateDisc(`star_${i}`, {
+          radius: Math.random() * 0.2 + 0.05,
+          tessellation: 32,
+        }, scene);
+
+        const mat = new BABYLON.StandardMaterial(`mat_${i}`, scene);
+        mat.diffuseColor = colors[Math.floor(Math.random() * colors.length)];
+        mat.emissiveColor = mat.diffuseColor;
+        mat.backFaceCulling = false;
+        disc.material = mat;
+
+        resetStar(disc);
+        stars.push(disc);
+      }
+
+      function resetStar(star) {
+        star.position.x = (Math.random() - 0.5) * 80;
+        star.position.y = (Math.random() - 0.5) * 80;
+        star.position.z = Math.random() * 100 + 10;
+      }
+
+      scene.onBeforeRenderObservable.add(() => {
+        for (const star of stars) {
+          star.position.z -= 0.1;
+          if (star.position.z < 1) {
+            resetStar(star);
+          }
+        }
+      });
+
+      return scene;
+    };
+
+    const scene = createScene();
+    engine.runRenderLoop(() => scene.render());
+    window.addEventListener("resize", () => engine.resize());
+
+    // Carregar e mostrar informações do estado pausado
+    function carregarInformacoesPausa() {
+      const estadoSalvo = localStorage.getItem("estadoJogoPausado");
+      
+      if (estadoSalvo) {
+        try {
+          const estado = JSON.parse(estadoSalvo);
+          
+          // Mostrar informações do jogo pausado em linha horizontal
+          const scoreElement = document.getElementById("score");
+          scoreElement.innerHTML = `
+            <div>SCORE: ${estado.pontuacao}</div>
+            <div>LEVEL: ${estado.currentLevel}</div>
+            <div>LIVES: ${estado.vidas}</div>
+            <div>INVADERS: ${estado.invasoresAtivos.length}</div>
+          `;
+          
+          console.log("Informações da pausa carregadas:", estado);
+        } catch (error) {
+          console.error("Erro ao carregar informações da pausa:", error);
+          // Fallback para informações básicas
+          const score = localStorage.getItem("pontuacaoFinal") || localStorage.getItem("pontuacaoAtual") || 0;
+          const nivel = localStorage.getItem("nivel") || localStorage.getItem("proximoNivel") || 1;
+          const vidas = localStorage.getItem("vidas") || 3;
+          
+          document.getElementById("score").innerHTML = `
+            <div>Score: ${score}</div>
+            <div>Level: ${nivel}</div>
+            <div>Lives: ${vidas}</div>
+            <div>Invaders: --</div>
+          `;
+        }
+      } else {
+        // Se não há estado salvo, mostrar informações básicas
+        const score = localStorage.getItem("pontuacaoFinal") || localStorage.getItem("pontuacaoAtual") || 0;
+        const nivel = localStorage.getItem("nivel") || localStorage.getItem("proximoNivel") || 1;
+        const vidas = localStorage.getItem("vidas") || 3;
+        
+        document.getElementById("score").innerHTML = `
+          <div>SCORE: ${score}</div>
+          <div>LEVEL: ${nivel}</div>
+          <div>LIVES: ${vidas}</div>
+          <div>INVADERS: --</div>
+        `;
+      }
+    }
+
+    // Carregar informações quando a página carrega
+    carregarInformacoesPausa();
+
+    // CONTINUAR botão — volta ao jogo principal
+    document.getElementById("continuar-jogo").addEventListener("click", () => {
+      // Verificar se existe estado salvo
+      const estadoSalvo = localStorage.getItem("estadoJogoPausado");
+      
+      if (estadoSalvo) {
+        // Voltar para o jogo principal que irá restaurar o estado
+        window.location.href = "/GAME/fundo.html";
+      } else {
+        // Se não há estado salvo, alertar o usuário
+        alert("Erro: Estado do jogo não encontrado. Voltando ao menu principal.");
+        window.location.href = "/Initial Sreen/index.html";
+      }
+    });
+
+    // Permitir voltar ao jogo com ESC também
+    window.addEventListener("keydown", (event) => {
+      if (event.code === "Escape") {
+        document.getElementById("continuar-jogo").click();
+      }
+    });
+  </script>
+</body>
+</html>

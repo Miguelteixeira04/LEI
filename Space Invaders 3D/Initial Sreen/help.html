@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Help - Space Invaders 3D</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    html, body {
+      margin: 0;
+      overflow: hidden;
+      height: 100%;
+      background: black;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #btn {
+      width: 100%;
+      text-align: center;
+      color: #fff;
+      position: absolute;
+      top: 80%;
+      left: 41.5%;
+      font-size: 3vh;
+      line-height: 1.8;
+      display: block;
+      font-family: 'Press Start 2P', monospace;
+    }
+
+    button {
+      font: inherit;
+      background: transparent;
+      color: #0f0;
+      border: 2px solid #0f0;
+      padding: 10px 30px 8px;
+      font-size: 1em;
+      cursor: pointer;
+      display: block;
+      margin: 40px 700px;
+    }
+
+    #title {
+      position: absolute;
+      top: 25%;
+      width: 100%;
+      text-align: center;
+    }
+
+    .word {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 65px;
+      font-weight: bold;
+      margin: 0 10px;
+    }
+
+    .game {
+      color: #030819;
+      text-shadow: -2px -2px 0 #007e10, 2px -2px 0 #007e10, -2px 2px 0 #007e10, 2px 2px 0 #007e10;
+    }
+
+    .controls {
+      color: #3dfc55;
+      text-shadow: -2px -2px 0 #007e10, 2px -2px 0 #007e10, -2px 2px 0 #007e10, 2px 2px 0 #007e10;
+    }
+
+    #instrucoes {
+      font-size: 0.9em;
+      position: absolute;
+      top: 42%;
+      padding: 0 2em;
+      width: 100%;
+      box-sizing: border-box;
+      color: #fff;
+      text-align: center;
+      font-family: 'Press Start 2P', monospace;
+      line-height: 1.4em;
+    }
+
+    #instrucoes div {
+        margin-bottom: 2.8em; /* espaçamento entre linhas */
+    }
+
+    .key {
+      background: #111;
+      border: 2px solid #0f0;
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-family: 'Press Start 2P';
+      color: #0f0;
+      font-size: 0.9em;
+      display: inline-block;
+      box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+      animation: glow 2s ease-in-out infinite;
+      margin: 0 4px;
+    }
+
+    @keyframes glow {
+      0% {
+        text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+      }
+      50% {
+        text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00;
+      }
+      100% {
+        text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <canvas id="renderCanvas"></canvas>
+
+  <!-- Título -->
+  <div id="title">
+    <span class="word game">GAME</span>
+    <span class="word controls">CONTROLS</span>
+  </div>
+
+  <!-- Instruções -->
+  <div id="instrucoes">
+    <div>
+      <span class="key">&larr;</span>
+      <span class="key">&rarr;</span> or
+      <span class="key">A</span>
+      <span class="key">D</span> Move Spaceship
+    </div>
+    <div>
+      <span class="key">W</span> or
+      <span class="key">SPACE</span> Shoot
+    </div>
+    <div>
+      <span class="key">C</span> Switch Camera View
+    </div>
+    <div>
+      <span class="key">ESC</span> Pause Game
+    </div>
+  </div>
+
+  <!-- Botão Menu -->
+  <div id="btn">
+    <button id="menu" onclick="window.location.href='/Initial Sreen/index.html'">MENU</button>
+  </div>
+
+  <!-- BabylonJS -->
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+
+  <script>
+    const canvas = document.getElementById("renderCanvas");
+    const engine = new BABYLON.Engine(canvas, true);
+
+    const createScene = () => {
+      const scene = new BABYLON.Scene(engine);
+      scene.clearColor = new BABYLON.Color4.FromHexString("#030819");
+
+      const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 0, -10), scene);
+      camera.setTarget(BABYLON.Vector3.Zero());
+
+      const maxStars = 100;
+      const stars = [];
+
+      const colors = [
+        new BABYLON.Color3(1, 1, 1),
+        new BABYLON.Color3(1, 1, 0),
+        new BABYLON.Color3(1, 0, 1),
+        new BABYLON.Color3(0, 1, 1),
+        new BABYLON.Color3(1, 0.5, 0)
+      ];
+
+      for (let i = 0; i < maxStars; i++) {
+        const disc = BABYLON.MeshBuilder.CreateDisc(`star_${i}`, {
+          radius: Math.random() * 0.2 + 0.05,
+          tessellation: 32,
+        }, scene);
+
+        const mat = new BABYLON.StandardMaterial(`mat_${i}`, scene);
+        mat.diffuseColor = colors[Math.floor(Math.random() * colors.length)];
+        mat.emissiveColor = mat.diffuseColor;
+        mat.backFaceCulling = false;
+        disc.material = mat;
+
+        resetStar(disc);
+        stars.push(disc);
+      }
+
+      function resetStar(star) {
+        star.position.x = (Math.random() - 0.5) * 80;
+        star.position.y = (Math.random() - 0.5) * 80;
+        star.position.z = Math.random() * 100 + 10;
+      }
+
+      scene.onBeforeRenderObservable.add(() => {
+        for (const star of stars) {
+          star.position.z -= 0.1;
+          if (star.position.z < 1) {
+            resetStar(star);
+          }
+        }
+      });
+
+      return scene;
+    };
+
+    const scene = createScene();
+    engine.runRenderLoop(() => scene.render());
+    window.addEventListener("resize", () => engine.resize());
+  </script>
+</body>
+</html>

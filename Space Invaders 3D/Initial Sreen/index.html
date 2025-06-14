@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Space Invaders 3D</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    html, body {
+      margin: 0;
+      overflow: hidden;
+      height: 100%;
+      background: black;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #intro {
+      width: 100%;
+      text-align: center;
+      color: #fff;
+      position: absolute;
+      top: 45%;
+      font-size: 3vh;
+      line-height: 1.8;
+      display: block;
+      font-family: 'Press Start 2P', monospace;
+    }
+
+    button {
+      font: inherit;
+      background: transparent;
+      color: #0f0;
+      border: 2px solid #0f0;
+      padding: 10px 30px 8px;
+      font-size: 1em;
+      cursor: pointer;
+      display: block;
+      margin: 40px auto;
+    }
+
+    #game-title {
+      position: absolute;
+      top: 25%;
+      width: 100%;
+      text-align: center;
+    }
+
+    .word {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 65px;
+      font-weight: bold;
+      margin: 0 10px;
+    }
+
+    .space {
+      color: #030819;
+      text-shadow: -2px -2px 0 #007e10, 2px -2px 0 #007e10, -2px 2px 0 #007e10, 2px 2px 0 #007e10;
+    }
+
+    .invaders {
+      color: #030819;
+      text-shadow: -2px -2px 0 #007e10, 2px -2px 0 #007e10, -2px 2px 0 #007e10, 2px 2px 0 #007e10;
+    }
+
+    .threeD {
+      color: #3dfc55;
+      text-shadow: -2px -2px 0 #007e10, 2px -2px 0 #007e10, -2px 2px 0 #007e10, 2px 2px 0 #007e10;
+    }
+
+    #name-label {
+      position:absolute;
+      top: 15px;
+      right: 25px;
+      color: white;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 18px;
+      z-index: 10;
+      text-align: right;
+    }
+
+    #sound-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(10, 10, 10, 0.95);
+      border: 2px solid #0f0;
+      padding: 15px 25px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      z-index: 999;
+      text-align: left;
+      box-shadow: 0 0 15px #0f0;
+      border-radius: 10px;
+      display: hidden;
+      flex-direction: column;
+      color: white;
+      animation: border-glow 3s ease-in-out infinite;
+    }
+
+    #sound-popup h3 {
+      color: #0f0;
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .sound-setting {
+      display: flex;
+      align-items: center;
+      margin: 2px 15px;
+      gap: 10px;
+      width: 95%;
+    }
+    .sound-setting span {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .toggle-btn {
+      padding: 4px 12px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      color: #0f0;
+      background: transparent;
+      border: 2px solid #0f0;
+      cursor: pointer;
+      min-width: 60px;
+      text-align: center;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+
+    .toggle-btn.off {
+      color: red;
+      border-color: red;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #sound-menu-container {
+      position: fixed;
+      bottom: 20px;
+      left: 5px;
+      z-index: 20;
+    }
+
+    #sound-toggle-btn {
+      background: transparent;
+      cursor: pointer;
+      line-height: 1;
+      border: none;
+      margin-bottom: 10px;
+    }
+
+    @keyframes border-glow {
+      0% {
+        box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+      }
+      50% {
+        box-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00;
+      }
+      100% {
+        box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="renderCanvas"></canvas>
+
+  <!-- Título -->
+  <div id="game-title">
+    <span class="word space">SPACE</span>
+    <span class="word invaders">INVADERS</span>
+    <span class="word threeD">3D</span>
+  </div>
+
+  <!-- Name label -->
+  <div id="name-label">M²R²<br>Studios</div>
+
+  <!-- Botões -->
+  <div id="intro">
+    <button id="start-game">START GAME</button>
+    <button id="help" onclick="window.location.href='/Initial Sreen/help.html'">HELP</button>
+  </div>
+  
+  <!-- Ícone para abrir menu de som -->
+  <div id="sound-menu-container">
+    <button id="sound-toggle-btn" title="Sound Settings">
+      <img src="/Sons/speaker.png" alt="Sound" style="width: 50px; height: auto">
+    </button>
+  </div>
+
+  <!-- Janela flutuante com controles de som -->
+  <div id="sound-popup" class="hidden">
+    <h3>SOUND SETTINGS</h3>
+    <div class="sound-setting" data-sound="global">
+      <span>Global:</span> <button class="toggle-btn">ON</button>
+    </div>
+    <div class="sound-setting" data-sound="music">
+      <span>Music:</span> <button class="toggle-btn">ON</button>
+    </div>
+    <div class="sound-setting" data-sound="effects">
+      <span>Sound Effects:</span> <button class="toggle-btn">ON</button>
+    </div>
+    <div class="sound-setting" data-sound="ambient">
+      <span>Ambient Sound:</span> <button class="toggle-btn">ON</button>
+    </div>
+  </div>
+
+
+
+  <!-- BabylonJS -->
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+
+  <script>
+    const canvas = document.getElementById("renderCanvas");
+    const engine = new BABYLON.Engine(canvas, true);
+
+    const createScene = () => {
+      const scene = new BABYLON.Scene(engine);
+      scene.clearColor = new BABYLON.Color4.FromHexString("#030819");
+
+      const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 0, -10), scene);
+      camera.setTarget(BABYLON.Vector3.Zero());
+
+      const maxStars = 100;
+      const stars = [];
+
+      const colors = [
+        new BABYLON.Color3(1, 1, 1),
+        new BABYLON.Color3(1, 1, 0),
+        new BABYLON.Color3(1, 0, 1),
+        new BABYLON.Color3(0, 1, 1),
+        new BABYLON.Color3(1, 0.5, 0)
+      ];
+
+      for (let i = 0; i < maxStars; i++) {
+        const disc = BABYLON.MeshBuilder.CreateDisc(`star_${i}`, {
+          radius: Math.random() * 0.2 + 0.05,
+          tessellation: 32,
+        }, scene);
+
+        const mat = new BABYLON.StandardMaterial(`mat_${i}`, scene);
+        mat.diffuseColor = colors[Math.floor(Math.random() * colors.length)];
+        mat.emissiveColor = mat.diffuseColor;
+        mat.backFaceCulling = false;
+        disc.material = mat;
+
+        resetStar(disc);
+        stars.push(disc);
+      }
+
+      function resetStar(star) {
+        star.position.x = (Math.random() - 0.5) * 80;
+        star.position.y = (Math.random() - 0.5) * 80;
+        star.position.z = Math.random() * 100 + 10;
+      }
+
+      scene.onBeforeRenderObservable.add(() => {
+        for (const star of stars) {
+          star.position.z -= 0.1;
+          if (star.position.z < 1) {
+            resetStar(star);
+          }
+        }
+      });
+
+      return scene;
+    };
+
+    const scene = createScene();
+    engine.runRenderLoop(() => scene.render());
+    window.addEventListener("resize", () => engine.resize());
+
+    document.getElementById("start-game").addEventListener("click", () => {
+      // Define o estado inicial para um NOVO JOGO no localStorage
+      localStorage.setItem("vidas", "3");
+      localStorage.setItem("pontuacao", "0");
+      localStorage.setItem("currentLevel", "1");
+      localStorage.removeItem("proximoNivel");
+      localStorage.removeItem("pontuacaoAtual");
+      localStorage.removeItem("estadoJogoPausado");
+
+      // Limpar estado da câmera para novo jogo
+      localStorage.removeItem("isOrthoCamera");
+      
+      console.log("Menu: Novo jogo iniciado. Vidas: 3, Pontuação: 0, Nível: 1");
+      
+      setTimeout(() => {
+        window.location.href = '/GAME/fundo.html';
+      }, 100); 
+    });
+
+
+    // DESATIVAR SONS DE JOGO (ligado por default)
+    const menuBtn = document.getElementById("sound-toggle-btn");
+    const soundPopup = document.getElementById("sound-popup");
+    const toggleButtons = soundPopup.querySelectorAll(".toggle-btn");
+
+    // Estado inicial dos sons
+    let soundSettings = JSON.parse(localStorage.getItem("soundSettings")) || {
+      global: true,
+      music: true,
+      effects: true,
+      ambient: true
+    };
+
+    function atualizarEstadoVisual() {
+      toggleButtons.forEach(btn => {
+        const tipo = btn.parentElement.dataset.sound;
+        const ativo = soundSettings[tipo];
+        btn.textContent = ativo ? "ON" : "OFF";
+        btn.classList.toggle("off", !ativo);
+      });
+    }
+
+    // Abrir/fechar menu
+    menuBtn.addEventListener("click", () => {
+      soundPopup.classList.toggle("hidden");
+    });
+
+    // Atualizar estado ao clicar
+    toggleButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tipo = btn.parentElement.dataset.sound;
+        soundSettings[tipo] = !soundSettings[tipo];
+
+        // Se GLOBAL foi alterado, afeta todos
+        if (tipo === "global") {
+          const novoEstado = soundSettings.global;
+          ["music", "effects", "ambient"].forEach(cat => {
+            soundSettings[cat] = novoEstado;
+          });
+        } else {
+          // Atualizar global dependendo do estado dos outros sons
+          soundSettings.global = ["music", "effects", "ambient"].every(cat => soundSettings[cat]);
+        }
+
+        localStorage.setItem("soundSettings", JSON.stringify(soundSettings));
+        atualizarEstadoVisual();
+      });
+    });
+
+    // Inicializar interface
+    atualizarEstadoVisual();
+    
+  </script>
+</body>
+</html>
