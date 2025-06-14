@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="english">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeScreen</title>
+    <!-- Link para o FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #6f9ead; 
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left; 
+            position: relative;
+        }
+
+        .start-btn {
+            background-color: #f9ad17;
+            border: 4px solid #000000;
+            color: black;
+            padding: 30px 100px; 
+            text-align: center;
+            font-size: 45px;            
+            cursor: pointer;
+            margin-top: 20px;
+            border-radius: 25px;
+            position: absolute;
+            top: 46%; 
+            left: 69%;
+        }
+
+        .start-btn:hover {
+            background-color: #f9ad17; 
+            border: 4px solid #ffdd57; 
+        }
+
+        .info-button {
+            position: fixed;
+            top: 85%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            font-size: 4.5vh;
+            background-color: #3b308b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease; /* Transição suave */
+        }
+
+        .info-button:hover {
+            transform: scale(1.1); /* Aumenta a imagem ao passar o mouse */
+            transition: transform 0.3s ease; /* Transição suave */
+        }
+
+        .hTest{
+            color: #3b308b;
+            position: absolute;
+            top: 35vh; 
+            left: 1620px;
+            font-size: 70px;
+            font-weight: bold;
+        }
+
+        .shTest {
+            position: absolute;
+            top: 900px; 
+            left: 1700px;
+            font-size: 30px;
+            color: #3b308b;
+        }
+
+        .hType {
+            position: absolute;
+            top: 200px; 
+            left: 500px;
+            font-size: 70px;
+            color: #3b308b;
+            font-weight: bold;
+        }
+
+        .shType{
+            color: #3b308b;
+            position: absolute;
+            top: 400px; 
+            left: 550px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .labelDi {
+            position: absolute;
+            top: 510px; 
+            left: 400px;
+            font-size: 40px;
+            color: #3b308b;
+            font-weight: bold;
+        }
+
+        .labelMono {
+            position: absolute;
+            top: 830px; 
+            left: 400px;
+            font-size: 40px;
+            color: #3b308b;
+            font-weight: bold;
+        }
+
+        .barravertical {
+            position: absolute;
+            top: 15vh;
+            left: 100vh;
+            width: 0.3vh;
+            height: 70vh;
+            background-color: #3b1a9b;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 30px;
+            color: #3b308b;
+        }
+
+        .option input[type="radio"] {
+            display: none; /* esconde o radio real */
+        }
+
+        .custom-radio {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid #3b308b;
+            margin-right: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        /* Círculo interior ao selecionar */
+        .custom-radio::after {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 100%;
+            background-color: #3b308b;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
+        /* Quando selecionado, mostra o ponto */
+        input[type="radio"]:checked + .custom-radio::after {
+            opacity: 1;
+        }
+
+        .radio-group-dichromacy {
+            position: absolute;
+            top: 600px;
+            left: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .radio-group-monochromacy {
+            position: absolute;
+            top: 900px;
+            left: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .btn-group {
+            position: absolute;
+            top: 1100px;
+            left: 530px;
+            display: flex;
+            gap: 50px;
+        }
+
+        .btn {
+            padding: 25px 100px;
+            font-size: 25px;
+            color: white;
+            background-color: #3b308b;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #5b29a6;
+        }
+
+        #screen-filter {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* permite interação com os elementos abaixo */
+            z-index: 9999;
+            mix-blend-mode: multiply;
+        }
+    </style>
+</head>
+<body>
+    <!-- SVG filters para simulação de daltonismo -->
+    <svg style="display: none;">
+        <!-- Protanopia -->
+        <filter id="protanopia-filter">
+            <feColorMatrix type="matrix" values="0.567,0.433,0,0,0 0.558,0.442,0,0,0 0,0.242,0.758,0,0 0,0,0,1,0" />
+        </filter>
+        
+        <!-- Deuteranopia -->
+        <filter id="deuteranopia-filter">
+            <feColorMatrix type="matrix" values="0.625,0.375,0,0,0 0.7,0.3,0,0,0 0,0.3,0.7,0,0 0,0,0,1,0" />
+        </filter>
+        
+        <!-- Tritanopia -->
+        <filter id="tritanopia-filter">
+            <feColorMatrix type="matrix" values="0.95,0.05,0,0,0 0,0.433,0.567,0,0 0,0.475,0.525,0,0 0,0,0,1,0" />
+        </filter>
+        
+        <!-- Acromatopsia -->
+        <filter id="grayscale-filter">
+            <feColorMatrix type="matrix" values="0.299,0.587,0.114,0,0 0.299,0.587,0.114,0,0 0.299,0.587,0.114,0,0 0,0,0,1,0" />
+        </filter>
+    </svg>
+      
+    <div id="screen-filter"></div>
+
+    <div>
+        <label class="barravertical"></label>
+        <button class="start-btn" onclick="startApp()">Here</button>
+        <!-- Botão Info -->
+        <a href="Informations.html">
+            <button class="info-button">
+                <i class="fas fa-info-circle"></i>
+            </button>
+        </a>
+
+        <label class="hTest">Test your color vision now 🎨</label>
+        <label class="shTest">Expert-designed test for a clearer, personalized experience</label>
+        <label class="hType">Know your colour<br> Blindness type?</label>
+        <label class="shType">Adjust your screen for better vision</label>
+
+        <label class="labelDi">Dichromacy</label>
+        <label class="labelMono">Monochromacy</label>
+    </div>
+
+    <!-- Grupo Dichromacy -->
+    <div class="radio-group-dichromacy">
+        <label class="option">
+            <input type="radio" name="daltonismo" value="protanopia">
+            <span class="custom-radio"></span>
+            Protanopia
+        </label>
+    
+        <label class="option">
+            <input type="radio" name="daltonismo" value="deuteranopia">
+            <span class="custom-radio"></span>
+            Deuteranopia
+        </label>
+    
+        <label class="option">
+            <input type="radio" name="daltonismo" value="tritanopia">
+            <span class="custom-radio"></span>
+            Tritanopia
+        </label>
+    </div>
+    
+    <!-- Grupo Monochromacy -->
+    <div class="radio-group-monochromacy">
+        <label class="option">
+            <input type="radio" name="daltonismo" value="acromatopsia">
+            <span class="custom-radio"></span>
+            Acromatopsia
+        </label>
+    </div>
+
+    <!-- Botões Reset e Apply -->
+    <div class="btn-group">
+        <button class="btn reset" id="resetBtn">Reset</button>
+        <button class="btn apply" onclick="applySelection()">Apply</button>
+    </div>
+    
+    <script>
+        function startApp() {
+            window.location.replace("Question.html");
+        }
+        
+        // Impedir zoom com Ctrl + Scroll e Ctrl + (+, -, 0)
+        document.addEventListener("wheel", function(event) {
+            if (event.ctrlKey) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener("keydown", function(event) {
+            if (event.ctrlKey && (event.key === "+" || event.key === "-" || event.key === "0")) {
+                event.preventDefault();
+            }
+        });
+
+        document.getElementById("resetBtn").addEventListener("click", () => {
+            ipcRenderer.send('resetar-filtro');
+            resetVisualFilter();
+        });
+
+        const { ipcRenderer } = require('electron');
+
+        function applySelection() {
+            const selected = document.querySelector('input[name="daltonismo"]:checked');
+            if (selected) {
+                const tipo = selected.value;
+                let valor = 0;
+
+                switch (tipo) {
+                    case "deuteranopia": valor = 3; break;
+                    case "protanopia":   valor = 4; break;
+                    case "tritanopia":   valor = 5; break;
+                    case "acromatopsia": valor = 0; break;
+                }
+
+                ipcRenderer.send('aplicar-filtro', valor);
+                
+                const filterDiv = document.getElementById("screen-filter");
+                let cssFilter = "";
+                
+                switch (tipo) {
+                    case "protanopia":
+                        cssFilter = "url('#protanopia-filter')";
+                        break;
+                    case "deuteranopia":
+                        cssFilter = "url('#deuteranopia-filter')";
+                        break;
+                    case "tritanopia":
+                        cssFilter = "url('#tritanopia-filter')";
+                        break;
+                    case "acromatopsia":
+                        cssFilter = "url('#grayscale-filter')";
+                        break;
+                }
+                
+                filterDiv.style.filter = cssFilter;
+                filterDiv.style.backgroundColor = "rgba(255,255,255,0.1)";
+                
+                console.log(`Filtro ${tipo} (${valor}) aplicado com sucesso`);
+            } else {
+                alert("Por favor selecione uma opção de daltonismo.");
+            }
+        }
+
+        function resetSelection() {
+            // Clear radio button selections
+            const radios = document.querySelectorAll('input[name="daltonismo"]');
+            radios.forEach(r => r.checked = false);
+            
+            // Reset visual filter on the page
+            const filterDiv = document.getElementById("screen-filter");
+            filterDiv.style.filter = "none";
+            filterDiv.style.backgroundColor = "transparent";
+            
+            // Send reset command to the main process to reset system color filter
+            ipcRenderer.send('resetar-filtro');
+            
+            console.log("Filtros e seleções reiniciados");
+        }
+
+        // Função para resetar visualmente o filtro
+        function resetVisualFilter() {
+            document.getElementById('screen-filter').style.display = 'none';
+            console.log("Filtro visual resetado.");
+        }
+
+        function restartExplorer() {
+            const { exec } = require('child_process');
+            exec(`taskkill /f /im explorer.exe && timeout /t 2 >nul && start explorer.exe`);
+        }
+    </script>
+</body>
+</html>

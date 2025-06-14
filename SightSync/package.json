@@ -1,0 +1,19 @@
+{
+  "name": "sightsync",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "rebuild": "electron-rebuild"
+  },
+  "dependencies": {
+    "electron": "^36.2.1",
+    "robotjs": "^0.6.0"
+  },
+  "build": {
+    "requestedExecutionLevel": "requireAdministrator"
+  },
+  "devDependencies": {
+    "electron-rebuild": "^3.2.9"
+  }
+}

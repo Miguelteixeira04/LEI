@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="english">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question</title>
+    <!-- Link para o FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #6f9ead;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: left; 
+            position: relative;
+        }
+        
+        .rect-a {  /* retangulo cinzento escuro */
+            background-color: #a6a6a6;
+            width: 55%;
+            height: 9%;
+            border-radius: 1.5vh;
+            position: absolute;
+            top: 8.5%; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 0; 
+        }
+
+        .rect-b {
+            background-color: #d9d9d9;
+            width: 55%;
+            height: 68%;
+            position: absolute;
+            top: 16%; 
+            left: 50%; 
+            transform: translateX(-50%);
+            z-index: 1; 
+        }
+
+        .label {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: bold; 
+            font-size: 4.5vh;
+            color: #000; 
+            z-index: 2; 
+            position: absolute;
+            top: 5.5%; 
+            left: 50%; 
+            transform: translateX(-50%);    
+        }
+
+        .button-container {
+            position: absolute;
+            top: 86.5%;  
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: space-between;
+            width: 80%; 
+            z-index: 3; 
+        }
+
+        .start-btn {
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            color: black;
+            padding: 2.2vh 4vh; 
+            text-align: center;
+            font-size: 3vh;            
+            cursor: pointer;
+            border-radius: 1.5vh;
+            width: 13%; 
+            position: relative;
+        }
+
+        .start-btn::before {
+            content: ''; 
+            position: absolute;
+            top: -10%; 
+            left: -4%; 
+            width: 15%; 
+            height: 45%; 
+            background-color: #d5e4ee; 
+            color: black; 
+            border-radius: 50%; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2vh; 
+            font-weight: bold; 
+        }
+
+        .button-container button:nth-child(1)::before {
+            content: 'A';
+        }
+
+        .button-container button:nth-child(2)::before {
+            content: 'B';
+        }
+
+        .button-container button:nth-child(3)::before {
+            content: 'C';
+        }
+
+        .button-container button:nth-child(4)::before {
+            content: 'D';
+        }
+
+        .back-button {
+            position: fixed;
+            top: 6%;
+            left: 4%;
+            width: 90px;
+            height: 90px;
+            font-size: 3.5vh;
+            background-color: #3b308b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-button:hover {
+            background-color: #2a1c6b;
+        }
+
+        .image-container {
+            position: absolute;
+            top: 51%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: 2; 
+        }
+
+        .image-container img {
+            width: 65vh; 
+            height: 65vh; 
+        }
+
+        #progress-bar {
+            width: 80%; 
+            height: 3%; 
+            background-color: #f3f3f3; 
+            border-radius: 2vh; 
+            margin: 0.6% 0;
+            position: absolute;
+            top: 2%; 
+            left: 50%; 
+            transform: translateX(-50%);
+            z-index: 3; 
+        }
+
+        #progress-bar span {
+            display: block;
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            border-radius: 2vh;
+            z-index: 3; 
+        }
+    </style>
+</head>
+<body>
+    <p class="label">Which number do you see in this photo?</p>
+    <div class="rect-a"></div> 
+    <div class="rect-b"></div> 
+
+    <div class="image-container">
+        <img id="question-image" src="../Photos/Perguntas/1.png" alt="Pergunta">
+    </div>
+    <div id="progress-bar">
+        <span id="progress-bar-fill"></span>
+    </div>
+
+    <div class="button-container">
+        <button class="start-btn" onclick="changeQuestion(1)">Nothing</button>
+        <button class="start-btn" onclick="changeQuestion(2)">72</button>
+        <button class="start-btn" onclick="changeQuestion(3)">Not Sure</button>
+        <button class="start-btn" onclick="changeQuestion(4)">12</button>
+    </div>
+
+    <button class="back-button" onclick="goBack()">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+
+    <script>
+        let currentQuestion = 1;
+        let normalcount = 0;
+        let tritanopiacount = 0;
+        let deuteranomaliacount = 0;
+        let protanomaliacount = 0;
+        let acromaticcount = 0;
+        
+        const responses = {
+        //                                  [Normal,Deuteranopia,Protanopia,Tritanopia,Acromático]
+
+                                //Normal = [0.7, 0.075, 0.075, 0.075, 0.075]
+                                //Deuteranopia = [0.05, 0.5, 0.3, 0.1, 0.05]
+                                //Protanopia = [0.05, 0.3, 0.5, 0.1, 0.05]
+                                //Tritanopia = [0.05, 0.15, 0.15, 0.6, 0.05]
+
+        
+            1:  { 1: [0, 0.25, 0.25, 0.25, 0.25],            2: [0, 0.25, 0.25, 0.25, 0.25],             3: [0, 0.25, 0.25, 0.25, 0.25],                 4: [0.7, 0.075, 0.075, 0.075, 0.075] },
+            2:  { 1: [0.05, 0.5, 0.3, 0.1, 0.05],            2: [0.2, 0.2, 0.2, 0.2, 0.2],               3: [0.7, 0.075, 0.075, 0.075, 0.075],           4: [0, 0, 0, 0, 1] },
+            3:  { 1: [0.2, 0.2, 0.2, 0.2, 0.2],              2: [0.7, 0.075, 0.075, 0.075, 0.075],       3: [0.05, 0.5, 0.3, 0.1, 0.05],                 4: [0, 0, 0, 0, 1] },
+            4:  { 1: [0.7, 0.075, 0.075, 0.075, 0.075],      2: [0, 0, 0, 0, 1],                         3: [0.05, 0.5, 0.3, 0.1, 0.05],                 4: [0.2, 0.2, 0.2, 0.2, 0.2] },
+            5:  { 1: [0.2, 0.2, 0.2, 0.2, 0.2],              2: [0, 0, 0, 0, 1],                         3: [0.7, 0.075, 0.075, 0.075, 0.075],           4: [0.05, 0.5, 0.3, 0.1, 0.05] },
+            6:  { 1: [0.7, 0.075, 0.075, 0.075, 0.075],      2: [0.05, 0.5, 0.3, 0.1, 0.05],             3: [0.2, 0.2, 0.2, 0.2, 0.2],                   4: [0, 0, 0, 0, 1] },
+            7:  { 1: [0.7, 0.075, 0.075, 0.075, 0.075],      2: [0.2, 0.2, 0.2, 0.2, 0.2],               3: [0, 0, 0, 0, 1],                             4: [0.05, 0.5, 0.3, 0.1, 0.05] },
+            8:  { 1: [0, 0, 0, 0, 1],                        2: [0.7, 0.075, 0.075, 0.075, 0.075],       3: [0.05, 0.5, 0.3, 0.1, 0.05],                 4: [0.2, 0.2, 0.2, 0.2, 0.2] },
+            9:  { 1: [0.7, 0.075, 0.075, 0.075, 0.075],      2: [0, 0, 0, 0, 1],                         3: [0.05, 0.5, 0.3, 0.1, 0.05],                 4: [0.2, 0.2, 0.2, 0.2, 0.2] },    
+            
+            10: { 1: [0.7, 0.075, 0.075, 0.075, 0.075],      2: [0.05, 0.5, 0.3, 0.1, 0.05],             3: [0.05, 0.5, 0.3, 0.1, 0.05],                 4: [0.05, 0.3, 0.5, 0.1, 0.05] },
+            11: { 1: [0.05, 0.5, 0.3, 0.1, 0.05],            2: [0.05, 0.5, 0.3, 0.1, 0.05],             3: [0.7, 0.075, 0.075, 0.075, 0.075],           4: [0.05, 0.3, 0.5, 0.1, 0.05]},
+            12: { 1: [0.7, 0.075, 0.075, 0.075, 0.075],      2: [0.05, 0.5, 0.3, 0.1, 0.05],             3: [0.05, 0.5, 0.3, 0.1, 0.05],                 4: [0.05, 0.3, 0.5, 0.1, 0.05]},
+            13: { 1: [0.05, 0.5, 0.3, 0.1, 0.05],            2: [0.05, 0.3, 0.5, 0.1, 0.05],             3: [0.7, 0.075, 0.075, 0.075, 0.075],           4: [0.05, 0.5, 0.3, 0.1, 0.05] },
+            14: { 1: [0.05, 0.3, 0.5, 0.1, 0.05] ,           2: [0.05, 0.5, 0.3, 0.1, 0.05] ,            3: [0.05, 0.5, 0.3, 0.1, 0.05] ,                4: [0.7, 0.075, 0.075, 0.075, 0.075]},   
+            15: { 1: [0.05, 0.5, 0.3, 0.1, 0.05],            2: [0.7, 0.075, 0.075, 0.075, 0.075],       3: [0.05, 0.3, 0.5, 0.1, 0.05],                 4: [0.05, 0.5, 0.3, 0.1, 0.05]},
+            16: { 1: [0.7, 0.075, 0.075, 0.075, 0.075],      2: [0.05, 0.5, 0.3, 0.1, 0.05],             3: [0.05, 0.5, 0.3, 0.1, 0.05],                 4: [0.05, 0.3, 0.5, 0.1, 0.05]},
+            17: { 1: [0.05, 0.5, 0.3, 0.1, 0.05],            2: [0.7, 0.075, 0.075, 0.075, 0.075],       3: [0.05, 0.5, 0.3, 0.1, 0.05],                 4: [0.05, 0.3, 0.5, 0.1, 0.05] },
+
+            18: { 1: [0.1, 0.1, 0.1, 0.1, 0.6],              2: [0.7, 0.075, 0.075, 0.075, 0.075],     3: [0.05, 0.6, 0.2, 0.1, 0.05],                   4: [0.05, 0.2, 0.6, 0.1, 0.05] },
+            19: { 1: [0.7, 0.075, 0.075, 0.075, 0.075],      2: [0.1, 0.1, 0.1, 0.1, 0.6],             3: [0.05, 0.6, 0.2, 0.1, 0.05],                   4: [0.05, 0.2, 0.6, 0.1, 0.05] },
+            20: { 1: [0.1, 0.1, 0.1, 0.1, 0.6],              2: [0.05, 0.4, 0.25, 0.25, 0.05],         3: [0.05, 0.2, 0.6, 0.1, 0.05],                   4: [0.7, 0.075, 0.075, 0.075, 0.075] },
+            21: { 1: [0.1, 0.1, 0.1, 0.1, 0.6],              2: [0.05, 0.25, 0.4, 0.25, 0.05],         3: [0.7, 0.075, 0.075, 0.075, 0.075],             4: [0.05, 0.6, 0.2, 0.1, 0.05] },   
+            22: { 1: [0.7, 0.075, 0.075, 0.075, 0.075],      2: [0.05, 0.2, 0.6, 0.1, 0.05],           3: [0, 0, 0, 0, 1],                               4: [0.05, 0.6, 0.2, 0.1, 0.05] },
+            23: { 1: [0.05, 0.2, 0.6, 0.1, 0.05],            2: [0.7, 0.075, 0.075, 0.075, 0.075],     3: [0.05, 0.6, 0.2, 0.1, 0.05],                   4: [0, 0, 0, 0, 1]},
+            24: { 1: [0, 0, 0, 0, 1],                        2: [0.05, 0.6, 0.2, 0.1, 0.05],           3: [0.05, 0.2, 0.6, 0.1, 0.05],                   4: [0.7, 0.075, 0.075, 0.075, 0.075] },
+            25: { 1: [0.7, 0.075, 0.075, 0.075, 0.075],      2: [0, 0, 0, 0, 1],                       3: [0.05, 0.6, 0.2, 0.1, 0.05],                   4: [0.05, 0.2, 0.6, 0.1, 0.05] },
+        };
+
+        const questionOptions = {
+            1: ["Nothing", "72", "Not Sure", "12"], //Normal 12
+            2: ["3", "Not Sure", "8", "Nothing"], //Normal 8; Deuteranopia:3
+            3: ["Not Sure", "6", "5", "Nothing"],//Normal 6 | Deuteranopia 5
+            4: ["29", "Nothing", "70", "Not Sure"],//Normal 29 | Deuteranopia 70
+            5: ["Not Sure", "Nothing", "57", "35"],//Normal 57 |  Deuteranopia 35
+            6: ["5", "2", "Not Sure", "Nothing"],//Normal 5 |  Deuteranopia 2
+            7: ["3", "Not Sure", "Nothing", "5"],//Normal 3 |  Deuteranopia 5
+            8: ["Nothing", "15", "17", "Not Sure"],//Normal 15 |  Deuteranopia 17
+            9: ["74", "Nothing", "21", "Not Sure"],//Normal 74 |  Deuteranopia 21
+            10: ["5", "Not Sure", "Nothing", "6"],//Normal 5 |  Deuteranopia Not Sure e Nothing
+            11: ["Not Sure", "Nothing", "6", "8"],//Normal 6 |  Deuteranopia Not Sure e Nothing
+            12: ["97", "Not Sure", "Nothing", "87"],//Normal 97 |  Deuteranopia Not Sure e Nothing
+            13: ["Not Sure", "46", "45", "Nothing"],//Normal 45 |  Deuteranopia Not Sure e Nothing
+            14: ["55", "Nothing", "Not Sure", "5"],//Normal 5 |  Deuteranopia Not Sure e Nothing
+            15: ["Nothing", "7", "47", "Not Sure"],//Normal 7 |  Deuteranopia Not Sure e Nothing
+            16: ["16", "Nothing", "Not Sure", "1"],//Normal 16 |  Deuteranopia Not Sure e Nothing
+            17: ["Nothing", "73", "Not Sure", "93"],//Normal 73 | Deuteranopia Not Sure e Nothing
+            18: ["Not Sure", "Nothing", "5", "9"],//Normal Nada | Deuteranopia 5
+            19: ["Nothing", "Not Sure", "2", "4"],//Normal Nada | Deuteranopia 2
+            20: ["Not Sure", "40", "45", "Nothing"],//Normal Nada | Protanopia 45
+            21: ["Not Sure", "27", "Nothing", "73"],//Normal Nada | Deuteranopia 73
+            22: ["26", "6", "Nothing", "2"],//Normal 26 | Protanopia 6 | Deuteranopia 2
+            23: ["2", "42", "4", "Nothing"],//Normal 42 | Protanopia 2 | Deuteranopia 4
+            24: ["Nothing", "3", "5", "35"],//Normal 35 | Protanopia 5 | Deuteranopia 3
+            25: ["96", "Nothing", "9", "6"]//Normal 96 | Protanopia 6 | Deuteranopia 9
+        };
+        //                                  [Normal,Deuteranopia,Protanopia,Tritanopia,Acromático]
+
+        function changeQuestion(option) {
+            if (responses[currentQuestion] && responses[currentQuestion][option]) {
+                let [n, d, p, t, a] = responses[currentQuestion][option];
+                normalcount += n;
+                deuteranomaliacount += d;
+                protanomaliacount += p;
+                tritanopiacount += t;
+                acromaticcount +=a;
+            }
+
+            console.log("Protanomalia:", protanomaliacount.toFixed(4));
+            console.log("Deuteranomalia:", deuteranomaliacount.toFixed(4));
+            console.log("Tritanopia:", tritanopiacount.toFixed(4));
+            console.log("Normal:", normalcount.toFixed(4));
+            console.log("Acromatico:", acromaticcount.toFixed(4));
+            console.log("--------------------");
+            console.log("Acabou o nível", currentQuestion);
+
+
+            if (currentQuestion < 26) {
+                currentQuestion++;
+                document.getElementById("question-image").src = "../Photos/Perguntas/" + currentQuestion + ".png";
+
+                if (questionOptions[currentQuestion]) {
+                    let labels = questionOptions[currentQuestion]; 
+
+                    document.querySelectorAll('.start-btn').forEach((btn, index) => {
+                        btn.textContent = labels[index]; 
+                    });
+                }
+
+                updateProgressBar();
+                } else {
+                    alert("Test finished!");
+                }
+            
+
+            if (currentQuestion === 26) {
+                let result = Math.max(protanomaliacount, deuteranomaliacount, tritanopiacount, normalcount, acromaticcount);
+                let resultText = "";
+                if (result === protanomaliacount) {
+                    resultText = "Protanomalia";
+                } else if (result === deuteranomaliacount) {
+                    resultText = "Deuteranomalia";
+                } else if (result === tritanopiacount) {
+                    resultText = "Tritanopia";
+                } else if (result === acromaticcount) {
+                    resultText = "Acromático";
+                } else {
+                    resultText = "Normal";
+                }
+
+                // Calcular as porcentagens finais
+                let protanomaliaPercentage = (protanomaliacount / 25) * 100;
+                let deuteranomaliaPercentage = (deuteranomaliacount / 25) * 100;
+                let tritanopiaPercentage = (tritanopiacount / 25) * 100;
+                let normalPercentage = (normalcount / 25) * 100;
+                let acromaticPercentage = (acromaticcount / 25) * 100;
+
+                console.log("Resultados finais:");
+                console.log(`Protanomalia: ${protanomaliaPercentage.toFixed(2)}%`);
+                console.log(`Deuteranomalia: ${deuteranomaliaPercentage.toFixed(2)}%`);
+                console.log(`Tritanopia: ${tritanopiaPercentage.toFixed(2)}%`);
+                console.log(`Acromático: ${acromaticPercentage.toFixed(2)}%`);
+                console.log(`Normal: ${normalPercentage.toFixed(2)}%`);
+
+                //alert("O seu resultado é: " + resultText);
+
+                // Redirecionamento para a página correspondente
+                let resultPage = "";
+                if (resultText === "Protanomalia") {
+                    resultPage = "EndScreen_Protanomalia.html";
+
+                } else if (resultText === "Deuteranomalia") {
+                    resultPage = "EndScreen_Deuteranomalia.html";
+
+                } else if (resultText === "Tritanopia") {
+                    resultPage = "EndScreen_Tritanopia.html";
+
+                } else if (resultText === "Normal") {
+                    resultPage = "EndScreen_Normal.html";
+
+                } else if (resultText === "Acromático") {
+                    resultPage = "EndScreen_Acromatico.html";
+                    
+                } else {
+                    resultPage = "EndScreen_Normal.html";
+                }
+
+                window.location.href = resultPage;
+            }
+        }
+        
+        function goBack() {
+            const confirmExit = confirm("Tem de certeza que quer interromper o teste? O progresso não será gravado.");
+            if (confirmExit) {
+                window.location.href = "HomeScreen.html";
+            }
+        }
+        
+        function getImageLink(questionNumber) {
+            const links = {
+                1: "ZpXVwyMH/1-resized-1.png",  
+                2: "KcfwgyG4/2.png",  
+                3: "MDYpsCbD/3.png",  
+                4: "p6Qh1byx/4.png",  
+                5: "0j3fGm4t/5.png",  
+                6: "Z1XfkB74/6.png",  
+                7: "yFZXgjX5/7.png",  
+                8: "TD0LzqNd/8.png",  
+                9: "MxTxPJgp/9.png", 
+
+                10: "bj46XNC9/10.png", 
+
+                11: "607QxbMb/11.png",  
+                12: "LdqkGNGk/12.png",  
+                13: "7t30MBmJ/13.png",  
+                14: "ZzmyWxpW/14.png",  
+                15: "84S4rJLY/15.png",  
+                16: "RpDC0QYk/16.png",  
+                17: "5Xnt30w5/17.png",  
+                18: "cP9cZNj/18.png",  
+                19: "6cKWd69W/19.png",  
+                20: "yFt81GQj/20.png",  
+                21: "zTpNMX02/21.png",  
+                22: "MyQcrjmy/22.png",  
+                23: "CpC3QqrH/23.png",  
+                24: "bg33wJr8/24.png",  
+                25: "fdymkFPh/25.png" 
+            };
+            return links[questionNumber];
+        }
+
+        // Impedir zoom com Ctrl + Scroll e Ctrl + (+, -, 0)
+        document.addEventListener("wheel", function(event) {
+            if (event.ctrlKey) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener("keydown", function(event) {
+            if (event.ctrlKey && (event.key === "+" || event.key === "-" || event.key === "0")) {
+                event.preventDefault();
+            }
+        });
+        
+         // Atualizar a barra de progresso conforme o progresso
+         function updateProgressBar() {
+            let progress = (currentQuestion / 25) * 100;  // Calcula o percentual
+            document.getElementById("progress-bar-fill").style.width = progress + "%";
+        }
+    </script>
+</body>
+</html>

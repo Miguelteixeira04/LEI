@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="english">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SightSync WEB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Codec+Pro:wght@800&display=swap" rel="stylesheet">
+    <style>
+
+        body {
+            background-color: #80b5c7;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        h2 {
+            font-family: 'League Spartan', sans-serif;
+            font-size: 6.5vh;
+            color: #3b308b;
+            margin: 20px 0;
+            position: absolute;
+            top: 6.5%;  /* 85px transformado em porcentagem */
+            left: 11.5%;  /* 340px transformado em porcentagem */
+            z-index: 1;
+        }
+
+        p {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 3.5vh;
+            color: #3b308b;
+            display: flex;
+            align-items: center; /* Alinha o ícone e o texto */
+            gap: 20px; /* Adiciona espaçamento entre o ícone e o texto */
+        }
+
+        .download-btn {
+            background-color: #f9ad17;
+            border: 4px solid #000000;
+            color: black;
+            padding: 1.5vh 3vh;
+            text-align: center;
+            font-size: 3.7vh;
+            cursor: pointer;
+            border-radius: 25px;
+            text-decoration: none;
+            display: flex; /* Flexbox para facilitar o alinhamento */
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            left: 20%;
+            top: 72%;
+            height: 6%;
+            width: 11.5%;
+            font-weight: bold;
+            gap: 2.5vh; /* Aumenta a distância entre os elementos (seta, divider, e Download) */
+        }
+
+        .download-btn:hover {
+            background-color: #ffcc33;
+            border: 2px solid #ffdd57;
+        }
+
+        .download-btn .arrow {
+            font-size: 6vh; 
+            font-weight: bold; 
+            transform: translateY(-10px); 
+        }
+
+        .download-btn .divider {
+            height: 9.3vh; 
+            width: 0.3vh; 
+            background-color: black; 
+            flex-shrink: 0; /* Evita que a linha desapareça */
+
+        }
+
+        .logo {
+            background-image: url('../Photos/Icons/Logo.png');
+            background-size: cover;
+            width: 3.7%;
+            height: 8.25%;
+            position: absolute;
+            top: 8.5%;
+            left: 6.8%;
+            z-index: 1;
+        }
+
+        .text-block {
+            position: absolute;
+            left: 7.2%;
+            top: 45%;
+            transform: translateY(-50%);
+            text-align: left;
+            color: #3b308b;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 3.4vh;
+            line-height: 1.6;
+        }
+
+        /* Moldura no lado direito da tela */
+        .image-frame {
+            position: fixed;
+            top: 50%;
+            right: 3%; /* Distância da borda direita */
+            transform: translateY(-50%); /* Centraliza verticalmente */
+            width: 48%; /* Largura da moldura */
+            height: 60%; /* Altura da moldura */
+            border: 1px solid #000; /* Moldura preta */
+            overflow: hidden; /* Esconde as imagens que saem da moldura */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Sombra suave */
+            border-radius: 25px;
+        }
+
+        /* Estilo das imagens */
+        .slide-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* A imagem preenche a moldura */
+            display: none; /* Esconde todas as imagens inicialmente */
+        }
+
+        /* Primeira imagem visível */
+        .slide-image.active {
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="text-block">
+        <p><img src="../Photos/website/checkbox.png" alt="checkbox" width="40" height="40"> <strong>Learn</strong>about colour blindness</p>
+        <p><img src="../Photos/website/checkbox.png" alt="checkbox" width="40" height="40"> <strong>Experience</strong>how colour-blind people see</p>
+        <p><img src="../Photos/website/checkbox.png" alt="checkbox" width="40" height="40"> <strong>Adjust</strong>your screen for better vision</p>
+        <p><img src="../Photos/website/checkbox.png" alt="checkbox" width="40" height="40"> <strong>Challenge</strong>yourself with a colour vision test</p>
+    </div>
+       
+    <h2>SightSync</h2>
+    <a href="https://drive.google.com/file/d/11qWaKhd7b6jcdX6lFyDJ6OcK3MHz87X7/view?usp=sharing" class="download-btn">
+        <span class="arrow">↓</span>
+        <span class="divider"></span> <!-- Linha vertical -->
+        Download
+    </a>
+    <div class="image-frame">
+        <img src="../Photos/website/1.png" alt="Image 1" class="slide-image">
+        <img src="../Photos/website/2.png" alt="Image 2" class="slide-image">
+        <img src="../Photos/website/5.png" alt="Image 5" class="slide-image">
+        <img src="../Photos/website/14.png" alt="Image 14" class="slide-image">
+    </div>
+    
+    <div class="logo"></div>
+
+    <script>
+        let images = document.querySelectorAll('.slide-image');
+        let currentIndex = 0;
+
+        function changeImage() {
+            // Remove a classe 'active' de todas as imagens
+            images.forEach((img) => img.classList.remove('active'));
+
+            // Adiciona a classe 'active' à imagem atual
+            images[currentIndex].classList.add('active');
+
+            // Atualiza o índice para a próxima imagem
+            currentIndex = (currentIndex + 1) % images.length;
+        }
+
+        // Inicia a troca de imagem a cada 1 segundo (1000 ms)
+        setInterval(changeImage, 5000);
+
+        // Exibe a primeira imagem inicialmente
+        changeImage();
+
+        document.addEventListener("wheel", function(event) {
+            if (event.ctrlKey) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener("keydown", function(event) {
+            if (event.ctrlKey && (event.key === "+" || event.key === "-")) {
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

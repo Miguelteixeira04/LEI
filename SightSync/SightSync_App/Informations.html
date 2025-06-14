@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="english">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information</title>
+    <!-- Link para o FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #6f9ead; 
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left; 
+            position: relative;
+        }
+
+        .option-btn {
+            background-color: #3b308b;
+            color: white;
+            text-align: center;
+            font-size: 2.8vh;            
+            cursor: pointer;
+            border-radius: 2vh;
+            position: absolute;
+            width: 11.5%;
+            height: 8.5%;
+            font-weight: bold;
+        }
+        .option-btn:hover {
+            background-color: #5b29a6;
+        }
+
+        .btn1 { top: 23%; left: 75%; }
+        .btn2 { top: 39%; left: 75%; }
+        .btn3 { top: 55%; left: 75%; }
+        .btn4 { top: 71%; left: 75%; }
+
+        .rect-initial {
+            background: linear-gradient(135deg, #c9e5f5, #f5f5f5);
+            width: 52%;
+            height: 74%;
+            position: absolute;
+            top: 15.5%; 
+            left: 38.5%; 
+            transform: translateX(-50%);
+            z-index: 1;
+            border-radius: 2vh;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /*container cabeçalho*/
+        .rect-b {
+            background-color: #a6a6a6;
+            width: 52%;
+            height: 10%;
+            border-radius: 2vh; 
+            position: absolute;
+            top: 8%; 
+            left: 38.5%; 
+            transform: translateX(-50%); 
+            z-index: 0; 
+            display: none;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Open Sans', sans-serif;
+            color: #3b308b;
+            margin: 0;
+            position: absolute;
+            z-index: 2;
+        }
+
+        h1 { font-size: 5.5vh; top: 20%; left: 14%; }
+        h2 { font-size: 2.5vh; font-weight: normal; top: 28%; left: 14%; }
+        h3 { font-size: 5.5vh; top: 20%; left: 15%; display: none; }
+        h4 { font-size: 4.5vh; top: 9.8%; left: 38%; transform: translateX(-50%); display: none; }
+        
+        h5 {
+            font-size: 3vh;
+            top: 18%;
+            left: 9%;
+            display: none;
+            color: #000000;
+            text-align: justify;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        /*imagem inicial das infos*/
+        .image-container-init {
+            position: absolute;
+            top: 35%;
+            left: 19%;
+            display: block;
+            gap: 15vh;
+            z-index: 5;
+        }
+        .image-container-init img {
+            width: 76vh;
+            height: auto;
+        }
+
+        /*imagem de cada tipo*/
+        .image-container {
+            position: absolute;
+            top: 47%;
+            left: 15%;
+            display: none;
+            z-index: 5;
+            gap: 15vh;
+            z-index: 5;
+        }
+        .image-container img {
+            width: 38vh;
+            height: auto;
+        }
+
+        .label {
+            background-color: #3b308b;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 1vh;
+            width: 95%;
+            border-radius: 0.5vh;
+            margin-top: 3%;
+            font-size: 3vh;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 6%;
+            left: 4%;
+            width: 90px;
+            height: 90px;
+            font-size: 3.5vh;
+            background-color: #3b308b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-button:hover {
+            background-color: #2a1c6b;
+        }
+
+    </style>
+</head>
+<body>
+    <div>
+        <button class="option-btn btn1" onclick="option1()">Protanopia</button>
+        <button class="option-btn btn2" onclick="option2()">Deuteranopia</button>
+        <button class="option-btn btn3" onclick="option3()">Tritanopia</button>
+        <button class="option-btn btn4" onclick="option4()">Acromatopsia</button>
+        
+         <!-- Botão Info -->
+        <a href="HomeScreen.html">
+            <button class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </a>
+
+        <div class="rect-initial">
+            <h5>
+                <!-- Este conteúdo será preenchido dinamicamente pelo JavaScript -->
+            </h5>
+        </div>
+        <div class="rect-b"></div>
+    </div>
+
+    <div class="header-container">
+        <h1>Learn More About Colour Blindness</h1>
+        <h2>Select the type of Colour Blindness you want to experience</h2>
+        <h3>Did you know that...</h3>
+        <h4>Protanopia</h4>
+
+        <div class="image-container">
+            <!-- As imagens agora começam ocultas -->
+            <div>
+                <img id="image1" src="https://i.ibb.co/VW9zRSnh/semaforo-normal.jpg" alt="Normal Vision">
+                <div class="label" id="label1">Normal Vision</div>
+            </div>
+            <div>
+                <!-- As imagens e os labels só serão exibidos quando o botão for clicado -->
+                <img id="image2" src="" alt="Protanopia" style="display:none;">
+                <div class="label" id="label2" style="display:none;">Protanopia</div>
+            </div>
+        </div>      
+        <div class="image-container-init">
+            <div>
+                <img id="image1" src="https://i.ibb.co/YChkHYH/daltonicos-como-diagnosticar-e-os-tipos-de-daltonismo-7.jpg" alt="Normal Vision">
+            </div>
+        </div>  
+    </div>
+
+    <script>
+        function resetContent() {
+            document.querySelector(".image-container").style.display = "none";  // Esconde a imagem ao reiniciar
+            document.querySelector("#image1").src = "https://i.ibb.co/VW9zRSnh/semaforo-normal.jpg";  // Restabelece a imagem normal
+            document.querySelector("#label1").innerText = "Normal Vision";  // Restabelece o label normal
+            document.querySelector("#image2").src = "";  // Limpa a imagem do daltonismo
+            document.querySelector("#label2").innerText = "";  // Limpa o label do daltonismo
+            document.querySelector("h3").style.display = "none";  // Esconde o texto informativo
+            document.querySelector("h4").style.display = "none";
+            document.querySelector("h5").style.display = "none";
+        } 
+
+        function showInfo(type, title, fulltext, imageUrl) {
+            document.querySelector(".image-container-init").style.display = "none";
+            document.querySelector(".rect-b").style.display = "block";
+            document.querySelector("h1").style.display = "none";
+            document.querySelector("h2").style.display = "none";
+            document.querySelector("h3").style.display = "block";
+            document.querySelector("h4").style.display = "block";
+            document.querySelector("h5").style.display = "block";
+            document.querySelector(".image-container").style.display = "flex";
+
+            document.querySelector("h4").innerText = title;
+            document.querySelector("h5").innerHTML = fulltext;
+            
+            document.querySelector("#image2").src = imageUrl;
+            document.querySelector("#label2").innerText = title;
+            document.querySelector("#image2").style.display = "block";
+            document.querySelector("#label2").style.display = "block";
+        }
+
+        function option1() {
+            showInfo(
+                "protanopia",
+                "Protanopia",
+                `People diagnosed with Protanopia may perceive red as<br>
+                darker or even indistinguishable from grey or beige,<br>
+                depending on the shade and context.`,
+                "https://i.ibb.co/Z1N6gHKk/semaforo-protanopia.jpg"
+            );
+        }
+
+        function option2() {
+            showInfo(
+                "deuteranopia",
+                "Deuteranopia",
+                `People diagnosed with Deuteranopia often struggle to<br>
+                distinguish grey, purple, and blue-green, typically<br>
+                identifying only a limited range of shades.`,
+                "https://i.ibb.co/dsX3cTQY/semaforo-deuteranopia.jpg"
+            );
+        }
+
+        function option3() {
+            showInfo(
+                "tritanopia",
+                "Tritanopia",
+                `Tritanopia affects the perception of blue and yellow.<br>
+                People may confuse blue with green and yellow with violet,<br>
+                due to the absence or malfunction of blue cone cells.`,
+                "https://i.ibb.co/jPwCjxqc/semaforo-tritanopia.jpg"
+            );
+        }
+
+        function option4() {
+            showInfo(
+                "acromatopsia",
+                "Acromatopsia",
+                `People with Acromatopsia see the world in shades of grey.<br>
+                They lack color perception entirely and may experience<br>
+                light sensitivity and low visual acuity.`,
+                "https://i.ibb.co/qY1xhHXS/semaforo-preto-e-branco.jpg"
+            );
+        }
+    </script>
+</body>
+</html>

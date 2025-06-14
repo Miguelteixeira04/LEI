@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="english">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <!-- Link para o FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #6f9ead;
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: left; 
+            position: relative;
+        }
+
+        .rect-a {
+            background-color: #a6a6a6;
+            width: 55%;
+            height: 13%;
+            border-radius: 2vh; 
+            position: absolute;
+            top: 4.6%; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 0; 
+        }
+
+        .rect-b {
+            background-color: #d9d9d9;
+            width: 55%;
+            height: 74%;
+            position: absolute;
+            top: 15%; 
+            left: 50%; 
+            transform: translateX(-50%);
+            z-index: 1; 
+        }
+
+        .label {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: bold; 
+            font-size: 70px;
+            color: #000; 
+            z-index: 2; 
+            position: absolute;
+            top: 2.8%; 
+            left: 50%; 
+            transform: translateX(-50%);    
+        }
+
+        .image-container {
+            position: absolute;
+            top: 47.5%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            z-index: 2;
+            display: flex;
+            gap: 20vh;
+        }
+
+        .image-container img {
+            width: 27vh;
+            height: auto;
+        }
+
+        .image-top-i {
+            position: absolute;
+            top: 19%;
+            left: 25%;
+            z-index: 3;
+            width: 3%;
+            height: auto;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Open Sans', sans-serif;
+            color: #3b308b;
+            margin: 0;
+            position: absolute;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 85px;
+            top: 23.8%; 
+            left: 55.9%; 
+        }
+
+        h2 {
+            font-size: 75px;
+            font-weight: normal;
+            top: 18%; 
+            left: 29.5%; 
+        }
+
+        h3 {
+            font-size: 75px;
+            font-weight: normal;
+            top: 24.2%; 
+            left: 29.5%; 
+        }
+
+        h4 {
+            font-size: 50px;
+            font-weight: normal;
+            top: 62.5%; 
+            left: 58%; 
+        }
+
+        h5 {
+            font-size: 50px;
+            font-weight: normal;
+            top: 62.5%; 
+            left: 30%; 
+        }
+
+        h6, h7, h8 {
+            font-family: 'Open Sans', sans-serif;
+            color: #000000;
+            margin: 0;
+            position: absolute;
+            z-index: 2;
+            font-weight: normal;
+            top: 50%; /* Centraliza verticalmente dentro de .rect-b */
+            left: 50%; /* Centraliza horizontalmente */
+            transform: translate(-50%, -50%); /* Ajuste exato para centralização */
+            text-align: center;
+        }
+
+        h6 {
+            font-size: 46px;
+            font-weight: normal;
+            top: 73%; 
+            left: 50%; 
+        }
+
+        h7 {
+            font-size: 44px;
+            font-weight: normal;
+            top: 78%; 
+            left: 50%; 
+        }
+
+        h8 {
+            font-size: 32px;
+            font-weight: normal;
+            top: 85%; 
+            left: 50%; 
+        }
+
+        .home-button {
+            position: fixed;
+            top: 7%;
+            right: 6%;
+            font-size: 4.5vh;
+            background-color: #3b308b;
+            color: white;
+            border: none;
+            padding: 1.5vh;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease; /* Transição suave */
+        }
+
+        .home-button:hover {
+            transform: scale(1.1); /* Aumenta a imagem ao passar o mouse */
+            transition: transform 0.3s ease; /* Transição suave */
+        }
+    </style>
+</head>
+<body>
+    <p class="label">Final Results: </p>
+    <div class="rect-a"></div> 
+    <div class="rect-b"></div> 
+    
+    <div class="header-container">
+        <div>
+            <h2>You have symptoms similar to a </h2>
+            <h3>colorbind person with</h3>
+            <h1>Deuteranopia.</h1>
+            <h5>Normal colour vision</h5>
+
+            <!-- Meter if do mais obtido para aparecer -->
+            <h4>Deuteranopia</h4>
+            <h6>We advise you to see a doctor and get checked by a professional.</h6>
+            <h7> This is for educational purposes only.</h7>
+            <h8>Go back to the <b>Home Screen</b>, and if you want, you can select this type of color blindness mode.</h8>
+        </div>
+        <div class="logo"></div>
+    </div>
+
+    <div class="image-container">
+        <img src="../Photos/Circulos_EndScreen/circulo_normal.png" alt="Circulo Normal">
+        
+        <!-- Meter if do mais obtido para aparecer -->
+        <img src="../Photos/Circulos_EndScreen/circulo_deuteranopia.png" alt="Circulo Deuteranopia">
+    </div>
+
+    <img class="image-top-i" src="../Photos/Icons/i.png" alt="Imagem Extra">
+    
+    <!-- Botão Home -->
+    <a href="HomeScreen.html">
+        <button class="home-button">
+            <i class="fas fa-home"></i>
+        </button>
+    </a>
+    <script>
+        // Impedir zoom com Ctrl + Scroll e Ctrl + (+, -, 0)
+        document.addEventListener("wheel", function(event) {
+            if (event.ctrlKey) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener("keydown", function(event) {
+            if (event.ctrlKey && (event.key === "+" || event.key === "-" || event.key === "0")) {
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
