@@ -1,6 +1,7 @@
 Hello! My name is Miguel Teixeira, and these are the projects I developed during my academic journey at UTAD, as part of my degree in Computer Engineering. Each project showcases a range of skills and areas of knowledge I acquired throughout the course.
 
 🎮 **BartleZ** - A Gamified Approach to Overturn Traditional Bartle Player Type Attribution;
+
 *Grade*: 20
 
 📚 **Biblioteca-LEI-UTAD** - An advanced app designed to enhance the library experience at UTAD;
