@@ -2,7 +2,7 @@ Hello! My name is Miguel Teixeira, and these are the projects I developed during
 
 🎮 **BartleZ** - A Gamified Approach to Overturn Traditional Bartle Player Type Attribution;
 
-*Grade*: 20
+             *Grade*: 20/20
 
 📚 **Biblioteca-LEI-UTAD** - An advanced app designed to enhance the library experience at UTAD;
 
