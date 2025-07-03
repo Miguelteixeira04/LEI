@@ -9,7 +9,7 @@ Each project showcases a range of skills and areas of knowledge I acquired throu
 
 - 🎮 **BartleZ**  
   *A gamified approach to overturn traditional Bartle player type attribution.*  
-  *Grade:* 20/20
+  *Grade:* 19.5/20
 
 - 📚 **Biblioteca-LEI-UTAD**  
   *An advanced app designed to enhance the library experience at UTAD.*  
