@@ -33,7 +33,7 @@ Each project showcases a range of skills and areas of knowledge I acquired throu
 
 - 👾 **Space Invaders 3D**  
   *A 3D remake of the classic Space Invaders using WebGL and Three.js.*  
-  *Grade:* 18/20
+  *Grade:* 18.2/20
 
 - ☑️ **To-do-List**  
   *The ultimate to-do list app for effortless task management.*  
